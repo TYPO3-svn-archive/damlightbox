@@ -1,0 +1,26 @@
+2008-04-07 Torsten Schrade <schradt@uni-mainz.de>
+	* NEW: vCalc and hCalc for tx_damlightbox->addAdditionalImg now use stdWrap to retrieve their values
+	* NEW: flexform field allows to override the lightbox dimensions for a specific image (notation is imagenumber:width,height;)
+	* NEW: title tag for the lightbox page now taken from DAM title of the current image (thx. Dr. Ronald P. Steiner)
+	* NEW: Lightbox content may now be cached. Big thanks and credits to Dr. Ronald P. Steiner!
+	* BUGFIX: RECORDS object used instead of CONTENT object for rendering the lightbox content. This way the lightbox CE is not bound to the page but might stay anywhere in the pagetree.
+	* BUGFIX: Save&Print buttons did not work. Changes still need to be implemented into savefile.php of pmkslimbox
+	* CHANGE: height changed to min-height in slimbox.css
+
+2008-03-24 Torsten Schrade <schradt@uni-mainz.de>
+
+	* NEW: possibility to set ff sheet values from TS
+	* NEW: watermark example
+	* NEW: new examples in manual
+	* BUGFIX: function addAdditionalImg now uses typolink function
+	* BUGFIX: corrected extension dependencies
+
+2008-02-11 Torsten Schrade <schradt@uni-mainz.de>
+
+	* VERSION: 0.0.2
+	* BUGFIX: wrong sorting field was set as default
+
+2008-02-10 Torsten Schrade <schradt@uni-mainz.de>
+
+	* VERSION: 0.0.1
+	* INFO: first public version

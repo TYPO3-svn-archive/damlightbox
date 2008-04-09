@@ -1,0 +1,144 @@
+#####################################################################
+# TypoScrip configuration for the plugin.damlightbox 				#
+# @author Torsten Schrade <schradt@uni-mainz.de>					#
+# PART III: config for image CEs with pmkslimbox					#
+#####################################################################
+
+page.headerData.1231 = TEXT
+page.headerData.1231 {
+	value (
+
+	<style type="text/css">
+			#lbCanvas #lbNextLink {right: 0 !important;}
+			#lbCanvas #lbPrevLink:hover {background-position: 0% 41px;}
+			#lbCanvas #lbNextLink:hover {background-position: 100% 41px;}
+	</style>
+	)
+}
+page.headerData.1232 = TEXT
+page.headerData.1232 {
+	value (
+	<script type="text/javascript" src="{path:EXT:damlightbox/res/scripts/damlightbox.js}"></script>
+	)
+	insertData = 1
+}
+
+tt_content.image.20 {
+
+	1 {
+		emptyTitleHandling >
+		titleText >
+		titleInLink = 0
+		titleInLinkAndImg = 0
+	}
+
+	## modifications to the imageLinkWrap ##
+	1.imageLinkWrap.typolink {
+
+		parameter.append >
+		parameter.listNum >
+
+		ATagParams >
+		ATagParams.cObject = COA
+
+		## calculate width / height & get the value for the lightbox caption ##
+		ATagParams.cObject.10 = LOAD_REGISTER
+		ATagParams.cObject.10 {
+			hpixels = TEXT
+			hpixels {
+				cObject < temp.getDAMvalues
+				cObject.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:IMAGE_NUM_CURRENT}|hpixels
+				wrap = {$plugin.damlightbox.slimbox.hCalc}
+			}
+			vpixels = TEXT
+			vpixels {
+				cObject < temp.getDAMvalues
+				cObject.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:IMAGE_NUM_CURRENT}|vpixels
+				wrap = {$plugin.damlightbox.slimbox.vCalc}
+			}
+			## width/height calculated to determine the actual lightbox dimensions ##
+			widthCalc = TEXT
+			widthCalc {
+				data = register:hpixels
+				prioriCalc = intval
+			}
+			heightCalc = TEXT
+			heightCalc {
+				data = register:vpixels
+				prioriCalc = intval
+			}
+			## determine the value that will be used as lightbox caption - this is retrieved with a COA to allow for easy additions from TS ##
+			lbCaption.cObject = COA
+			lbCaption.cObject.10 < temp.getDAMvalues
+			lbCaption.cObject.10 {
+				cObject.value = TSFE:register|tx_damlightbox|metaData|{register:IMAGE_NUM_CURRENT}|{TSFE:register|tx_damlightbox|config|sLIGHTBOX|lbCaption}
+			}
+		}
+
+		## check if the calculated dimensions have to be overriden due to a value in the flexform configuration
+		ATagParams.cObject.15 = TEXT
+		ATagParams.cObject.15.data = register:IMAGE_NUM_CURRENT
+		ATagParams.cObject.15.postUserFunc = tx_damlightbox_pi1->overrideDimsFromFlexform
+
+		## the a-tag parameters used for slimbox
+		ATagParams.cObject.20 = TEXT
+		ATagParams.cObject.20 {
+			dataWrap = {$plugin.damlightbox.imageLinkAttributes} rel="lightbox[sb{field:uid}]" rev="width={register:widthCalc}, height={register:heightCalc}" title="{register:lbCaption}"
+			if.isFalse.field = image_link
+		}
+	}
+
+	## if slimbox is used together with the preview function all imgs despite the first one need to be inserted into a hidden div ##
+	stdWrap.postCObject = TEXT
+	stdWrap.postCObject {
+		if.isTrue.data = TSFE:register|tx_damlightbox|config|sDEF|imgPreview
+		cObject = USER
+		cObject.userFunc = tx_damlightbox_pi1->addHiddenImgs
+		cObject {
+			content.data = field:uid
+			type = 313
+			hCalc.cObject = TEXT
+			hCalc.cObject.value = {$plugin.damlightbox.slimbox.hCalc}
+			vCalc.cObject = TEXT
+			vCalc.cObject.value = {$plugin.damlightbox.slimbox.vCalc}
+		}
+	}
+}
+
+
+#####################################################################
+# TypoScrip configuration for the plugin.damlightbox 				#
+# @author Torsten Schrade <schradt@uni-mainz.de>					#
+# PART IV: config for pmkslimbox									#
+#####################################################################
+
+damlightbox {
+
+	## this clears any leftover from pmkslimbox
+	headerData.1230 >
+	1230 >
+	headerData.1232 < page.headerData.1232
+
+	includeCSS.file1 = {$plugin.damlightbox.slimbox.cssFile}
+
+	10.10.conf.tt_content.20 {
+
+		template.file = {$plugin.damlightbox.slimbox.templateFile}
+		marks.CE_TITLE >
+
+		marks.IMAGEBROWSER {
+
+			10 {
+				value =
+				override.cObject.typolink.ATagParams.dataWrap = id="lbPrevLink"
+			}
+
+			30 {
+				value =
+				override.cObject.typolink.ATagParams.dataWrap = id="lbNextLink"
+			}
+		}
+
+		marks.DAM_TITLE.outerWrap >
+	}
+}
