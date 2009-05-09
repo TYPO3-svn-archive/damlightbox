@@ -55,7 +55,6 @@ temp.getDAMvalues {
 	}
 	insertData = 1
 	htmlSpecialChars = 1
-	stripHTML = 1
 }
 
 

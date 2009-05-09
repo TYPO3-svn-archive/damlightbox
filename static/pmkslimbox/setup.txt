@@ -59,6 +59,17 @@ tt_content.image.20 {
 			lbCaption.cObject.10 {
 				cObject.value = TSFE:register|tx_damlightbox|metaData|{register:IMAGE_NUM_CURRENT}|{TSFE:register|tx_damlightbox|config|sLIGHTBOX|lbCaption}
 			}
+			## parse out any " that would invalidate the HTML and cut off the caption
+			lbCaption.cObject.stdWrap.split {
+				# substitue all " with entity
+				token.char = 34
+				cObjNum = 1
+				1.current = 1
+				1.wrap = &quot;|				
+			}
+			# remove the first entity again
+			lbCaption.substring = 6	
+			
 			## the real img path will be passed on to savefile.php from pmkslimbox
 			fullPath.cObject = COA
 			fullPath.cObject.10 < temp.getDAMvalues
