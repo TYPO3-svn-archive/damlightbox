@@ -4,21 +4,23 @@
 # PART III: config for image CEs with pmkslimbox					#
 #####################################################################
 
+# use a slightbly modified slimbox js for damlightbox
+page.1230.20.jsfile.dataWrap = EXT:damlightbox/res/pmkslimbox/slimboxplus_uncompressed.js
+
 page.headerData.1231 = TEXT
 page.headerData.1231 {
 	value (
-
-	<style type="text/css">
-			#lbCanvas #lbNextLink {right: 0 !important;}
-			#lbCanvas #lbPrevLink:hover {background-position: 0% 41px;}
-			#lbCanvas #lbNextLink:hover {background-position: 100% 41px;}
-	</style>
+	
+	<link rel="stylesheet" href="{path:EXT:damlightbox/res/pmkslimbox/slimboxplus.css}" type="text/css" media="screen" />
 	)
+	insertData = 1
 }
+
 page.headerData.1232 = TEXT
 page.headerData.1232 {
 	value (
-	<script type="text/javascript" src="{path:EXT:damlightbox/res/scripts/damlightbox.js}"></script>
+	
+	<script type="text/javascript" src="{path:EXT:damlightbox/res/pmkslimbox/damlightbox.js}"></script>
 	)
 	insertData = 1
 }
@@ -73,6 +75,12 @@ tt_content.image.20 {
 			lbCaption.cObject.10 {
 				cObject.value = TSFE:register|tx_damlightbox|metaData|{register:IMAGE_NUM_CURRENT}|{TSFE:register|tx_damlightbox|config|sLIGHTBOX|lbCaption}
 			}
+			fullPath.cObject = COA
+			fullPath.cObject.10 < temp.getDAMvalues
+			fullPath.cObject.10 {
+				wrap = {getIndpEnv:TYPO3_SITE_URL}{|}
+				cObject.value = TSFE:register|tx_damlightbox|metaData|{register:IMAGE_NUM_CURRENT}|fullPath
+			}
 		}
 
 		## check if the calculated dimensions have to be overriden due to a value in the flexform configuration
@@ -83,7 +91,7 @@ tt_content.image.20 {
 		## the a-tag parameters used for slimbox
 		ATagParams.cObject.20 = TEXT
 		ATagParams.cObject.20 {
-			dataWrap = {$plugin.damlightbox.imageLinkAttributes} rel="lightbox[sb{field:uid}]" rev="width={register:widthCalc}, height={register:heightCalc}" title="{register:lbCaption}"
+			dataWrap = {$plugin.damlightbox.imageLinkAttributes} rel="lightbox[sb{field:uid}]" rev="width={register:widthCalc}, height={register:heightCalc}, src={register:fullPath}" title="{register:lbCaption}"
 			if.isFalse.field = image_link
 		}
 	}
@@ -113,6 +121,8 @@ tt_content.image.20 {
 #####################################################################
 
 damlightbox {
+
+	config.noPageTitle = 2
 
 	## this clears any leftover from pmkslimbox
 	headerData.1230 >

@@ -1,0 +1,35 @@
+/* CSS styles for the Slimbox Clickenlarge */
+
+body, #container, #container p {
+	margin: 0;
+	padding: 0;
+	font: 11px Verdana, Geneva, sans-serif;
+}
+
+#header, #footer, #imagebrowser {
+	position: relative;
+	z-index: 10;
+	min-height: 15px;
+	margin: 0;
+	border: none;
+	padding: 5px;
+	color: #FFFFFF;
+	background: #333333;
+	text-align: center;
+	font-size: 11px;
+}
+
+#imagebrowser a {
+	color: #FFFFFF;
+	padding: 0 5px;
+}
+
+#footer #damlocation {
+	border-left: 1px solid #FFFFFF;
+	padding-left: 5px;
+}
+
+#image {
+	background: #6F6F6F;
+	text-align: center;
+}

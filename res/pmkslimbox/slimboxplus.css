@@ -1,0 +1,5 @@
+#lbCanvas #lbNextLink { right: 0 !important; }
+
+#lbCanvas #lbPrevLink:hover { background-position: 0% 41px; }
+
+#lbCanvas #lbNextLink:hover { background-position: 100% 41px; }

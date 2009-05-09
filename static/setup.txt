@@ -244,7 +244,7 @@ damlightbox {
 	headerData.10 {
 		cObject < temp.getDAMvalues
 		cObject.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|title
-		wrap = <title>|</title>
+		noTrimWrap = |	<title>|</title>|
 	}
 
 	## standard CSS file
