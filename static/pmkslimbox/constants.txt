@@ -3,13 +3,12 @@
 # @author Torsten Schrade <schradt@uni-mainz.de>								#
 #################################################################################
 
-
 ## FILES ##
 
 #cat=plugin.damlightbox.slimbox/file/10; type=file; label= Template file: Template file that will be used within pmkslimbox
 plugin.damlightbox.slimbox.templateFile = EXT:damlightbox/res/pmkslimbox/template.html
 
-#cat=plugin.damlightbox.slimbox/file/20; type=file; label= CSS File: CSS file for clickenlarge with pmkslimbox.
+#cat=plugin.damlightbox.slimbox/file/20; type=file; label= CSS File: CSS file for clickenlarge iframe with pmkslimbox.
 plugin.damlightbox.slimbox.cssFile = EXT:damlightbox/res/pmkslimbox/damlightbox.css
 
 

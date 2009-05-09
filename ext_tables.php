@@ -5,8 +5,9 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 $_EXTCONF = unserialize($_EXTCONF);
 
 // Adding the TS Objects
-t3lib_extMgm::addStaticFile($_EXTKEY,'static/','DAM Lightbox');
+t3lib_extMgm::addStaticFile($_EXTKEY,'static/','DAM Lightbox: basics');
 t3lib_extMgm::addStaticFile($_EXTKEY,'static/pmkslimbox','DAM Lightbox: pmkslimbox');
+#t3lib_extMgm::addStaticFile($_EXTKEY,'static/watermarks','DAM Lightbox: watermarks');
 
 // load $TCA of tt_content for changes afterwards
 t3lib_div::loadTCA('tt_content');

@@ -4,7 +4,7 @@
 # Example for how to use watermarks on clickenlarged images			#
 #####################################################################
 
-damlightbox.10.10.renderObj.20.marks.DAM_IMAGE.10 {
+damlightbox.10.10.conf.tt_content.20.marks.DAM_IMAGE.10 {
 
 	file >
 

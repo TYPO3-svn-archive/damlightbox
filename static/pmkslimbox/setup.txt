@@ -4,29 +4,13 @@
 # PART III: config for image CEs with pmkslimbox					#
 #####################################################################
 
-# use a slightbly modified slimbox js for damlightbox
-page.1230.20.jsfile.dataWrap = EXT:damlightbox/res/pmkslimbox/slimboxplus_uncompressed.js
+# use a slightly modified slimboxplus.js to provide all functions
+page.1230.20.jsfile.dataWrap = EXT:damlightbox/res/pmkslimbox/slimboxplus.js
 
-page.headerData.1231 = TEXT
-page.headerData.1231 {
-	value (
-	
-	<link rel="stylesheet" href="{path:EXT:damlightbox/res/pmkslimbox/slimboxplus.css}" type="text/css" media="screen" />
-	)
-	insertData = 1
-}
-
-page.headerData.1232 = TEXT
-page.headerData.1232 {
-	value (
-	
-	<script type="text/javascript" src="{path:EXT:damlightbox/res/pmkslimbox/damlightbox.js}"></script>
-	)
-	insertData = 1
-}
-
+# modify image links for pmkslimbox/damlightbox use
 tt_content.image.20 {
 
+	# clean stuff from pmkslimbox
 	1 {
 		emptyTitleHandling >
 		titleText >
@@ -75,6 +59,7 @@ tt_content.image.20 {
 			lbCaption.cObject.10 {
 				cObject.value = TSFE:register|tx_damlightbox|metaData|{register:IMAGE_NUM_CURRENT}|{TSFE:register|tx_damlightbox|config|sLIGHTBOX|lbCaption}
 			}
+			## the real img path will be passed on to savefile.php from pmkslimbox
 			fullPath.cObject = COA
 			fullPath.cObject.10 < temp.getDAMvalues
 			fullPath.cObject.10 {
@@ -117,14 +102,12 @@ tt_content.image.20 {
 #####################################################################
 # TypoScrip configuration for the plugin.damlightbox 				#
 # @author Torsten Schrade <schradt@uni-mainz.de>					#
-# PART IV: config for pmkslimbox									#
+# PART IV: config for pmkslimbox / iframe							#
 #####################################################################
 
 damlightbox {
 
-	config.noPageTitle = 2
-
-	## this clears any leftover from pmkslimbox
+	## this clears any leftovers from pmkslimbox
 	headerData.1230 >
 	1230 >
 	headerData.1232 < page.headerData.1232
@@ -135,19 +118,6 @@ damlightbox {
 
 		template.file = {$plugin.damlightbox.slimbox.templateFile}
 		marks.CE_TITLE >
-
-		marks.IMAGEBROWSER {
-
-			10 {
-				value =
-				override.cObject.typolink.ATagParams.dataWrap = id="lbPrevLink"
-			}
-
-			30 {
-				value =
-				override.cObject.typolink.ATagParams.dataWrap = id="lbNextLink"
-			}
-		}
 
 		marks.DAM_TITLE.outerWrap >
 	}

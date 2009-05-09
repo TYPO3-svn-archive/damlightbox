@@ -5,11 +5,9 @@
 #####################################################################
 
 ## include the plugin class ##
-
 includeLibs.tx_damlightbox_pi1 = EXT:damlightbox/pi1/class.tx_damlightbox_pi1.php
 
 ## basic setup ##
-
 plugin.tx_damlightbox_pi1 = USER
 plugin.tx_damlightbox_pi1 {
 
@@ -57,6 +55,7 @@ temp.getDAMvalues {
 	}
 	insertData = 1
 	htmlSpecialChars = 1
+	stripHTML = 1
 }
 
 
@@ -157,7 +156,6 @@ tt_content.image.20 {
 	## new title and alt text objects with metadata but can be overidden with standard fields ##
 	1.titleText >
 	1.titleText {
-		stripHTML = 1
 		cObject < temp.getDAMvalues
 		cObject.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:IMAGE_NUM_CURRENT}|title
 		override {
@@ -168,11 +166,11 @@ tt_content.image.20 {
 				split.returnKey.data = register:IMAGE_NUM_CURRENT
 			}
 		}
+		cObject.override >
 	}
 
 	1.altText >
 	1.altText {
-		stripHTML = 1
 		cObject < temp.getDAMvalues
 		cObject.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:IMAGE_NUM_CURRENT}|alt_text
 		override {
@@ -239,7 +237,10 @@ damlightbox = PAGE
 damlightbox.typeNum = 313
 damlightbox {
 
-	## use the DAM title for the title tag of the lightbox
+	# no standard pagetitle - will be fetched from DAM
+	config.noPageTitle = 2
+
+	## use the DAM title for the title tag of the popup
 	headerData.10 = TEXT
 	headerData.10 {
 		cObject < temp.getDAMvalues
