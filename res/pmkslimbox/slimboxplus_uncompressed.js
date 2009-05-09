@@ -256,8 +256,8 @@ var Slimbox;
 					image.setStyles({backgroundImage: "", display: ""});
 					$$(image, bottom).setStyle("width", preload.w);
 					$$(image).setStyle("height", preload.h);
-					$$(image, prevLink, nextLink).setStyle("height", preload.height);
 					$$(prevLink, nextLink).setStyle("width", "50%");					
+					$$(prevLink, nextLink).setStyle("height", "100%");					
 					//$$(prevLink, nextLink).setStyle("height", "35px");
 					//$$(prevLink, nextLink).setStyle("width", "65px");
 					iframe.setStyles({display: ""});
@@ -330,5 +330,4 @@ var Slimbox;
 		}
 		return true;
 	}
-	
 })();
