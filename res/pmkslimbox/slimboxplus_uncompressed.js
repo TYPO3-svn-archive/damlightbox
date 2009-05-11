@@ -228,12 +228,15 @@ var Slimbox;
 //				$$(printB,saveB).setStyle("display", "none");
 				preload = new Object ();	// JavaScript native Object
 				preload.datatype = 'iframe';
-				rev = images[activeImage][2];
+/*				rev = images[activeImage][2];
 				preload.w = matchOrDefault(rev, new RegExp("width=(\\d+)", "i"), options.defaultIframeWidth);
 				preload.h = matchOrDefault(rev, new RegExp("height=(\\d+)", "i"), options.defaultIframeHeight);
-				scroll = options.iframeScrolling;
+*/
+				preload.w = matchOrDefault(images[activeImage][2], new RegExp("width=(\\d+)", "i"), options.defaultIframeWidth);
+				preload.h = matchOrDefault(images[activeImage][2], new RegExp("height=(\\d+)", "i"), options.defaultIframeHeight);				
+//				scroll = options.iframeScrolling;
 // schradt: remove hardcoded scrolling parameter
-				iframe.setProperties({id: "lbFrame_" + new Date().getTime(), width: preload.w, height: preload.h, scrolling: scroll, frameBorder:0, src: url});					
+				iframe.setProperties({id: "lbFrame_" + new Date().getTime(), width: preload.w, height: preload.h, scrolling: options.iframeScrolling, frameBorder:0, src: url});					
 //				iframe.setProperties({id: "lbFrame_" + new Date().getTime(), width: preload.w, height: preload.h, scrolling:'yes', frameBorder:0, src: url});				
 			}				
 		}
@@ -323,7 +326,7 @@ var Slimbox;
 	function printOrSave(mode) {
 		if (options.psScriptPath) {
 // schradt: img src passed to php script
-			fullpath = matchOrDefault(rev, new RegExp("src=(.+)", "i"));
+			fullpath = matchOrDefault(images[activeImage][2], new RegExp("src=(.+)", "i"));
 			var myRef = window.open(options.psScriptPath+'?mode='+mode+'&image='+fullpath,'printsave', 'left=0,top=0,width='+(parseInt(image.style.width))+',height='+ (parseInt(image.style.height)) +',toolbar=0,resizable=1');
 //			var myRef = window.open(options.psScriptPath+'?mode='+mode+'&image='+images[activeImage][0],'printsave', 'left=0,top=0,width='+(parseInt(image.style.width))+',height='+ (parseInt(image.style.height)) +',toolbar=0,resizable=1');
 			return false; // needed to prevent the calling page to reload

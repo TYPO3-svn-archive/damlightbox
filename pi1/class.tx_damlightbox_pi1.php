@@ -239,7 +239,7 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 				$linkConfig['no_cache'] = 0;
 				$linkConfig['useCacheHash'] = 1;
 				$linkConfig['additionalParams'] = '&type='.$conf['type'].'&content='.$uid.'&img='.$key.'';
-				$linkConfig['ATagParams'] = 'title="'.$title.'" rev="width='.$GLOBALS['TSFE']->register['widthCalc'].', height='.$GLOBALS['TSFE']->register['heightCalc'].'" rel="lightbox[sb'.$uid.']"';
+				$linkConfig['ATagParams'] = 'title="'.$title.'" rev="width='.$GLOBALS['TSFE']->register['widthCalc'].', height='.$GLOBALS['TSFE']->register['heightCalc'].', src='.$GLOBALS['TSFE']->register['fullPath'].'" rel="lightbox[sb'.$uid.']"';
 				$linkConfig['ATagBeforeWrap'] = 1;
 
 				$hiddenLinks .= $this->cObj->typoLink(null,$linkConfig);
