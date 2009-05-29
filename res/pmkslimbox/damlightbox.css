@@ -1,5 +1,11 @@
 /* CSS used within the iframe of pmkslimbox */
 
+body {
+	/* needed to convince IE not to display horizontal scrollbars */
+	position: relative;
+	overflow: hidden;
+}
+
 body, #container, #container p {
 	margin: 0;
 	padding: 0;

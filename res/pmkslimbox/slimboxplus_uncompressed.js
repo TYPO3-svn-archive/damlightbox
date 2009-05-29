@@ -129,9 +129,7 @@ var Slimbox;
 		*/
 		slimbox: function(_options, linkMapper, linksFilter) {
 			linkMapper = linkMapper || function(el) {
-// schradt: include a reference to the original image for saving/printing
 				return [el.href, el.title, el.rev];				
-//				return [el.href, el.title, el.rev];
 			};
 
 			linksFilter = linksFilter || function() {
