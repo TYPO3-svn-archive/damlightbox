@@ -253,7 +253,7 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 
 	/**
 	 * Checks if there are custom dimension set for the lightbox of the current image in the flexform of the content element and if yes overrides the calculated
-	 * values from TS. The expected notation in the flexorm is "imagenumber:width,height"
+	 * values from TS. The expected notation in the flexorm is "imagenumber:width,height" starting with number 1 for the first image
 	 *
 	 * @param	int		The current image number
 	 *
