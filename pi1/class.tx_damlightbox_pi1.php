@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008 Torsten Schrade <schradt@uni-mainz.de>
+*  (c) 2009 Torsten Schrade <schradt@uni-mainz.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -36,11 +36,12 @@
  *
  *
  *   50:	class tx_damlightbox_pi1 extends tslib_pibase
- *   68:	function main ($content,$conf)
- *  109:	function getDAMRecords()
- *  208:	function addHiddenImgs($content, $conf)
+ *   69:	function main ($content,$conf)
+ *  117:	function getDAMRecords()
+ *  216:	function addHiddenImgs($content, $conf)
+ *  262:	function overrideDimsFromFlexform($content, $conf)
  *
- * TOTAL FUNCTIONS: 4
+ * TOTAL FUNCTIONS: 5
  * (This index is automatically created/updated by the extension "extdeveval")
  *
  */

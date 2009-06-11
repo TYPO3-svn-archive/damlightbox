@@ -1,4 +1,16 @@
+2009-06-11 Torsten Schrade <schradt@uni-mainz.de>
+
+	* NEW: Added autoconfiguration for realurl. Many thanks to Christopher Torgalson!
+	* NEW: Print/Save function of pmkslimbox now works with damlightbox
+	* BUGFIX #3514: IE Versions display scrollbar in the lightbox iFrame despite scrolling set to "no"
+	* BUGFIX #3262: JS error in IE versions fixed
+	* BUGFIX #3261: Print/Save function didn't work with firstImageIsPreview
+	* BUGFIX #2200: Double quotation mark in DAM fields could break the lightbox caption	
+	* BUGFIX: Now works with dam 1.1.1, dam_ttcontent 1.1.0, pmkslimbox 3.1.0
+	* CHANGE: Refactoring of the extensions folder structure
+
 2008-04-07 Torsten Schrade <schradt@uni-mainz.de>
+
 	* NEW: vCalc and hCalc for tx_damlightbox->addAdditionalImg now use stdWrap to retrieve their values
 	* NEW: flexform field allows to override the lightbox dimensions for a specific image (notation is imagenumber:width,height;)
 	* NEW: title tag for the lightbox page now taken from DAM title of the current image (thx. Dr. Ronald P. Steiner)
