@@ -16,7 +16,7 @@ plugin.damlightbox.mmTable = tx_dam_mm_ref
 plugin.damlightbox.foreignTable = tt_content
 
 #cat=plugin.damlightbox/enable/25; type=string; label= Where clause: This is the used in the MM query. Has stdWrap properties!
-plugin.damlightbox.whereClause = AND tt_content.uid={field:uid}
+plugin.damlightbox.whereClause = AND tt_content.uid={field:uid} AND tx_dam_mm_ref.tablenames LIKE 'tt_content'
 
 #cat=plugin.damlightbox/enable/30; type=string; label= Sorting: This sorting field is the used in the MM query
 plugin.damlightbox.sorting = tx_dam_mm_ref.sorting_foreign

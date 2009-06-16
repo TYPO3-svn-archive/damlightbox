@@ -216,14 +216,16 @@ var Slimbox;
 			var url = images[activeImage][0];	
 // schradt: use tag attribute like ref to pass on a valid path to the img			
 			var re_imageURL = /\.(jpe?g|png|gif|bmp)/i;
-			if( url.match(re_imageURL) ) {
+			if (url.match(re_imageURL) ) {
 				$$(printB,saveB).setStyle("display", "");
 				preload = new Image();	// JavaScript native Object
 				preload.datatype = 'image';
 				preload.onload = nextEffect;
 				preload.src = url;
-			}else{
-//				$$(printB,saveB).setStyle("display", "none");
+			} else {
+				$$(printB,saveB).setStyle("display", "none");
+				if (options.enablePrintButton == 1) $$(printB).setStyle("display", "");
+				if (options.enableSaveButton == 1) $$(saveB).setStyle("display", "");
 				preload = new Object ();	// JavaScript native Object
 				preload.datatype = 'iframe';
 /*				rev = images[activeImage][2];
