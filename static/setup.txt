@@ -252,7 +252,8 @@ damlightbox {
 	includeCSS.file1.media = screen
 
 	## body tag
-	bodyTagCObject =< page.bodyTagCObject
+	bodyTagCObject = TEXT
+	bodyTagCObject.dataWrap = <body id="damlightbox-{GPvar:content}" class="damlightbox">|
 
 	# page object
 	10 = COA

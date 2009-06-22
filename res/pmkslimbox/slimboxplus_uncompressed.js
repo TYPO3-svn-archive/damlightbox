@@ -26,7 +26,7 @@ var Slimbox;
 	// State values: 0 (closed or closing), 1 (open and ready), 2+ (open and busy with animation)
 
 	// DOM elements
-	overlay, center, image, iframe, prevLink, nextLink, bottomContainer, bottom, caption, number,printB,saveB;
+	overlay, center, image, iframe, prevLink, nextLink, bottomContainer, bottom, caption, number, printB, saveB;
 
 	/*
 		Initialization
@@ -234,7 +234,7 @@ var Slimbox;
 */
 				preload.w = matchOrDefault(images[activeImage][2], new RegExp("width=(\\d+)", "i"), options.defaultIframeWidth);
 				preload.h = matchOrDefault(images[activeImage][2], new RegExp("height=(\\d+)", "i"), options.defaultIframeHeight);				
-//				scroll = options.iframeScrolling;
+
 // schradt: remove hardcoded scrolling parameter
 				iframe.setProperties({id: "lbFrame_" + new Date().getTime(), width: preload.w, height: preload.h, scrolling: options.iframeScrolling, frameBorder:0, src: url});					
 //				iframe.setProperties({id: "lbFrame_" + new Date().getTime(), width: preload.w, height: preload.h, scrolling:'yes', frameBorder:0, src: url});				
