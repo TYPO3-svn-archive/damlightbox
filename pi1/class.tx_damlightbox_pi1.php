@@ -153,7 +153,7 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 		$i = 0;
 		$tmpWidth = array();
 		$tmpHeight = array();
-		while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 
 			// build some comma lists for usage from TS
 			$GLOBALS['TSFE']->register['tx_damlightbox']['imgCount'] .= $i.',';
@@ -194,10 +194,15 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 					$tmpCategories[] = $subRow['title'];
 				}
 				$GLOBALS['TSFE']->register['tx_damlightbox']['metaData'][$i]['category'] = implode(',', $tmpCategories);
+				// free memory
+				$GLOBALS['TYPO3_DB']->sql_free_result($subRes);
 			}
 
 			$i++;
 		}
+		
+		// free memory
+		$GLOBALS['TYPO3_DB']->sql_free_result($res);
 
 		// remove the final commas from the lists
 		$GLOBALS['TSFE']->register['tx_damlightbox']['imgCount'] = substr($GLOBALS['TSFE']->register['tx_damlightbox']['imgCount'], 0,-1);
@@ -220,8 +225,8 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 		if (count($GLOBALS['TSFE']->register['tx_damlightbox']['metaData']) > 1) {
 			foreach ($GLOBALS['TSFE']->register['tx_damlightbox']['metaData'] as $key => $value) {
 
-				// leave out the first image
-				if ($key == '0') continue;
+				// leave out the first image and any image that is hidden in DAM
+				if ($key == '0' || $value['hidden'] == 1) continue;
 
 				$uid = $this->cObj->stdWrap($conf['content'],$conf['content.']);
 				$lbCaption = $GLOBALS['TSFE']->register['tx_damlightbox']['config']['sLIGHTBOX']['lbCaption'];
