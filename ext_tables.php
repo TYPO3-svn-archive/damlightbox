@@ -9,25 +9,50 @@ t3lib_extMgm::addStaticFile($_EXTKEY,'static/','DAM Lightbox: basics');
 t3lib_extMgm::addStaticFile($_EXTKEY,'static/pmkslimbox','DAM Lightbox: pmkslimbox');
 #t3lib_extMgm::addStaticFile($_EXTKEY,'static/watermarks','DAM Lightbox: watermarks');
 
-// load $TCA of tt_content for changes afterwards
-t3lib_div::loadTCA('tt_content');
-
-// add the new flexform field to $TCA
 $tempColumns = Array (
 	'tx_damlightbox_flex' => Array (
 		'exclude' => 1,
 		'label' => 'LLL:EXT:damlightbox/locallang_db.xml:tt_content.tx_damlightbox_flex',
 		'config' => Array (
 			'type' => 'flex',
-         	'ds' => array(
-            	'default' => ''.$_EXTCONF['flexformFile'].'',
-        	 )
+         	'ds' => Array (
+            	'default' => $_EXTCONF['flexformFile'],
+        	)
         )
 	),
 );
-t3lib_extMgm::addTCAcolumns('tt_content', $tempColumns, 1);
-t3lib_extMgm::addToAllTCAtypes('tt_content','tx_damlightbox_flex','image,textpic','after:tx_damttcontent_files');
 
-// Set new label for tx_damttcontent_files
-$TCA['tt_content']['columns']['tx_damttcontent_files']['label'] = 'LLL:EXT:damlightbox/locallang_db.xml:tt_content.tx_damttcontent_files';
+$allowedTables = t3lib_div::trimExplode(';', $_EXTCONF['allowedTables'], 1);
+
+if (is_array($allowedTables)) {
+	
+	foreach ($allowedTables as $table) {
+		
+		$after = strpos($table, ':');
+		$types = strpos($table, '|');
+		
+		// table:field
+		if (FALSE !== $after && FALSE === $types) {
+			$field = substr($table, $after+1);
+			$TCAtypes = '';
+			$table = substr($table, 0, $after);
+			
+		// table|types:field
+		} elseif (FALSE !== $after && FALSE !== $types) {
+			$field = substr($table, $after+1);
+			$TCAtypes = str_replace(':'.$field, '', substr($table, $types+1));
+			$table = substr($table, 0, $types);	
+		
+		// table|types
+		} elseif (FALSE === $after && FALSE !== $types) {
+			$field = '';
+			$TCAtypes = substr($table, $types+1);
+			$table = substr($table, 0, $types);			
+		}
+		// else it's just the tablename
+
+		t3lib_extMgm::addTCAcolumns($table, $tempColumns, 1);
+		t3lib_extMgm::addToAllTCAtypes($table, 'tx_damlightbox_flex', $TCAtypes, 'after:'.$field.'');
+	}
+}
 ?>

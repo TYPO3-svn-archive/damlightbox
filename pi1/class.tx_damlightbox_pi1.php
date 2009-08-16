@@ -46,6 +46,7 @@
  *
  */
 
+require_once(t3lib_extMgm::extPath('damlightbox').'pi1/class.tx_damlightbox_div.php');
 require_once(PATH_tslib.'class.tslib_pibase.php');
 
 class tx_damlightbox_pi1 extends tslib_pibase {
@@ -71,16 +72,17 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 
 		// making TypoScript $conf generally available in class
 		$this->conf = $conf;
-
+		
 		// initialize the flexform
 		$flexFieldName = 'tx_damlightbox_flex';
+		$this->cObj->data[$flexFieldName] = tx_damlightbox_div::getFlexFormForRecord($this->cObj->data['uid'], $this->conf['select.']['foreignTable']);
 		$this->pi_initPIflexForm($flexFieldName);
 
 		//clean the registers from any previous data
 		$GLOBALS['TSFE']->register['tx_damlightbox'] = array();
 
 		// get the records
-		$this->getDamRecords();
+		$this->getDamRecords();		
 
 		// if a result is returned, set the config registers; create them from flexform or from TS using the same notation
 		if (isset($GLOBALS['TSFE']->register['tx_damlightbox']['imgCount']) && $this->cObj->data['tx_damlightbox_flex']['data']) {
@@ -131,6 +133,7 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 		$mmTable = $this->conf['select.']['mmTable'];
 		$foreignTable = $this->conf['select.']['foreignTable'];
 		$whereClause = $this->cObj->stdWrap($this->conf['select.']['whereClause'], $this->conf['select.']['whereClause.']);
+		$whereClause .= $this->cObj->enableFields('tx_dam');
 		$sorting = $this->conf['select.']['sorting'];
 
 		// in debug mode store the query
@@ -147,7 +150,7 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 			$sorting,
 			''
 		);
-
+		
 		if ($this->conf['debugData'] == 1) {$GLOBALS['TSFE']->register['tx_damlightbox']['query'] = $GLOBALS['TYPO3_DB']->debug_lastBuiltQuery;}
 
 		$i = 0;

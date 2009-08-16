@@ -1,0 +1,1 @@
+- setting different flexforms per table should be possible using $TCA[TABLENAME]['columns']['tx_damlightbox_flex']['config']['ds']['default'] = FILEPATH;
