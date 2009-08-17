@@ -1,11 +1,6 @@
 <?php
 if (!defined ('TYPO3_MODE')) die ('Access denied.');
 
-// Defining constants. This will save some time and repetition
-if (!defined('PATH_damlightbox')) {    
-	define('PATH_damlightbox', t3lib_extMgm::extPath('damlightbox'));
-}
-
 // Extracting configuration from EM
 $TYPO3_CONF_VARS['EXTCONF']['damlightbox'] = unserialize($_EXTCONF);
 
@@ -16,4 +11,26 @@ $TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/class.t3lib_tceforms.php']['getMainFieldsC
 
 // RealURL autoconfiguration 
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/realurl/class.tx_realurl_autoconfgen.php']['extensionConfiguration']['damlightbox'] = 'EXT:damlightbox/pi1/class.tx_damlightbox_realurl.php:tx_damlightbox_realurl->addDamlightboxConfig';
+
+// check if dam_ttcontent is not loaded, and if so include TS
+
+if (!t3lib_extMgm::isLoaded('dam_ttcontent')) {
+	
+	t3lib_extMgm::addTypoScript(
+		$_EXTKEY,
+		'setup','
+
+		tt_content.image.20.imgList >
+		tt_content.image.20.imgList.cObject = USER
+		tt_content.image.20.imgList.cObject {
+			userFunc = tx_dam_tsfe->fetchFileList
+			refField = tx_damlightbox_image
+			refTable = tt_content
+		}
+		tt_content.image.20.imgPath >
+		tt_content.image.20.imgPath =
+		',
+		43
+	);
+}
 ?>

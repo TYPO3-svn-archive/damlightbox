@@ -1,3 +1,7 @@
+2009-08-16 Torsten Schrade <schradt@uni-mainz.de>
+	* NEW: Universal damlightbox flexform field
+	* NEW: Universal dam image reference field (alternatively dam_ttcontent and dam_ttnews can be used)
+
 2009-07-21 Torsten Schrade <schradt@uni-mainz.de>
 	* CHANGE: Added sql_free_result calls
 	* BUGFIX #3644: Any hidden images now exluded when firstImageIsPreview is checked

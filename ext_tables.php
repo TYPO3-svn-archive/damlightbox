@@ -20,39 +20,35 @@ $tempColumns = Array (
         	)
         )
 	),
+	'tx_damlightbox_image' => txdam_getMediaTCA('image_field', 'tx_damlightbox_image'),
 );
 
 $allowedTables = t3lib_div::trimExplode(';', $_EXTCONF['allowedTables'], 1);
 
 if (is_array($allowedTables)) {
 	
-	foreach ($allowedTables as $table) {
+	foreach ($allowedTables as $configstring) {
 		
-		$after = strpos($table, ':');
-		$types = strpos($table, '|');
+		$tableconfig = t3lib_div::trimExplode('|', $configstring, 1);
+				
+		$table = $tableconfig[0];
+		$fields = 'tx_damlightbox_image, tx_damlightbox_flex';
+		$types = '';
+		$after = '';	
 		
-		// table:field
-		if (FALSE !== $after && FALSE === $types) {
-			$field = substr($table, $after+1);
-			$TCAtypes = '';
-			$table = substr($table, 0, $after);
+		foreach ($tableconfig as $config) {
+
+			if (strpos($config, 'types:') !== FALSE) $types = str_replace('types:', '', $config);
+			if (strpos($config, 'after:') !== FALSE) $after = str_replace('after:', '', $config);		
+			if (strpos($config, 'reffield:') !== FALSE) {
+				$fields = 'tx_damlightbox_flex';
+				unset($tempColumns['tx_damlightbox_image']);
+			}
 			
-		// table|types:field
-		} elseif (FALSE !== $after && FALSE !== $types) {
-			$field = substr($table, $after+1);
-			$TCAtypes = str_replace(':'.$field, '', substr($table, $types+1));
-			$table = substr($table, 0, $types);	
-		
-		// table|types
-		} elseif (FALSE === $after && FALSE !== $types) {
-			$field = '';
-			$TCAtypes = substr($table, $types+1);
-			$table = substr($table, 0, $types);			
 		}
-		// else it's just the tablename
 
 		t3lib_extMgm::addTCAcolumns($table, $tempColumns, 1);
-		t3lib_extMgm::addToAllTCAtypes($table, 'tx_damlightbox_flex', $TCAtypes, 'after:'.$field.'');
+		t3lib_extMgm::addToAllTCAtypes($table, $fields, $types, 'after:'.$after.'');
 	}
 }
 ?>
