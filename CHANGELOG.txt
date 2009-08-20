@@ -1,3 +1,6 @@
+2009-08-21 Torsten Schrade <schradt@uni-mainz.de>
+	* BUGFIX: Wrong TCA include in ext_tables.php
+
 2009-08-16 Torsten Schrade <schradt@uni-mainz.de>
 	* NEW: Universal damlightbox flexform field
 	* NEW: Universal dam image reference field (alternatively dam_ttcontent and dam_ttnews can be used)

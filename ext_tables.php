@@ -20,7 +20,6 @@ $tempColumns = Array (
         	)
         )
 	),
-	'tx_damlightbox_image' => txdam_getMediaTCA('image_field', 'tx_damlightbox_image'),
 );
 
 $allowedTables = t3lib_div::trimExplode(';', $_EXTCONF['allowedTables'], 1);
@@ -32,6 +31,9 @@ if (is_array($allowedTables)) {
 		$tableconfig = t3lib_div::trimExplode('|', $configstring, 1);
 				
 		$table = $tableconfig[0];
+		
+		t3lib_div::loadTCA($table);
+		
 		$fields = 'tx_damlightbox_image, tx_damlightbox_flex';
 		$types = '';
 		$after = '';	
@@ -39,12 +41,16 @@ if (is_array($allowedTables)) {
 		foreach ($tableconfig as $config) {
 
 			if (strpos($config, 'types:') !== FALSE) $types = str_replace('types:', '', $config);
-			if (strpos($config, 'after:') !== FALSE) $after = str_replace('after:', '', $config);		
+			if (strpos($config, 'after:') !== FALSE) $after = str_replace('after:', '', $config);
+
 			if (strpos($config, 'reffield:') !== FALSE) {
+				// just add the flexfield
 				$fields = 'tx_damlightbox_flex';
 				unset($tempColumns['tx_damlightbox_image']);
+			} else {
+				// ad the universal reverence field
+				$tempColumns['tx_damlightbox_image'] = txdam_getMediaTCA('image_field', 'tx_damlightbox_image');
 			}
-			
 		}
 
 		t3lib_extMgm::addTCAcolumns($table, $tempColumns, 1);

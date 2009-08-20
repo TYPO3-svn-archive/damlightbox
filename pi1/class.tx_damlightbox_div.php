@@ -57,7 +57,7 @@ final class tx_damlightbox_div {
 		return TRUE;		
 	}
 	
-	static function getFlexFormForRecord($uid, $table) {
+	static function getFlexFormForRecord($uid, $table) {	
 		
 		// QUERY on the flexform table to find the ds belonging the incoming uid	
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('tx_damlightbox_flex', 'tx_damlightbox_ds', 'tablenames=\''.$table.'\' AND uid_foreign='.$uid.' AND deleted=0', null, null, null);
