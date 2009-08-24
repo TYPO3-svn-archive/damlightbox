@@ -1,1 +1,2 @@
 - setting different flexforms per table should be possible using $TCA[TABLENAME]['columns']['tx_damlightbox_flex']['config']['ds']['default'] = FILEPATH;
+- for tx_dam_mm_ref SELECT GROUP_CONCAT(tx_dam.file_name) could be used but would only be useful for mysql

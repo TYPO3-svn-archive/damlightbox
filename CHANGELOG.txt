@@ -1,3 +1,6 @@
+2009-08-24 Torsten Schrade <schradt@uni-mainz.de>
+	* BUGFIX: SQL errors in list module if the pseudo fields are selected for display. Fixed using a hok in db_list_extra.inc
+
 2009-08-21 Torsten Schrade <schradt@uni-mainz.de>
 	* BUGFIX: Wrong TCA include in ext_tables.php
 

@@ -35,13 +35,13 @@
  *
  *
  *
- *   50:	class tx_damlightbox_pi1 extends tslib_pibase
- *   69:	function main ($content,$conf)
- *  117:	function getDAMRecords()
- *  216:	function addHiddenImgs($content, $conf)
- *  262:	function overrideDimsFromFlexform($content, $conf)
+ *   52: class tx_damlightbox_pi1 extends tslib_pibase
+ *   70:     function main ($content, $conf)
+ *  119:     function getDamRecords()
+ *  226:     function addHiddenImgs($content, $conf)
+ *  272:     function overrideDimsFromFlexform($content, $conf)
  *
- * TOTAL FUNCTIONS: 5
+ * TOTAL FUNCTIONS: 4
  * (This index is automatically created/updated by the extension "extdeveval")
  *
  */
@@ -65,14 +65,13 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 	 *
 	 * @param	string		$content
 	 * @param	string		$conf
-	 *
 	 * @return	void
 	 */
 	function main ($content, $conf) {
 
 		// making TypoScript $conf generally available in class
 		$this->conf = $conf;
-		
+
 		// initialize the flexform
 		$flexFieldName = 'tx_damlightbox_flex';
 		$this->cObj->data[$flexFieldName] = tx_damlightbox_div::getFlexFormForRecord($this->cObj->data['uid'], $this->conf['select.']['foreignTable']);
@@ -82,7 +81,7 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 		$GLOBALS['TSFE']->register['tx_damlightbox'] = array();
 
 		// get the records
-		$this->getDamRecords();		
+		$this->getDamRecords();
 
 		// if a result is returned, set the config registers; create them from flexform or from TS using the same notation
 		if (isset($GLOBALS['TSFE']->register['tx_damlightbox']['imgCount']) && $this->cObj->data['tx_damlightbox_flex']['data']) {
@@ -150,7 +149,7 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 			$sorting,
 			''
 		);
-		
+
 		if ($this->conf['debugData'] == 1) {$GLOBALS['TSFE']->register['tx_damlightbox']['query'] = $GLOBALS['TYPO3_DB']->debug_lastBuiltQuery;}
 
 		$i = 0;
@@ -203,7 +202,7 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 
 			$i++;
 		}
-		
+
 		// free memory
 		$GLOBALS['TYPO3_DB']->sql_free_result($res);
 
@@ -220,6 +219,8 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 	/**
 	 * If the preview mode is set the remaining imagelinks need to be inserted in a hidden div. Otherwise the lightbox will not be browsable and just open the preview image
 	 *
+	 * @param	[type]		$content: ...
+	 * @param	[type]		$conf: ...
 	 * @return	string		Hidden div with the remaining imagelinks
 	 */
 	function addHiddenImgs($content, $conf) {
@@ -265,7 +266,7 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 	 * values from TS. The expected notation in the flexorm is "imagenumber:width,height" starting with number 1 for the first image
 	 *
 	 * @param	int		The current image number
-	 *
+	 * @param	[type]		$conf: ...
 	 * @return	string		Hidden div with the remaining imagelinks
 	 */
 	function overrideDimsFromFlexform($content, $conf) {

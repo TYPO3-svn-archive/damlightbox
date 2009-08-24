@@ -28,7 +28,12 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
+ *   54: static function tableAllowedForDamlightbox($table)
+ *   72: static function getFlexFormForRecord($uid, $table)
+ *   96: static function addTableToFieldnames($table, $fields)
  *
+ * TOTAL FUNCTIONS: 3
+ * (This index is automatically created/updated by the extension "extdeveval")
  *
  */
 /**
@@ -38,31 +43,38 @@
  * @subpackage 	damlightbox
  */
 
-final class tx_damlightbox_div {	 
-	
+final class tx_damlightbox_div {
+
 	/**
-	 * Checks if a table should include the damlightbox field
+	 * Checks if a table should include the damlightbox pseudo fields
 	 *
 	 * @param	string		$table: table to check
 	 * @return	boolean		true if table should include the field
 	 */
 	static function tableAllowedForDamlightbox($table) {
-			
+
 		// table is not configured at all
 		if (!isset($GLOBALS['TCA'][$table])) return FALSE;
-		
+
 		// test if damlightbox field is allowed for the table according to damlightbox extconf
 		if (strpos($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['damlightbox']['allowedTables'], $table) === FALSE) return FALSE;
 
-		return TRUE;		
+		return TRUE;
 	}
-	
-	static function getFlexFormForRecord($uid, $table) {	
-		
-		// QUERY on the flexform table to find the ds belonging the incoming uid	
+
+	/**
+	 * Gets the flexform field for the current record from tx_damlightbox_ds
+	 *
+	 * @param	integer		$uid: The uid of the record for which to fetch tx_damlightbox_flex
+	 * @param	string		$table: The tablename of the record
+	 * @return	string		$ds: The XML string from the tx_damlightbox_flex field of the current record
+	 */
+	static function getFlexFormForRecord($uid, $table) {
+
+		// QUERY on the flexform table to find the ds belonging the incoming uid
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('tx_damlightbox_flex', 'tx_damlightbox_ds', 'tablenames=\''.$table.'\' AND uid_foreign='.$uid.' AND deleted=0', null, null, null);
 		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
-				
+
 			// get and set
 			$row = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 			$ds = $row[0];
@@ -70,8 +82,24 @@ final class tx_damlightbox_div {
 		}
 		// free memory
 		$GLOBALS['TYPO3_DB']->sql_free_result($res);
-		
+
 		return $ds;
+	}
+
+	/**
+	 * Adds the current tablename in front of the submitted fieldnames in order to do proper SQL queries
+	 *
+	 * @param	string		$table: Tablename
+	 * @param	string		$fields: Comma list of fields for which to add the tablename
+	 * @return	string		$fieldList: Comma list of fields with appended tablename
+	 */
+	static function addTableToFieldnames($table, $fields) {
+
+		$fieldList = t3lib_div::trimExplode(',', $fields);
+		foreach ($fieldList as $key => $field) {
+			$fieldList[$key] = $table.'.'.$field;
+		}
+		return implode(',', $fieldList);
 	}
 }
 

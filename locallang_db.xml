@@ -6,12 +6,12 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="tt_content.tx_damttcontent_files">DAM Media</label>
-			<label index="tt_content.tx_damlightbox_flex">DAM Media configuration:</label>
+			<label index="tx_damlightbox_image">DAM Images:</label>
+			<label index="tx_damlightbox_flex">DAM Image configuration:</label>
 		</languageKey>
 		<languageKey index="de" type="array">
-			<label index="tt_content.tx_damttcontent_files">DAM Medien</label>
-			<label index="tt_content.tx_damlightbox_flex">DAM Medienkonfiguration:</label>
+			<label index="tx_damlightbox_image">DAM Bilder:</label>
+			<label index="tx_damlightbox_flex">DAM Bildkonfiguration:</label>
 		</languageKey>
 	</data>
 </T3locallang>

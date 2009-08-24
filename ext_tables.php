@@ -12,7 +12,7 @@ t3lib_extMgm::addStaticFile($_EXTKEY,'static/pmkslimbox','DAM Lightbox: pmkslimb
 $tempColumns = Array (
 	'tx_damlightbox_flex' => Array (
 		'exclude' => 1,
-		'label' => 'LLL:EXT:damlightbox/locallang_db.xml:tt_content.tx_damlightbox_flex',
+		'label' => 'LLL:EXT:damlightbox/locallang_db.xml:tx_damlightbox_flex',
 		'config' => Array (
 			'type' => 'flex',
          	'ds' => Array (
@@ -50,6 +50,7 @@ if (is_array($allowedTables)) {
 			} else {
 				// ad the universal reverence field
 				$tempColumns['tx_damlightbox_image'] = txdam_getMediaTCA('image_field', 'tx_damlightbox_image');
+				$tempColumns['tx_damlightbox_image']['label'] = 'LLL:EXT:damlightbox/locallang_db.xml:tx_damlightbox_image';
 			}
 		}
 
