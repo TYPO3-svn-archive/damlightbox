@@ -52,13 +52,16 @@ final class tx_damlightbox_div {
 	 * @return	boolean		true if table should include the field
 	 */
 	static function tableAllowedForDamlightbox($table) {
+		
+		// load $TCA
+		t3lib_div::loadTCA($table);
 
 		// table is not configured at all
 		if (!isset($GLOBALS['TCA'][$table])) return FALSE;
 
 		// test if damlightbox field is allowed for the table according to damlightbox extconf
 		if (strpos($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['damlightbox']['allowedTables'], $table) === FALSE) return FALSE;
-
+		
 		return TRUE;
 	}
 

@@ -32,11 +32,9 @@ if (is_array($allowedTables)) {
 				
 		$table = $tableconfig[0];
 		
-		t3lib_div::loadTCA($table);
-		
 		$fields = 'tx_damlightbox_image, tx_damlightbox_flex';
 		$types = '';
-		$after = '';	
+		$after = '';
 		
 		foreach ($tableconfig as $config) {
 
@@ -54,6 +52,7 @@ if (is_array($allowedTables)) {
 			}
 		}
 
+		t3lib_div::loadTCA($table);
 		t3lib_extMgm::addTCAcolumns($table, $tempColumns, 1);
 		t3lib_extMgm::addToAllTCAtypes($table, $fields, $types, 'after:'.$after.'');
 	}

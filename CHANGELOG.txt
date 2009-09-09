@@ -1,5 +1,6 @@
 2009-08-24 Torsten Schrade <schradt@uni-mainz.de>
-	* BUGFIX: SQL errors in list module if the pseudo fields are selected for display. Fixed using a hok in db_list_extra.inc
+	* BUGFIX: SQL errors in list module if the pseudo fields are selected for display. Fixed using a hook in db_list_extra.inc
+	* INFO: setting different flexforms per table should is possible using $TCA[TABLENAME]['columns']['tx_damlightbox_flex']['config']['ds']['default'] = FILEPATH;
 
 2009-08-21 Torsten Schrade <schradt@uni-mainz.de>
 	* BUGFIX: Wrong TCA include in ext_tables.php
@@ -7,6 +8,7 @@
 2009-08-16 Torsten Schrade <schradt@uni-mainz.de>
 	* NEW: Universal damlightbox flexform field
 	* NEW: Universal dam image reference field (alternatively dam_ttcontent and dam_ttnews can be used)
+	* INFO: Example syntax for including the fields in tt_content with dam_ttcontent: "tt_content|types:textpic,image|after:tx_damttcontent_files|reffield:tx_damttcontent_files"
 
 2009-07-21 Torsten Schrade <schradt@uni-mainz.de>
 	* CHANGE: Added sql_free_result calls
