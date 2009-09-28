@@ -68,9 +68,14 @@ class tx_damlightbox_tcemain {
 			}
 
 			if (array_key_exists('tx_damlightbox_image', $incomingFieldArray)) {
+				
+				// add the pseudo image field to the table TCA (necessary for correct processing of MM data)
+				$GLOBALS['TCA'][$table]['columns']['tx_damlightbox_image'] = txdam_getMediaTCA('image_field', 'tx_damlightbox_image');
+				
 				$pObj->tx_damlightbox_image = $incomingFieldArray['tx_damlightbox_image'];
 				unset($incomingFieldArray['tx_damlightbox_image']);
 			}
+			
 		}
 	}
 

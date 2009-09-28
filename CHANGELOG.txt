@@ -1,3 +1,6 @@
+2009-09-27 Torsten Schrade <schradt@uni-mainz.de>
+	* BUGFIX: Moved inclusion of pseudo fields into a function that is called by TCEforms/TCEmain hooks. This way the extensions installation order is not relevant anymore (which it was when ext_tables.php was used for inclusion)
+
 2009-08-24 Torsten Schrade <schradt@uni-mainz.de>
 	* BUGFIX: SQL errors in list module if the pseudo fields are selected for display. Fixed using a hook in db_list_extra.inc
 	* INFO: setting different flexforms per table should is possible using $TCA[TABLENAME]['columns']['tx_damlightbox_flex']['config']['ds']['default'] = FILEPATH;

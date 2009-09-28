@@ -2,4 +2,4 @@
 flexformFile = FILE:EXT:damlightbox/flexform_ds.xml
 
 # cat=basic/enable; type=string; label=Allowed tables: Tables for which to include the universal damlightbox fields.
-allowedTables = tt_content|types:textpic,image|after:image; tt_news|after:image
+allowedTables = tt_content|types:textpic,image|after:image; pages|after:media; tt_news|after:image
