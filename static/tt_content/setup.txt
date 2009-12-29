@@ -1,0 +1,184 @@
+#####################################################################
+# TypoScrip configuration for the plugin.damlightbox_pi1			#
+# @author Torsten Schrade <schradt@uni-mainz.de>					#
+# PART I: config for tt_content image and text/w image CEs			#
+#####################################################################
+
+## configuration of the class call to fetch the DAM data into TSFE ##
+
+tt_content.image.15 =< plugin.tx_damlightbox_pi1
+tt_content.textpic.15 =< plugin.tx_damlightbox_pi1
+
+## prepare tt_content.image for damlightbox ##
+
+tt_content.image.20.imgList {
+
+	override.if {
+		value = 1
+		equals.data = TSFE:register|tx_damlightbox|config|sDEF|imgPreview
+	}
+	override.cObject = TEXT
+	override.cObject {
+		wrap = |
+		cObject	< tt_content.image.20.imgList.cObject
+		listNum = 0
+	}
+}
+
+tt_content.image.20.imgPath >
+tt_content.image.20.imgPath =
+
+## configure image CEs for DAM data ##
+
+tt_content.image.20 {
+
+	## cases when imageLinkWrap will be enabled ##
+	1.imageLinkWrap.enable >
+	1.imageLinkWrap.enable.cObject = COA
+	1.imageLinkWrap.enable.cObject {
+
+			## normal links
+			10 = TEXT
+			10.value = 1
+			10.if.isTrue.field = image_link
+
+			## click-enlarge
+			20 < .10
+			20.if.isTrue.field = image_zoom
+
+			## image preview
+			30 < .10
+			30.if.isTrue >
+			30.if.value = 1
+			30.if.equals.data = TSFE:register|tx_damlightbox|config|sDEF|imgPreview
+	}
+
+	## typolink configuration ##
+	1.imageLinkWrap.typolink {
+
+		## unset old param object ##
+		parameter >
+
+		## caching ##
+		no_cache = 0
+		useCacheHash = 1
+
+		## if image_link field is filled ##
+		parameter {
+			field = image_link
+			#listNum.stdWrap.data = register : IMAGE_NUM_CURRENT
+			listNum >
+		}
+
+		## if image_link field is not filled, link to the current id ##
+		parameter.override {
+			cObject = TEXT
+			cObject.data = TSFE:id
+			stdWrap.if.isFalse.field = image_link
+			stdWrap.if.isTrue.data = field:image_zoom // TSFE:register|tx_damlightbox|config|sDEF|imgPreview
+		}
+
+		## append the parameters for the lightbox page ##
+		parameter.append = TEXT
+		parameter.append {
+			if.isFalse.field = image_link
+			value = {$plugin.damlightbox.jsParams}
+			noTrimWrap = | ||
+		}
+
+		additionalParams.cObject = TEXT
+		additionalParams.cObject {
+			htmlspecialchars = 1
+			dataWrap = |&type=313&content=tt_content_{field:uid}&img={register:IMAGE_NUM_CURRENT}
+			if.isFalse.field = image_link
+		}
+
+		ATagParams.cObject = TEXT
+		ATagParams.cObject {
+			value = {$plugin.damlightbox.imageLinkAttributes}
+			if.isFalse.field = image_link
+		}
+	}
+
+	## new title and alt text objects with metadata but can be overidden with standard fields ##
+	1.titleText >
+	1.titleText {
+		cObject < lib.damlightbox.getDAMvalues
+		cObject.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:IMAGE_NUM_CURRENT}|title
+		override {
+			if.isTrue.field = titleText
+			cObject {
+				field = titleText
+				split.token.char = 10
+				split.returnKey.data = register:IMAGE_NUM_CURRENT
+			}
+		}
+		cObject.override >
+	}
+
+	1.altText >
+	1.altText {
+		cObject < lib.damlightbox.getDAMvalues
+		cObject.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:IMAGE_NUM_CURRENT}|alt_text
+		override {
+			if.isTrue.field = altText
+			cObject {
+				field = altText
+				split.token.char = 10
+				split.returnKey.data = register:IMAGE_NUM_CURRENT
+			}
+		}
+	}
+
+	## metadata inserted into the caption; this COA might easily be modified to your needs, depending what you want to show ##
+	caption = COA
+	caption {
+
+		1 >
+
+		## if selected first insert the copyright notice ##
+		10 < lib.damlightbox.getDAMvalues
+		10 {
+			cObject.value = TSFE:register|tx_damlightbox|metaData|{register:IMAGE_NUM_CURRENT}|copyright
+			if.isTrue.data = TSFE:register|tx_damlightbox|config|sDEF|showCopyright
+			outerWrap = {$plugin.damlightbox.copyrightWrap}
+		}
+
+		## now insert the caption from DAM but this might be overriden by the normal caption field ##
+		20 = COA
+		20 {
+
+			## insert the selected field ##
+			10 < lib.damlightbox.getDAMvalues
+			10 {
+				cObject.value = TSFE:register|tx_damlightbox|metaData|{register:IMAGE_NUM_CURRENT}|{TSFE:register|tx_damlightbox|config|sDEF|imgCaption}
+				if.isFalse.field = imagecaption
+			}
+
+			## insert field:imagecaption if used; overrides all other settings ##
+			99 = TEXT
+			99 {
+				field = imagecaption
+				required = 1
+				parseFunc =< lib.parseFunc
+				br=1
+				split {
+					token.char = 10
+					token.if.isPositive = {$styles.content.imgtext.imageTextSplit} + {$styles.content.imgtext.captionSplit}
+					returnKey.data = register:IMAGE_NUM_CURRENT
+				}
+			}
+		}
+	}
+}
+
+#####################################################################
+# TypoScrip configuration for the plugin.damlightbox_pi1			#
+# @author Torsten Schrade <schradt@uni-mainz.de>					#
+# PART II: config for click-enlarge (pagetype = 313)				#
+#####################################################################
+
+damlightbox {
+	10.10.tables := addToList(tt_content)
+	10.10.conf.tt_content =< lib.damlightbox.clickEnlargeConf
+}

@@ -10,3 +10,15 @@ Stuff
 Bugs
 ----
 - BUG: tx_damlighbox_flex displays standard FF if well edited in list module/single field mode
+
+Notes
+-----
+
+tt_news correct behaviour with damlightbox is: 
+- as long as images are in the standard news field, nothing happens, even if the damlightbox field is filled
+- could be: as soon as the damlightbox field is filled, those images take precedence (but then noImage_stdWrap cannot be used)
+- as soon as the standard field is empty and the damlightbox field is filled, noImage_stdWrap activates damlightbox handling of images
+- what about firstImageIsPreview
+- what about imageCount
+
+- include noImg_stdWrap in the imageMarkerfuction

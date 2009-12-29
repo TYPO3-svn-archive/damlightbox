@@ -12,12 +12,6 @@ plugin.damlightbox.damFields = *
 #cat=plugin.damlightbox/enable/15; type=string; label= MM-table: This MM-table will be used in the query for the DAM data
 plugin.damlightbox.mmTable = tx_dam_mm_ref
 
-#cat=plugin.damlightbox/enable/20; type=string; label= Foreign table: This table will be joined in the MM query for the DAM data
-plugin.damlightbox.foreignTable = tt_content
-
-#cat=plugin.damlightbox/enable/25; type=string; label= Where clause: This is the used in the MM query. Has stdWrap properties!
-plugin.damlightbox.whereClause = AND tt_content.uid={field:uid} AND tx_dam_mm_ref.tablenames LIKE 'tt_content'
-
 #cat=plugin.damlightbox/enable/30; type=string; label= Sorting: This sorting field is the used in the MM query
 plugin.damlightbox.sorting = tx_dam_mm_ref.sorting_foreign
 

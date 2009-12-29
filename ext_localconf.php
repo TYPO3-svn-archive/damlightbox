@@ -4,7 +4,7 @@ if (!defined ('TYPO3_MODE')) die ('Access denied.');
 // Extracting configuration from EM
 $TYPO3_CONF_VARS['EXTCONF']['damlightbox'] = unserialize($_EXTCONF);
 
-//	Registering hooks
+// Registering hooks
 // TCEmain
 $TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] = 'EXT:damlightbox/hooks/class.tx_damlightbox_tcemain.php:tx_damlightbox_tcemain';
 $TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass'][] = 'EXT:damlightbox/hooks/class.tx_damlightbox_tcemain.php:tx_damlightbox_tcemain';
@@ -16,7 +16,7 @@ $TYPO3_CONF_VARS['SC_OPTIONS']['typo3/class.db_list_extra.inc']['getTable'][] = 
 // RealURL autoconfiguration 
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/realurl/class.tx_realurl_autoconfgen.php']['extensionConfiguration']['damlightbox'] = 'EXT:damlightbox/pi1/class.tx_damlightbox_realurl.php:tx_damlightbox_realurl->addDamlightboxConfig';
 
-// check if dam_ttcontent is not loaded, and if so include TS
+// check if dam_ttcontent is loaded, and if so include TS
 if (!t3lib_extMgm::isLoaded('dam_ttcontent')) {
 	
 	t3lib_extMgm::addTypoScript(

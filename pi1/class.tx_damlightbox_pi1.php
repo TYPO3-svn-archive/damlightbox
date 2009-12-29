@@ -68,13 +68,25 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 	 * @return	void
 	 */
 	function main ($content, $conf) {
+		
+#		debug($GLOBALS['TSFE']->register);
 
 		// making TypoScript $conf generally available in class
 		$this->conf = $conf;
+		
+		// get the current tablename and record uid which invoked this function call - either we are in the standard page context and a current record is set in TSFE
+		if ($this->cObj->currentRecord) {
+			$this->currentTable = substr($this->cObj->currentRecord, 0, strpos($this->cObj->currentRecord, ':'));
+			$this->currentUid = (int) substr($this->cObj->currentRecord, strpos($this->cObj->currentRecord, ':')+1);			
+		// or we are in a lightbox context (pagetype 313) and need to retrieve the current record via parameters	
+		} else {
+			$this->currentTable = substr(t3lib_div::_GP('content'), 0, strrpos(t3lib_div::_GP('content'), '_')); // value fully quoted below
+			$this->currentUid = (int) substr(t3lib_div::_GP('content'), strrpos(t3lib_div::_GP('content'), '_')+1);
+		}
 
 		// initialize the flexform
 		$flexFieldName = 'tx_damlightbox_flex';
-		$this->cObj->data[$flexFieldName] = tx_damlightbox_div::getFlexFormForRecord($this->cObj->data['uid'], $this->conf['select.']['foreignTable']);
+		$this->cObj->data[$flexFieldName] = tx_damlightbox_div::getFlexFormForRecord($this->currentUid, $this->currentTable);
 		$this->pi_initPIflexForm($flexFieldName);
 
 		//clean the registers from any previous data
@@ -117,7 +129,7 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 	 * @return	void
 	 */
 	function getDamRecords() {
-
+		
 		// fetch only the fields for the DAM record
 		if ($this->conf['select.']['damFields'] == '*') {
 			$selectFields = 'tx_dam.*';
@@ -129,11 +141,20 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 			$selectFields = implode(',', $selectFields);
 		}
 
+		// set the parts for the select query
 		$mmTable = $this->conf['select.']['mmTable'];
 		$foreignTable = $this->conf['select.']['foreignTable'];
 		$whereClause = $this->cObj->stdWrap($this->conf['select.']['whereClause'], $this->conf['select.']['whereClause.']);
-		$whereClause .= $this->cObj->enableFields('tx_dam');
 		$sorting = $this->conf['select.']['sorting'];
+		
+		// automatically try to determine which table and record we are dealing with
+		if (!$mmTable || !$whereClause) {
+			$foreignTable = $this->currentTable;
+			$whereClause = 'AND '.$this->currentTable.'.uid='.$this->currentUid.' AND tx_dam_mm_ref.tablenames LIKE \''.$this->currentTable.'\'';
+		}
+		
+		// include the enable fields for the table
+		$whereClause .= $this->cObj->enableFields('tx_dam');
 
 		// in debug mode store the query
 		if ($this->conf['debugData'] == 1) {$GLOBALS['TYPO3_DB']->store_lastBuiltQuery = TRUE;}
