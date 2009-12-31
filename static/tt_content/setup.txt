@@ -13,6 +13,7 @@ tt_content.textpic.15 =< plugin.tx_damlightbox_pi1
 
 tt_content.image.20.imgList {
 
+	## image preview feature for tt_content images: just use the first image if the flag is set in DS ##
 	override.if {
 		value = 1
 		equals.data = TSFE:register|tx_damlightbox|config|sDEF|imgPreview
@@ -175,7 +176,7 @@ tt_content.image.20 {
 #####################################################################
 # TypoScrip configuration for the plugin.damlightbox_pi1			#
 # @author Torsten Schrade <schradt@uni-mainz.de>					#
-# PART II: config for click-enlarge (pagetype = 313)				#
+# PART II: config for tt_content click-enlarge						#
 #####################################################################
 
 damlightbox {

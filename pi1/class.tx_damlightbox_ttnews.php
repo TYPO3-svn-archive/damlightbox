@@ -28,7 +28,7 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- *   49: function imageMarkerFunc($itemConfig, $pObjRef)
+ *   54: function imageMarkerFunc($itemConfig, $pObjRef)
  *
  * TOTAL FUNCTIONS: 1
  * (This index is automatically created/updated by the extension "extdeveval")
@@ -43,8 +43,13 @@
 
 final class tx_damlightbox_ttnews {
 	
-	/*
-	 * 
+	/**
+	 * Connects tt_news image processing to the damlightbox routine to fetch DAM images and according metadata. The rest of the processing can be done with pure TypoScript.
+	 * Just have a look in the static include file for tt_news.
+	 *
+	 * @param	string		$itemConfig: TypoScript configuration of the current news item
+	 * @param	string		$pObjRef: Reference to the parent object
+	 * @return	string		The accumulated HTML for the news images
 	 */
 	function imageMarkerFunc($itemConfig, $pObjRef) {
 
@@ -62,12 +67,12 @@ final class tx_damlightbox_ttnews {
 
 		// execute damlightbox function to fetch images and metadata
 		$pObj->local_cObj->cObjGetSingle($conf['executeDamlightbox'], $conf['executeDamlightbox.']);
-		
-		// get the images
-		$images = t3lib_div::trimExplode(',', $GLOBALS['TSFE']->register['tx_damlightbox']['damImages'], 1);
-		
+				
 		// set display mode
 		$mode = $pObj->config['code'];
+		
+		// get the images / enable TS processing of the list of images
+		$images = t3lib_div::trimExplode(',', $pObj->local_cObj->cObjGetSingle($conf[$mode.'.']['imgList'], $conf[$mode.'.']['imgList.']), 1);
 		
 		// reset image marker
 		$markerArray['###NEWS_IMAGE###'] = '';

@@ -4,20 +4,47 @@
 # PART I: Configuration for tt_news									#
 #####################################################################
 
+## include the damlightbox class for tt_news image rendering ##
 includeLibs.tx_damlightbox_ttnews = EXT:damlightbox/pi1/class.tx_damlightbox_ttnews.php
 
 plugin.tt_news {
 
+	## take out the standard tt_news image processing ##
 	displaySingle.image >
 	displayLatest.image >
 	displayList.image >
 	
+	## include the damlightbox image marker function ##
 	imageMarkerFunc = tx_damlightbox_ttnews->imageMarkerFunc
 	imageMarkerFunc {
 	
+		## call to damlightbox ##
 		executeDamlightbox =< plugin.tx_damlightbox_pi1
 
-		LIST {	
+		## configuration of images for list view ##
+		LIST {
+
+			## list of images to process ##
+			imgList = TEXT
+			imgList {
+			
+				data = TSFE:register|tx_damlightbox|damImages
+				
+				## override if imgPreview is set in damlightbox ##
+				override {
+					cObject = TEXT
+					cObject {
+						data = TSFE:register|tx_damlightbox|damImages
+						listNum = 0
+					}
+					if {
+						value = 1
+						equals.data = TSFE:register|tx_damlightbox|config|sDEF|imgPreview
+					}
+				}
+			}
+		
+			## configuration for each image ##
 			image = IMAGE
 			image {	
 				file {
@@ -36,14 +63,16 @@ plugin.tt_news {
 				titleText.cObject.cObject.value  = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|title
 			}
 			
+			## additional wraps from tt_news
 #			imageWrapIfAny =
 #			noImage_stdWrap = 
 		}
 		
-		LATEST {
-			image < plugin.tt_news.imageMarkerFunc.LIST.image
-		}
+		## configuration of images for latest view ##
+		LATEST < plugin.tt_news.imageMarkerFunc.LIST
 		
+		## configuration of images in single view ##
+		SINGLE < plugin.tt_news.imageMarkerFunc.LIST
 		SINGLE {
 			image < plugin.tt_news.imageMarkerFunc.LIST.image
 			image {
