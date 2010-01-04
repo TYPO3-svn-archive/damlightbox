@@ -7,7 +7,7 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 			<label index="tx_damlightbox.sDEF">Image configuration</label>
-			<label index="tx_damlightbox.imgPreview">Show first image as preview</label>
+			<label index="tx_damlightbox.imgPreview">Show only first image (preview mode)</label>
 			<label index="tx_damlightbox.imgCaption">Use as caption:</label>
 			<label index="tx_damlightbox.imgCaption.title">Media: title</label>
 			<label index="tx_damlightbox.imgCaption.caption">Media: caption</label>
@@ -22,7 +22,7 @@
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="tx_damlightbox.sDEF">Bilder:</label>
-			<label index="tx_damlightbox.imgPreview">Erstes Bild als Vorschau</label>
+			<label index="tx_damlightbox.imgPreview">Zeige nur erstes Bild (Vorschaumodus)</label>
 			<label index="tx_damlightbox.imgCaption">Benutze als Bildunterschrift:</label>
 			<label index="tx_damlightbox.imgCaption.title">Media: Titel</label>
 			<label index="tx_damlightbox.imgCaption.caption">Media: Bildunterschrift</label>

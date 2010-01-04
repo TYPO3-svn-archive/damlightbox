@@ -71,12 +71,20 @@ final class tx_damlightbox_ttnews {
 		// set display mode
 		$mode = $pObj->config['code'];
 		
-		// get the images / enable TS processing of the list of images
+		// fistImageIsPreview mode in SINGLE: remove the first image from the list
+		if ($mode == 'SINGLE' && substr_count($GLOBALS['TSFE']->register['tx_damlightbox']['damImages'], ',') > 0 && $pObj->config['firstImageIsPreview']) {
+			$GLOBALS['TSFE']->register['tx_damlightbox']['damImages'] = substr($GLOBALS['TSFE']->register['tx_damlightbox']['damImages'], strpos($GLOBALS['TSFE']->register['tx_damlightbox']['damImages'], ',')+1);
+			array_shift($GLOBALS['TSFE']->register['tx_damlightbox']['metaData']);
+		}
+				
+		// get the final image list / enable TS processing
 		$images = t3lib_div::trimExplode(',', $pObj->local_cObj->cObjGetSingle($conf[$mode.'.']['imgList'], $conf[$mode.'.']['imgList.']), 1);
 		
 		// reset image marker
 		$markerArray['###NEWS_IMAGE###'] = '';
-				
+
+		debug($itemConfig);
+		
 		// processing of the images
 		if ($images) {
 			

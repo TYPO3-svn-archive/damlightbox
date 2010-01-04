@@ -8,11 +8,6 @@
 includeLibs.tx_damlightbox_ttnews = EXT:damlightbox/pi1/class.tx_damlightbox_ttnews.php
 
 plugin.tt_news {
-
-	## take out the standard tt_news image processing ##
-	displaySingle.image >
-	displayLatest.image >
-	displayList.image >
 	
 	## include the damlightbox image marker function ##
 	imageMarkerFunc = tx_damlightbox_ttnews->imageMarkerFunc
@@ -46,14 +41,15 @@ plugin.tt_news {
 		
 			## configuration for each image ##
 			image = IMAGE
-			image {	
+			image {
+			
 				file {
 					import.cObject < lib.damlightbox.getDAMvalues
 					import.cObject {
 						cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|fullPath
 					}	
-					maxW = 200
-					maxH = 150
+					maxW < plugin.tt_news.displayList.image.file.maxW
+					maxH < plugin.tt_news.displayList.image.file.maxH
 				}
 			
 				altText.cObject < lib.damlightbox.getDAMvalues
@@ -64,18 +60,35 @@ plugin.tt_news {
 			}
 			
 			## additional wraps from tt_news
-#			imageWrapIfAny =
-#			noImage_stdWrap = 
+			imageWrapIfAny < plugin.tt_news.displayList.imageWrapIfAny
+			noImage_stdWrap < plugin.tt_news.displayList.image.noImage_stdWrap
 		}
 		
 		## configuration of images for latest view ##
 		LATEST < plugin.tt_news.imageMarkerFunc.LIST
+		LATEST {
+		
+			image.file {
+				maxW < plugin.tt_news.displayLatest.image.file.maxW
+				maxH < plugin.tt_news.displayLatest.image.file.maxH
+			}
+		
+			## additional wraps from tt_news
+			imageWrapIfAny < plugin.tt_news.displayLatest.imageWrapIfAny
+			noImage_stdWrap < plugin.tt_news.displayLatest.image.noImage_stdWrap
+		}
 		
 		## configuration of images in single view ##
 		SINGLE < plugin.tt_news.imageMarkerFunc.LIST
 		SINGLE {
-			image < plugin.tt_news.imageMarkerFunc.LIST.image
+		
 			image {
+
+				file {
+					maxW < plugin.tt_news.displaySingle.image.file.maxW
+					maxH < plugin.tt_news.displaySingle.image.file.maxH
+				}
+			
 				imageLinkWrap = 1
 				imageLinkWrap {
 					enable = 1
@@ -95,10 +108,22 @@ plugin.tt_news {
 							dataWrap = |&type=313&content=tt_news_{field:uid}&img={register:currentImg}
 						}
 					}
-				}		
+				}
 			}
+			
+			## additional wraps from tt_news
+			imageWrapIfAny < plugin.tt_news.displaySingle.imageWrapIfAny
+			noImage_stdWrap < plugin.tt_news.displaySingle.image.noImage_stdWrap			
 		}
 	}
+	
+#	## take out the standard tt_news image processing ##
+#	displaySingle.image >
+#	displayLatest.image >
+#	displayList {
+#		image >
+#		imageWrapIfAny >
+#	}	
 }
 
 #####################################################################
