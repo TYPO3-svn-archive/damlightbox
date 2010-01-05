@@ -51,12 +51,33 @@ plugin.tt_news {
 					maxW < plugin.tt_news.displayList.image.file.maxW
 					maxH < plugin.tt_news.displayList.image.file.maxH
 				}
-			
+
+				## alt texts from DAM ##
 				altText.cObject < lib.damlightbox.getDAMvalues
 				altText.cObject.cObject.value  = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|description
 				
+				## allow override from record ##
+				altText.override {
+					if.isTrue.field = imagealttext
+					
+					field = imagealttext
+					split.token.char = 10
+					split.returnKey.data = register:currentImg
+					
+				}
+				
+				## title texts from DAM ##
 				titleText.cObject < lib.damlightbox.getDAMvalues
 				titleText.cObject.cObject.value  = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|title
+				
+				## allow override from record ##
+				titleText.override {
+					if.isTrue.field = imagetitletext
+					
+					field = imagetitletext	
+					split.token.char = 10
+					split.returnKey.data = register:currentImg	
+				}
 			}
 			
 			## additional wraps from tt_news
@@ -111,19 +132,32 @@ plugin.tt_news {
 				}
 			}
 			
+			## captions ##
+			caption = COA
+			caption {
+				
+				## DAM metadata ##
+				10 < lib.damlightbox.getDAMvalues
+				10.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|{TSFE:register|tx_damlightbox|config|sDEF|imgCaption}
+				10.if.isFalse.field = imagecaption
+			
+				## override from record ##
+				20 = TEXT
+				20.if.isTrue.field = imagecaption
+				20 {
+					field = imagecaption
+					split.token.char = 10
+					split.returnKey.data = register:currentImg
+				}
+			}
+			
+			
 			## additional wraps from tt_news
 			imageWrapIfAny < plugin.tt_news.displaySingle.imageWrapIfAny
-			noImage_stdWrap < plugin.tt_news.displaySingle.image.noImage_stdWrap			
+			noImage_stdWrap < plugin.tt_news.displaySingle.image.noImage_stdWrap
+			caption_stdWrap < plugin.tt_news.displaySingle.caption_stdWrap
 		}
-	}
-	
-#	## take out the standard tt_news image processing ##
-#	displaySingle.image >
-#	displayLatest.image >
-#	displayList {
-#		image >
-#		imageWrapIfAny >
-#	}	
+	}	
 }
 
 #####################################################################

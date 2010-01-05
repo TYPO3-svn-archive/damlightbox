@@ -51,74 +51,140 @@ final class tx_damlightbox_ttnews {
 	 * @param	string		$pObjRef: Reference to the parent object
 	 * @return	string		The accumulated HTML for the news images
 	 */
-	function imageMarkerFunc($itemConfig, $pObjRef) {
+	public function imageMarkerFunc($itemConfig, $pObjRef) {
 
-		// $config of the current news item in an array
-		$itemConfig = $itemConfig[1];
-		
 		// reference to the parent-object
 		$pObj = &$pObjRef['parentObj'];
 
+		// $config of the current news item in an array
+		$this->itemConfig = $itemConfig[1];
+
 		// set current row from parent object
-		$row = $pObj->local_cObj->data;
-		
+		$this->row = $pObj->local_cObj->data;
+
 		// conf of the image marker function
-		$conf = $pObj->conf['imageMarkerFunc.'];
+		$this->conf = $pObj->conf['imageMarkerFunc.'];
 
 		// execute damlightbox function to fetch images and metadata
-		$pObj->local_cObj->cObjGetSingle($conf['executeDamlightbox'], $conf['executeDamlightbox.']);
-				
+		$pObj->local_cObj->cObjGetSingle($this->conf['executeDamlightbox'], $this->conf['executeDamlightbox.']);
+
 		// set display mode
-		$mode = $pObj->config['code'];
+		$this->mode = $pObj->config['code'];
 		
+		// maxW & maxH
+		$this->conf[$this->mode.'.']['image.']['file.']['maxW'] = $this->itemConfig['image.']['file.']['maxW'];
+		$this->conf[$this->mode.'.']['image.']['file.']['maxH'] = $this->itemConfig['image.']['file.']['maxH'];
+
 		// fistImageIsPreview mode in SINGLE: remove the first image from the list
-		if ($mode == 'SINGLE' && substr_count($GLOBALS['TSFE']->register['tx_damlightbox']['damImages'], ',') > 0 && $pObj->config['firstImageIsPreview']) {
+		if ($this->mode == 'SINGLE' && substr_count($GLOBALS['TSFE']->register['tx_damlightbox']['damImages'], ',') > 0 && $pObj->config['firstImageIsPreview']) {
 			$GLOBALS['TSFE']->register['tx_damlightbox']['damImages'] = substr($GLOBALS['TSFE']->register['tx_damlightbox']['damImages'], strpos($GLOBALS['TSFE']->register['tx_damlightbox']['damImages'], ',')+1);
 			array_shift($GLOBALS['TSFE']->register['tx_damlightbox']['metaData']);
 		}
-				
+
 		// get the final image list / enable TS processing
-		$images = t3lib_div::trimExplode(',', $pObj->local_cObj->cObjGetSingle($conf[$mode.'.']['imgList'], $conf[$mode.'.']['imgList.']), 1);
+		$images = t3lib_div::trimExplode(',', $pObj->local_cObj->cObjGetSingle($this->conf[$this->mode.'.']['imgList'], $this->conf[$this->mode.'.']['imgList.']), 1);
 		
 		// reset image marker
 		$markerArray['###NEWS_IMAGE###'] = '';
-
-		debug($itemConfig);
 		
 		// processing of the images
 		if ($images) {
 			
 			// image count in tt_news
-			$imageCount = isset($itemConfig['imageCount']) ? $itemConfig['imageCount']:1;
-			
+			$imageCount = isset($this->itemConfig['imageCount']) ? $this->itemConfig['imageCount']:1;
+
 			// set global counter - can be accessed like IMAGE_NUM_CURRENT from TS but in tt_news context
 			$GLOBALS['TSFE']->register['currentImg'] = 0;
-			
+
 			// walk through each image
 			foreach ($images as $img) {
-				
+
 				// if imgCount is reached stop the processing
 				if ($GLOBALS['TSFE']->register['currentImg'] == $imageCount) break;
-				
-				// execute the TS configuration
-				$theImgCode .= $pObj->local_cObj->IMAGE($conf[$mode.'.']['image.']);
-				
+
+				// image
+				$theImgCode .= $pObj->local_cObj->IMAGE($this->conf[$this->mode.'.']['image.']);
+	
+				// caption
+				$theImgCode .= $pObj->local_cObj->stdWrap($pObj->local_cObj->cObjGetSingle($this->conf[$this->mode.'.']['caption'], $this->conf[$this->mode.'.']['caption.']), $this->conf[$this->mode.'.']['caption_stdWrap.']);
+
 				// raise the global image count
 				$GLOBALS['TSFE']->register['currentImg']++;
-				
+
 			}
 			
 			// fill the accumulated image code into the marker
-			$markerArray['###NEWS_IMAGE###'] = $pObj->local_cObj->wrap(trim($theImgCode), $conf[$mode.'.']['imageWrapIfAny']);
+			$markerArray['###NEWS_IMAGE###'] = $pObj->local_cObj->wrap(trim($theImgCode), $this->conf[$this->mode.'.']['imageWrapIfAny']);
+
+		// to allow easy transition from classic newsimages to damlightbox handling implement the standard function from tt_news
+		} elseif ($this->row['image']) {
+
+			$theImgCode = $this->getImageMarkersClassic($pObj);
 			
+			if ($theImgCode) $markerArray['###NEWS_IMAGE###'] = $pObj->local_cObj->wrap(trim($theImgCode), $this->conf[$this->mode.'.']['imageWrapIfAny']);
+		
+		// if no images are present execute noImage_stdWrap as normal
 		} else {
-			
-			// if no images are there execute noImage_stdWrap as normal
-			$markerArray['###NEWS_IMAGE###'] = $pObj->local_cObj->stdWrap($markerArray['###NEWS_IMAGE###'], $conf[$mode.'.']['noImage_stdWrap.']);
+			$markerArray['###NEWS_IMAGE###'] = $pObj->local_cObj->stdWrap($markerArray['###NEWS_IMAGE###'], $this->conf[$this->mode.'.']['noImage_stdWrap.']);
 		}		
 		
 		// pass the image HTML back to tt_news
 		return $markerArray;
+	}
+
+	/**
+	 * The 'classic' image function from tt_news. It's used as long as there are no DAM images present to provide a smooth transition to damlightbox handling of images
+	 * 
+	 * @param	object		$pObj: The calling tt_news parent object
+	 * 
+	 * @return	string		The HTML code for the images
+	 */
+	private function getImageMarkersClassic($pObj) {
+		
+		$imageNum = isset($this->itemConfig['imageCount']) ? $this->itemConfig['imageCount']:1;
+		$imageNum = t3lib_div::intInRange($imageNum, 0, 100);
+		$theImgCode = '';
+		$imgs = t3lib_div::trimExplode(',', $this->row['image'], 1);
+		$imgsCaptions = explode(chr(10), $this->row['imagecaption']);
+		$imgsAltTexts = explode(chr(10), $this->row['imagealttext']);
+		$imgsTitleTexts = explode(chr(10), $this->row['imagetitletext']);
+
+		reset($imgs);
+
+		$cc = 0;
+		// remove first img from the image array in single view if the TSvar firstImageIsPreview is set
+		if ((	(count($imgs) > 1 && $this->itemConfig['firstImageIsPreview'])
+				||
+				(count($imgs) >= 1 && $this->itemConfig['forceFirstImageIsPreview'])
+			) && $this->mode == 'SINGLE') {
+			array_shift($imgs);
+			array_shift($imgsCaptions);
+			array_shift($imgsAltTexts);
+			array_shift($imgsTitleTexts);
+		}
+		// get img array parts for single view pages
+		if ($pObj->piVars[$this->itemConfig['singleViewPointerName']]) {
+			$spage = $pObj->piVars[$this->itemConfig['singleViewPointerName']];
+			$astart = $imageNum*$spage;
+			$imgs = array_slice($imgs,$astart,$imageNum);
+			$imgsCaptions = array_slice($imgsCaptions,$astart,$imageNum);
+			$imgsAltTexts = array_slice($imgsAltTexts,$astart,$imageNum);
+			$imgsTitleTexts = array_slice($imgsTitleTexts,$astart,$imageNum);
+		}
+
+		while (list(, $val) = each($imgs)) {
+			if ($cc == $imageNum) break;
+			if ($val) {
+
+				$this->itemConfig['image.']['altText'] = $imgsAltTexts[$cc];
+				$this->itemConfig['image.']['titleText'] = $imgsTitleTexts[$cc];
+				$this->itemConfig['image.']['file'] = 'uploads/pics/' . $val;
+			}
+			$theImgCode .= $pObj->local_cObj->IMAGE($this->itemConfig['image.']) . $pObj->local_cObj->stdWrap($imgsCaptions[$cc], $this->itemConfig['caption_stdWrap.']);
+			$cc++;
+		}
+
+		return($theImgCode);
 	}
 	
 }
