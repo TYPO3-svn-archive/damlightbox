@@ -67,7 +67,7 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 	 * @param	string		$conf
 	 * @return	void
 	 */
-	function main ($content, $conf) {
+	public function main ($content, $conf) {
 		
 #		debug($GLOBALS['TSFE']->register);
 
@@ -128,7 +128,7 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 	 *
 	 * @return	void
 	 */
-	function getDamRecords() {
+	protected function getDamRecords() {
 		
 		// fetch only the fields for the DAM record
 		if ($this->conf['select.']['damFields'] == '*') {
@@ -244,7 +244,7 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 	 * @param	[type]		$conf: ...
 	 * @return	string		Hidden div with the remaining imagelinks
 	 */
-	function addHiddenImgs($content, $conf) {
+	public function addHiddenImgs($content, $conf) {
 
 		// check if there is more than one image and if yes insert a hidden div
 		if (count($GLOBALS['TSFE']->register['tx_damlightbox']['metaData']) > 1) {
@@ -286,15 +286,15 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 	 * Checks if there are custom dimension set for the lightbox of the current image in the flexform of the content element and if yes overrides the calculated
 	 * values from TS. The expected notation in the flexorm is "imagenumber:width,height" starting with number 1 for the first image
 	 *
-	 * @param	int		The current image number
-	 * @param	[type]		$conf: ...
+	 * @param	int			The current image number
+	 * @param	array		TypoScript configuration array
 	 * @return	string		Hidden div with the remaining imagelinks
 	 */
-	function overrideDimsFromFlexform($content, $conf) {
+	public function overrideDimsFromFlexform($content, $conf) {
 
 		// check if some specific dimensions are set in the flexform
 		$customDims = array();
-		$customDims = t3lib_div::trimExplode(';',$GLOBALS['TSFE']->register['tx_damlightbox']['config']['sLIGHTBOX']['setSpecificDimensions'],1);
+		$customDims = t3lib_div::trimExplode(';', $GLOBALS['TSFE']->register['tx_damlightbox']['config']['sLIGHTBOX']['setSpecificDimensions'], 1);
 
 		if ($customDims) {
 			foreach($customDims as $value) {
@@ -309,6 +309,40 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 			}
 		}
 		return;
+	}
+
+	
+	
+	/* Iterates through all images given in the damImages register. Usefull for frontend rendering in case more than one image from a damlightbox field of a given table has to be rendered.
+	 * 
+	 * @param	string		Content to be processed
+	 * @param	array		TypoScript configuration of the user object (have a look at the static TS example for pages table)
+	 * @return	string		The generated HTML
+	 */
+	public function frontendImageIterator($content, $conf) {
+		
+		// first gather the list of files
+		$images = array();
+		$images = t3lib_div::trimExplode(',', $GLOBALS['TSFE']->register['tx_damlightbox']['damImages'], 1);
+		
+		if (count($images) > 0) {
+
+			// iterate through the images
+			$GLOBALS['TSFE']->register['currentImg'] = 0;
+					
+			foreach ($images as $image) {
+				
+				// produce the image
+				$content .= $this->cObj->cObjGetSingle($conf['image'], $conf['image.']);
+				
+				// first image is preview
+				if ($GLOBALS['TSFE']->register['tx_damlightbox']['config']['sDEF']['imgPreview']) break;
+				
+				// raise counter
+				$GLOBALS['TSFE']->register['currentImg']++;
+			}
+		}	
+		return $content;
 	}
 
 }

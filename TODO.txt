@@ -13,3 +13,6 @@ Bugs
 
 Notes
 -----
+
+# Field config not via ext_conf_template but via PageTSConfig
+# slide config for pages

@@ -54,7 +54,7 @@ plugin.tt_news {
 
 				## alt texts from DAM ##
 				altText.cObject < lib.damlightbox.getDAMvalues
-				altText.cObject.cObject.value  = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|description
+				altText.cObject.cObject.value  = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|alt_text
 				
 				## allow override from record ##
 				altText.override {
@@ -114,6 +114,11 @@ plugin.tt_news {
 				imageLinkWrap {
 					enable = 1
 					typolink {
+					
+						## caching ##
+						no_cache = 0
+						useCacheHash = 1
+						
 						parameter.data = TSFE:id	
 						
 						parameter.append = TEXT
@@ -127,6 +132,11 @@ plugin.tt_news {
 						additionalParams.cObject {
 							htmlspecialchars = 1
 							dataWrap = |&type=313&content=tt_news_{field:uid}&img={register:currentImg}
+						}
+						
+						ATagParams.cObject = TEXT
+						ATagParams.cObject {
+							value = {$plugin.damlightbox.imageLinkAttributes}
 						}
 					}
 				}
