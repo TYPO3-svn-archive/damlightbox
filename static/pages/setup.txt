@@ -4,6 +4,11 @@
 # PART I: Configuration for pages									#
 #####################################################################
 
+## include the damlightbox class for tt_news image rendering ##
+includeLibs.tx_damlightbox_pages = EXT:damlightbox/pi1/class.tx_damlightbox_pages.php
+
+## configuration of example pages object ##
+
 page.313 = COA
 page.313 {
 
@@ -23,8 +28,8 @@ page.313 {
 				import.cObject {
 					cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|fullPath
 				}	
-				maxW = {$plugin.damlightbox.maxW}
-				maxH = {$plugin.damlightbox.maxH}
+				maxW = 400
+				maxH = 300
 			}
 	
 			## alt texts from DAM ##
@@ -65,7 +70,7 @@ page.313 {
 					}
 				}
 			}
-			
+	
 			stdWrap.postCObject = COA
 			stdWrap.postCObject {
 				
@@ -84,6 +89,17 @@ page.313 {
 				20.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|{TSFE:register|tx_damlightbox|config|sDEF|imgCaption}
 				20.if.isTrue.data = TSFE:register|tx_damlightbox|config|sDEF|imgCaption
 			}
+		}
+		
+		## advanced feature: slide option for pages ##
+		stdWrap.ifEmpty.cObject = USER
+		stdWrap.ifEmpty.cObject {
+		
+			userFunc = tx_damlightbox_pages->rootLineSlide
+			
+			image < page.313.20.image
+			
+			
 		}
 	}
 }

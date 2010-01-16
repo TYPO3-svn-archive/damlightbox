@@ -41,7 +41,7 @@
  * @subpackage 	damlightbox
  */
 
-final class tx_damlightbox_ttnews {
+class tx_damlightbox_ttnews extends tx_ttnews {
 	
 	/**
 	 * Connects tt_news image processing to the damlightbox routine to fetch DAM images and according metadata. The rest of the processing can be done with pure TypoScript.

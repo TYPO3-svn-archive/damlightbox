@@ -1,7 +1,7 @@
 #####################################################################
 # TypoScrip configuration for the plugin.damlightbox_pi1			#
 # @author Torsten Schrade <schradt@uni-mainz.de>					#
-# PART I: config for the image and text/w image CEs					#
+# PART I: Basic TypoScript libraries and settings					#
 #####################################################################
 
 ## include the plugin class ##

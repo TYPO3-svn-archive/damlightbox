@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009 Torsten Schrade <schradt@uni-mainz.de>
+*  (c) 2010 Torsten Schrade <schradt@uni-mainz.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -317,7 +317,7 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 	 * 
 	 * @param	string		Content to be processed
 	 * @param	array		TypoScript configuration of the user object (have a look at the static TS example for pages table)
-	 * @return	string		The generated HTML
+	 * @return	string		The generated image tags
 	 */
 	public function frontendImageIterator($content, $conf) {
 		
@@ -341,8 +341,9 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 				// raise counter
 				$GLOBALS['TSFE']->register['currentImg']++;
 			}
-		}	
-		return $content;
+		}
+		
+		return $this->cObj->stdWrap($content, $conf['stdWrap.']);
 	}
 
 }
