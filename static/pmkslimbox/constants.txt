@@ -5,21 +5,16 @@
 
 ## FILES ##
 
-#cat=plugin.damlightbox.slimbox/file/10; type=file; label= Template file: Template file that will be used within pmkslimbox
-plugin.damlightbox.slimbox.templateFile = EXT:damlightbox/res/pmkslimbox/template.html
+#cat=plugin.damlightbox.pmkslimbox/file/10; type=file; label= Template file: Template file that will be used within pmkslimbox
+plugin.damlightbox.pmkslimbox.templateFile = EXT:damlightbox/res/pmkslimbox/template.html
 
-#cat=plugin.damlightbox.slimbox/file/20; type=file; label= CSS File: CSS file for clickenlarge iframe with pmkslimbox.
-plugin.damlightbox.slimbox.cssFile = EXT:damlightbox/res/pmkslimbox/damlightbox.css
-
+#cat=plugin.damlightbox.pmkslimbox/file/20; type=file; label= CSS File: CSS file for clickenlarge iframe with pmkslimbox.
+plugin.damlightbox.pmkslimbox.cssFile = EXT:damlightbox/res/pmkslimbox/damlightbox.css
 
 ## DIMENSIONS ##
 
-#cat=plugin.damlightbox.slimbox/dims/10; type=wrap; label= Width calculation: Here you can add arithmetic expressions that will be combined with the horizontal pixel value of the image to determine the actual height of the lightbox
-plugin.damlightbox.slimbox.hCalc =
+#cat=plugin.damlightbox.pmkslimbox/dims/10; type=wrap; label= Width calculation: Here you can add arithmetic expressions that will be combined with the horizontal pixel value of the image to determine the actual height of the lightbox
+plugin.damlightbox.pmkslimbox.hCalc =
 
-#cat=plugin.damlightbox.slimbox/dims/20; type=wrap; label= Height calculation: Here you can add arithmetic expressions that will be combined with the vertical pixel value of the image determine the actual width lightbox
-plugin.damlightbox.slimbox.vCalc = |+54
-
-## PMKSLIMBOX SETTINGS ###
-plugin.pmkslimbox.imgtext.captionField =
-plugin.pmkslimbox.iframeScrolling = no
+#cat=plugin.damlightbox.pmkslimbox/dims/20; type=wrap; label= Height calculation: Here you can add arithmetic expressions that will be combined with the vertical pixel value of the image determine the actual width lightbox
+plugin.damlightbox.pmkslimbox.vCalc = |+54

@@ -7,6 +7,82 @@
 # use a slightly modified slimboxplus.js to provide all functions
 page.1230.20.jsfile.dataWrap = EXT:damlightbox/res/pmkslimbox/slimboxplus.js
 
+## library for pmkslimbox link treatment ##
+lib.damlightbox.pmkslimbox.imageLinkWrap.typolink {
+
+	ATagParams.cObject = COA
+	ATagParams.cObject.10 = LOAD_REGISTER
+	ATagParams.cObject.10 {
+	
+		## calculate width / height & get the value for the lightbox caption ##		
+		hpixels = TEXT
+		hpixels {
+			cObject < lib.damlightbox.getDAMvalues
+			cObject.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|hpixels
+			wrap = {$plugin.damlightbox.pmkslimbox.hCalc}
+		}
+		
+		vpixels = TEXT
+		vpixels {
+			cObject < lib.damlightbox.getDAMvalues
+			cObject.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|vpixels
+			wrap = {$plugin.damlightbox.pmkslimbox.vCalc}
+		}
+		
+		## width/height calculated to determine the actual lightbox dimensions ##
+		widthCalc = TEXT
+		widthCalc {
+			data = register:hpixels
+			prioriCalc = intval
+		}
+		
+		heightCalc = TEXT
+		heightCalc {
+			data = register:vpixels
+			prioriCalc = intval
+		}
+		
+		## determine the value that will be used as lightbox caption - this is retrieved with a COA to allow for easy additions from TS ##
+		lbCaption.cObject = COA
+		lbCaption.cObject.10 < lib.damlightbox.getDAMvalues
+		lbCaption.cObject.10 {
+			cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|{TSFE:register|tx_damlightbox|config|sLIGHTBOX|lbCaption}
+		}
+		
+		## parse out any " that would invalidate the HTML and cut off the caption
+		lbCaption.cObject.stdWrap.split {
+			# substitue all " with entity
+			token.char = 34
+			cObjNum = 1
+			1.current = 1
+			1.wrap = &quot;|				
+		}
+		
+		# remove the first entity again
+		lbCaption.substring = 6	
+		
+		## the real img path will be passed on to savefile.php from pmkslimbox
+		fullPath.cObject = COA
+		fullPath.cObject.10 < lib.damlightbox.getDAMvalues
+		fullPath.cObject.10 {
+			wrap = {getIndpEnv:TYPO3_SITE_URL}{|}
+			cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|fullPath
+		}
+	}
+
+	## check if the calculated dimensions have to be overriden due to a value in the flexform configuration
+	ATagParams.cObject.15 = TEXT
+	ATagParams.cObject.15.data = register:currentImg
+	ATagParams.cObject.15.postUserFunc = tx_damlightbox_pi1->overrideDimsFromFlexform
+
+	## the a-tag parameters used for slimbox
+	ATagParams.cObject.20 = TEXT
+	ATagParams.cObject.20 {
+		dataWrap = {$plugin.damlightbox.imageLinkAttributes} rel="lightbox[sb{field:uid}]" rev="width={register:widthCalc}, height={register:heightCalc}, src={register:fullPath}" title="{register:lbCaption}"
+		if.isFalse.field = image_link
+	}
+}
+
 # modify image links for pmkslimbox/damlightbox use
 tt_content.image.20 {
 
@@ -25,70 +101,12 @@ tt_content.image.20 {
 		parameter.listNum >
 
 		ATagParams >
-		ATagParams.cObject = COA
-
-		## calculate width / height & get the value for the lightbox caption ##
-		ATagParams.cObject.10 = LOAD_REGISTER
-		ATagParams.cObject.10 {
-			hpixels = TEXT
-			hpixels {
-				cObject < temp.getDAMvalues
-				cObject.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:IMAGE_NUM_CURRENT}|hpixels
-				wrap = {$plugin.damlightbox.slimbox.hCalc}
-			}
-			vpixels = TEXT
-			vpixels {
-				cObject < temp.getDAMvalues
-				cObject.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:IMAGE_NUM_CURRENT}|vpixels
-				wrap = {$plugin.damlightbox.slimbox.vCalc}
-			}
-			## width/height calculated to determine the actual lightbox dimensions ##
-			widthCalc = TEXT
-			widthCalc {
-				data = register:hpixels
-				prioriCalc = intval
-			}
-			heightCalc = TEXT
-			heightCalc {
-				data = register:vpixels
-				prioriCalc = intval
-			}
-			## determine the value that will be used as lightbox caption - this is retrieved with a COA to allow for easy additions from TS ##
-			lbCaption.cObject = COA
-			lbCaption.cObject.10 < temp.getDAMvalues
-			lbCaption.cObject.10 {
-				cObject.value = TSFE:register|tx_damlightbox|metaData|{register:IMAGE_NUM_CURRENT}|{TSFE:register|tx_damlightbox|config|sLIGHTBOX|lbCaption}
-			}
-			## parse out any " that would invalidate the HTML and cut off the caption
-			lbCaption.cObject.stdWrap.split {
-				# substitue all " with entity
-				token.char = 34
-				cObjNum = 1
-				1.current = 1
-				1.wrap = &quot;|				
-			}
-			# remove the first entity again
-			lbCaption.substring = 6	
-			
-			## the real img path will be passed on to savefile.php from pmkslimbox
-			fullPath.cObject = COA
-			fullPath.cObject.10 < temp.getDAMvalues
-			fullPath.cObject.10 {
-				wrap = {getIndpEnv:TYPO3_SITE_URL}{|}
-				cObject.value = TSFE:register|tx_damlightbox|metaData|{register:IMAGE_NUM_CURRENT}|fullPath
-			}
-		}
-
-		## check if the calculated dimensions have to be overriden due to a value in the flexform configuration
-		ATagParams.cObject.15 = TEXT
-		ATagParams.cObject.15.data = register:IMAGE_NUM_CURRENT
-		ATagParams.cObject.15.postUserFunc = tx_damlightbox_pi1->overrideDimsFromFlexform
-
-		## the a-tag parameters used for slimbox
-		ATagParams.cObject.20 = TEXT
-		ATagParams.cObject.20 {
-			dataWrap = {$plugin.damlightbox.imageLinkAttributes} rel="lightbox[sb{field:uid}]" rev="width={register:widthCalc}, height={register:heightCalc}, src={register:fullPath}" title="{register:lbCaption}"
-			if.isFalse.field = image_link
+		ATagParams < lib.damlightbox.pmkslimbox.imageLinkWrap.typolink.ATagParams
+		ATagParams {
+			cObject.10.hpixels.cObject.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:IMAGE_NUM_CURRENT}|hpixels
+			cObject.10.vpixels.cObject.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:IMAGE_NUM_CURRENT}|vpixels
+			cObject.10.lbCaption.cObject.10.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:IMAGE_NUM_CURRENT}|{TSFE:register|tx_damlightbox|config|sLIGHTBOX|lbCaption}
+			cObject.10.fullPath.cObject.10.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:IMAGE_NUM_CURRENT}|fullPath
 		}
 	}
 
@@ -109,6 +127,14 @@ tt_content.image.20 {
 	}
 }
 
+## pages integration ##
+page.313.20.image.imageLinkWrap.typolink {
+
+	parameter.append >
+	ATagParams >
+	
+	ATagParams < lib.damlightbox.pmkslimbox.imageLinkWrap.typolink.ATagParams
+}
 
 #####################################################################
 # TypoScrip configuration for the plugin.damlightbox 				#
@@ -123,13 +149,22 @@ damlightbox {
 	1230 >
 	headerData.1232 < page.headerData.1232
 
-	includeCSS.file1 = {$plugin.damlightbox.slimbox.cssFile}
+	includeCSS.file1 = {$plugin.damlightbox.pmkslimbox.cssFile}
 
 	10.10.conf.tt_content.20 {
 
-		template.file = {$plugin.damlightbox.slimbox.templateFile}
+		template.file = {$plugin.damlightbox.pmkslimbox.templateFile}
 		marks.CE_TITLE >
 
 		marks.DAM_TITLE.outerWrap >
+	}
+	
+	10.10.conf.pages.20 {
+		
+		template.file = {$plugin.damlightbox.pmkslimbox.templateFile}
+		marks.CE_TITLE >
+
+		marks.DAM_TITLE.outerWrap >
+	
 	}
 }

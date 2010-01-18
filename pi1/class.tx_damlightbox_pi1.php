@@ -68,8 +68,6 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 	 * @return	void
 	 */
 	public function main ($content, $conf) {
-		
-#		debug($GLOBALS['TSFE']->register);
 
 		// making TypoScript $conf generally available in class
 		$this->conf = $conf;
@@ -291,7 +289,7 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 	 * @return	string		Hidden div with the remaining imagelinks
 	 */
 	public function overrideDimsFromFlexform($content, $conf) {
-
+		
 		// check if some specific dimensions are set in the flexform
 		$customDims = array();
 		$customDims = t3lib_div::trimExplode(';', $GLOBALS['TSFE']->register['tx_damlightbox']['config']['sLIGHTBOX']['setSpecificDimensions'], 1);
@@ -302,8 +300,8 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 				if (substr($value, 0, 1)-1 == $content) {
 					$dims = t3lib_div::trimExplode(',',substr($value,strpos($value,':')+1));
 					if ($dims) {
-						$GLOBALS['TSFE']->register['widthCalc'] = $dims[0];
-						$GLOBALS['TSFE']->register['heightCalc'] = $dims[1];
+						$GLOBALS['TSFE']->register['widthCalc'] = htmlspecialchars($dims[0]);
+						$GLOBALS['TSFE']->register['heightCalc'] = htmlspecialchars($dims[1]);
 					}
 				}
 			}
