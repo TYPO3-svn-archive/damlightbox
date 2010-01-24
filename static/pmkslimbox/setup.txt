@@ -4,6 +4,9 @@
 # PART III: config for image CEs with pmkslimbox					#
 #####################################################################
 
+## include the damlightbox class for pmkslimbox rendering ##
+includeLibs.tx_damlightbox_pmkslimbox = EXT:damlightbox/pi1/class.tx_damlightbox_pmkslimbox.php
+
 # use a slightly modified slimboxplus.js to provide all functions
 page.1230.20.jsfile.dataWrap = EXT:damlightbox/res/pmkslimbox/slimboxplus.js
 
@@ -73,17 +76,17 @@ lib.damlightbox.pmkslimbox.imageLinkWrap.typolink {
 	## check if the calculated dimensions have to be overriden due to a value in the flexform configuration
 	ATagParams.cObject.15 = TEXT
 	ATagParams.cObject.15.data = register:currentImg
-	ATagParams.cObject.15.postUserFunc = tx_damlightbox_pi1->overrideDimsFromFlexform
+	ATagParams.cObject.15.postUserFunc = tx_damlightbox_pmkslimbox->overrideDimsFromFlexform
 
 	## the a-tag parameters used for slimbox
 	ATagParams.cObject.20 = TEXT
 	ATagParams.cObject.20 {
 		dataWrap = {$plugin.damlightbox.imageLinkAttributes} rel="lightbox[sb{field:uid}]" rev="width={register:widthCalc}, height={register:heightCalc}, src={register:fullPath}" title="{register:lbCaption}"
-		if.isFalse.field = image_link
 	}
 }
 
-# modify image links for pmkslimbox/damlightbox use
+## tt_content ##
+
 tt_content.image.20 {
 
 	# clean stuff from pmkslimbox
@@ -107,6 +110,8 @@ tt_content.image.20 {
 			cObject.10.vpixels.cObject.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:IMAGE_NUM_CURRENT}|vpixels
 			cObject.10.lbCaption.cObject.10.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:IMAGE_NUM_CURRENT}|{TSFE:register|tx_damlightbox|config|sLIGHTBOX|lbCaption}
 			cObject.10.fullPath.cObject.10.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:IMAGE_NUM_CURRENT}|fullPath
+			cObject.15.data = register:IMAGE_NUM_CURRENT
+			cObject.20.if.isFalse.field = image_link
 		}
 	}
 
@@ -115,25 +120,41 @@ tt_content.image.20 {
 	stdWrap.postCObject {
 		if.isTrue.data = TSFE:register|tx_damlightbox|config|sDEF|imgPreview
 		cObject = USER
-		cObject.userFunc = tx_damlightbox_pi1->addHiddenImgs
+		cObject.userFunc = tx_damlightbox_pmkslimbox->addHiddenImgs
 		cObject {
 			content.data = field:uid
-			type = 313
+			content.table = tt_content
 			hCalc.cObject = TEXT
-			hCalc.cObject.value = {$plugin.damlightbox.slimbox.hCalc}
+			hCalc.cObject.value = {$plugin.damlightbox.pmkslimbox.hCalc}
 			vCalc.cObject = TEXT
-			vCalc.cObject.value = {$plugin.damlightbox.slimbox.vCalc}
+			vCalc.cObject.value = {$plugin.damlightbox.pmkslimbox.vCalc}
 		}
 	}
 }
 
-## pages integration ##
-page.313.20.image.imageLinkWrap.typolink {
+## pages ##
 
-	parameter.append >
-	ATagParams >
-	
-	ATagParams < lib.damlightbox.pmkslimbox.imageLinkWrap.typolink.ATagParams
+page.313 {
+	20.image.imageLinkWrap.typolink {
+		parameter.append >
+		
+		ATagParams >
+		ATagParams < lib.damlightbox.pmkslimbox.imageLinkWrap.typolink.ATagParams
+	}
+	stdWrap.postCObject = TEXT
+	stdWrap.postCObject {
+		if.isTrue.data = TSFE:register|tx_damlightbox|config|sDEF|imgPreview
+		cObject = USER
+		cObject.userFunc = tx_damlightbox_pmkslimbox->addHiddenImgs
+		cObject {
+			content.data = field:uid
+			content.table = pages
+			hCalc.cObject = TEXT
+			hCalc.cObject.value = {$plugin.damlightbox.pmkslimbox.hCalc}
+			vCalc.cObject = TEXT
+			vCalc.cObject.value = {$plugin.damlightbox.pmkslimbox.vCalc}
+		}
+	}	
 }
 
 #####################################################################

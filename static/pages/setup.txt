@@ -98,8 +98,6 @@ page.313 {
 			userFunc = tx_damlightbox_pages->rootLineSlide
 			
 			image < page.313.20.image
-			
-			
 		}
 	}
 }

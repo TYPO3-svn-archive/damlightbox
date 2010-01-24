@@ -235,82 +235,6 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 
 
 
-	/**
-	 * If the preview mode is set the remaining imagelinks need to be inserted in a hidden div. Otherwise the lightbox will not be browsable and just open the preview image
-	 *
-	 * @param	[type]		$content: ...
-	 * @param	[type]		$conf: ...
-	 * @return	string		Hidden div with the remaining imagelinks
-	 */
-	public function addHiddenImgs($content, $conf) {
-
-		// check if there is more than one image and if yes insert a hidden div
-		if (count($GLOBALS['TSFE']->register['tx_damlightbox']['metaData']) > 1) {
-			foreach ($GLOBALS['TSFE']->register['tx_damlightbox']['metaData'] as $key => $value) {
-
-				// leave out the first image and any image that is hidden in DAM
-				if ($key == '0' || $value['hidden'] == 1) continue;
-
-				$uid = $this->cObj->stdWrap($conf['content'],$conf['content.']);
-				$lbCaption = $GLOBALS['TSFE']->register['tx_damlightbox']['config']['sLIGHTBOX']['lbCaption'];
-				$title = $GLOBALS['TSFE']->register['tx_damlightbox']['metaData'][$key][''.$lbCaption.''];
-
-				$hCalc = t3lib_div::trimExplode('|',$this->cObj->stdWrap(null,$conf['hCalc.']));
-				$vCalc = t3lib_div::trimExplode('|',$this->cObj->stdWrap(null,$conf['vCalc.']));
-				$GLOBALS['TSFE']->register['widthCalc'] = intval(t3lib_div::calcParenthesis($hCalc[0].$GLOBALS['TSFE']->register['tx_damlightbox']['metaData'][$key]['hpixels'].$hCalc[1]));
-				$GLOBALS['TSFE']->register['heightCalc'] = intval(t3lib_div::calcParenthesis($vCalc[0].$GLOBALS['TSFE']->register['tx_damlightbox']['metaData'][$key]['vpixels'].$vCalc[1]));
-
-				// check if specific dimensions are set in the flexform
-				if ($GLOBALS['TSFE']->register['tx_damlightbox']['config']['sLIGHTBOX']['setSpecificDimensions']) $this->overrideDimsFromFlexform($key,null);
-
-				$linkConfig=array();
-				$linkConfig['parameter'] = $GLOBALS['TSFE']->id;
-				$linkConfig['no_cache'] = 0;
-				$linkConfig['useCacheHash'] = 1;
-				$linkConfig['additionalParams'] = '&type='.$conf['type'].'&content='.$uid.'&img='.$key.'';
-				$linkConfig['ATagParams'] = 'title="'.$title.'" rev="width='.$GLOBALS['TSFE']->register['widthCalc'].', height='.$GLOBALS['TSFE']->register['heightCalc'].', src='.$GLOBALS['TSFE']->register['fullPath'].'" rel="lightbox[sb'.$uid.']"';
-				$linkConfig['ATagBeforeWrap'] = 1;
-
-				$hiddenLinks .= $this->cObj->typoLink(null,$linkConfig);
-			}
-			$content = '<div style="display: none;">'.$hiddenLinks.'</div>';
-		}
-		return $content;
-	}
-
-
-
-	/**
-	 * Checks if there are custom dimension set for the lightbox of the current image in the flexform of the content element and if yes overrides the calculated
-	 * values from TS. The expected notation in the flexorm is "imagenumber:width,height" starting with number 1 for the first image
-	 *
-	 * @param	int			The current image number
-	 * @param	array		TypoScript configuration array
-	 * @return	string		Hidden div with the remaining imagelinks
-	 */
-	public function overrideDimsFromFlexform($content, $conf) {
-		
-		// check if some specific dimensions are set in the flexform
-		$customDims = array();
-		$customDims = t3lib_div::trimExplode(';', $GLOBALS['TSFE']->register['tx_damlightbox']['config']['sLIGHTBOX']['setSpecificDimensions'], 1);
-
-		if ($customDims) {
-			foreach($customDims as $value) {
-				// check if the current image dimensions in the GLOBAL register need to be overridden
-				if (substr($value, 0, 1)-1 == $content) {
-					$dims = t3lib_div::trimExplode(',',substr($value,strpos($value,':')+1));
-					if ($dims) {
-						$GLOBALS['TSFE']->register['widthCalc'] = htmlspecialchars($dims[0]);
-						$GLOBALS['TSFE']->register['heightCalc'] = htmlspecialchars($dims[1]);
-					}
-				}
-			}
-		}
-		return;
-	}
-
-	
-	
 	/* Iterates through all images given in the damImages register. Usefull for frontend rendering in case more than one image from a damlightbox field of a given table has to be rendered.
 	 * 
 	 * @param	string		Content to be processed
@@ -339,8 +263,7 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 				// raise counter
 				$GLOBALS['TSFE']->register['currentImg']++;
 			}
-		}
-		
+		}	
 		return $this->cObj->stdWrap($content, $conf['stdWrap.']);
 	}
 

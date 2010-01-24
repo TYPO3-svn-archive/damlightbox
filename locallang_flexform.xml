@@ -18,7 +18,7 @@
 			<label index="tx_damlightbox.lbCaption.title">Media: title</label>
 			<label index="tx_damlightbox.lbCaption.caption">Media: caption</label>
 			<label index="tx_damlightbox.lbCaption.description">Media: description</label>
-			<label index="tx_damlightbox.setSpecificDimensions">Custom Dimensions (Imagenr:width/height;)</label>
+			<label index="tx_damlightbox.setSpecificDimensions">Custom Dimensions (Notation = Imagenr:width,height;)</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="tx_damlightbox.sDEF">Bilder:</label>
@@ -33,7 +33,7 @@
 			<label index="tx_damlightbox.lbCaption.title">Media: Titel</label>
 			<label index="tx_damlightbox.lbCaption.caption">Media: Bildunterschrift</label>
 			<label index="tx_damlightbox.lbCaption.description">Media: Bildbeschreibung</label>
-			<label index="tx_damlightbox.setSpecificDimensions">Spezifische Maße (Bildnr:Höhe/Breite;)</label>
+			<label index="tx_damlightbox.setSpecificDimensions">Spezifische Maße (Notation = Bildnr:Höhe,Breite;)</label>
 		</languageKey>
 	</data>
 </T3locallang>
