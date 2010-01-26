@@ -106,9 +106,6 @@ page.313 {
 
 [globalVar = LIT:pmkslimbox = {$plugin.damlightbox.lightboxExtension}]
 
-page.10 = TEXT
-page.10.value = Hello world
-
 page.313 {
 	20.image.imageLinkWrap.typolink {
 		parameter.append >
