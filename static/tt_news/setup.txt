@@ -170,6 +170,11 @@ plugin.tt_news {
 	}	
 }
 
+## pmkslimbox setup ##
+
+[globalVar = LIT:pmkslimbox = {$plugin.damlightbox.lightboxExtension}]
+[global]
+
 #####################################################################
 # TypoScrip configuration for the plugin.damlightbox_pi1			#
 # @author Torsten Schrade <schradt@uni-mainz.de>					#

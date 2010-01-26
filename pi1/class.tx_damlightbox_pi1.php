@@ -90,7 +90,7 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 		//clean the registers from any previous data
 		$GLOBALS['TSFE']->register['tx_damlightbox'] = array();
 
-		// get the records
+		// fetch the metadata records from DAM
 		$this->getDamRecords();
 
 		// if a result is returned, set the config registers; create them from flexform or from TS using the same notation
@@ -110,12 +110,14 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 				}
 			}
 		}
+		
+		$GLOBALS['TSFE']->register['tx_damlightbox']['test'] = 1;
+#		debug($GLOBALS['TSFE']->register['tx_damlightbox']);
 
 		// possibility to debug from TS
 		if ($this->conf['debugData'] == 1) {
 			debug($GLOBALS['TSFE']->register['tx_damlightbox']);
 		}
-
 		return;
 	}
 

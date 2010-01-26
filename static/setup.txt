@@ -41,6 +41,7 @@ plugin.tx_damlightbox_pi1 {
 
 		sLIGHTBOX {
 			lbCaption = {$plugin.damlightbox.lbCaption}
+			setSpecificDimensions = 
 		}
 	}
 }

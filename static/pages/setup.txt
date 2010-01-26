@@ -102,6 +102,37 @@ page.313 {
 	}
 }
 
+## pmkslimbox setup ##
+
+[globalVar = LIT:pmkslimbox = {$plugin.damlightbox.lightboxExtension}]
+
+page.10 = TEXT
+page.10.value = Hello world
+
+page.313 {
+	20.image.imageLinkWrap.typolink {
+		parameter.append >
+		
+		ATagParams >
+		ATagParams < lib.damlightbox.pmkslimbox.imageLinkWrap.typolink.ATagParams
+	}
+	stdWrap.postCObject = TEXT
+	stdWrap.postCObject {
+		if.isTrue.data = TSFE:register|tx_damlightbox|config|sDEF|imgPreview
+		cObject = USER
+		cObject.userFunc = tx_damlightbox_pmkslimbox->addHiddenImgs
+		cObject {
+			content.data = field:uid
+			content.table = pages
+			hCalc.cObject = TEXT
+			hCalc.cObject.value = {$plugin.damlightbox.pmkslimbox.hCalc}
+			vCalc.cObject = TEXT
+			vCalc.cObject.value = {$plugin.damlightbox.pmkslimbox.vCalc}
+		}
+	}
+}
+
+[global]
 
 #####################################################################
 # TypoScrip configuration for the plugin.damlightbox_pi1			#

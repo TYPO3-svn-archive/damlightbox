@@ -18,3 +18,7 @@ plugin.damlightbox.pmkslimbox.hCalc =
 
 #cat=plugin.damlightbox.pmkslimbox/dims/20; type=wrap; label= Height calculation: Here you can add arithmetic expressions that will be combined with the vertical pixel value of the image determine the actual width lightbox
 plugin.damlightbox.pmkslimbox.vCalc = |+54
+
+
+## TURN ON PMKSLIMBOX ##
+plugin.damlightbox.lightboxExtension = pmkslimbox
