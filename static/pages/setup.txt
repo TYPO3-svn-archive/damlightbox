@@ -102,7 +102,22 @@ page.313 {
 	}
 }
 
-## pmkslimbox setup ##
+#####################################################################
+# TypoScrip configuration for the plugin.damlightbox_pi1			#
+# @author Torsten Schrade <schradt@uni-mainz.de>					#
+# PART II: configuration for click-enlarge for pages				#
+#####################################################################
+
+damlightbox {
+	10.10.tables := addToList(pages)
+	10.10.conf.pages =< lib.damlightbox.clickEnlargeConf
+}
+
+#####################################################################
+# TypoScrip configuration for the plugin.damlightbox_pi1			#
+# @author Torsten Schrade <schradt@uni-mainz.de>					#
+# PART III: config for pages & pmkslimbox							#
+#####################################################################
 
 [globalVar = LIT:pmkslimbox = {$plugin.damlightbox.lightboxExtension}]
 
@@ -129,15 +144,15 @@ page.313 {
 	}
 }
 
-[global]
-
-#####################################################################
-# TypoScrip configuration for the plugin.damlightbox_pi1			#
-# @author Torsten Schrade <schradt@uni-mainz.de>					#
-# PART II: configuration for click-enlarge for pages				#
-#####################################################################
-
 damlightbox {
-	10.10.tables := addToList(pages)
-	10.10.conf.pages =< lib.damlightbox.clickEnlargeConf
+	10.10.conf.pages.20 {
+		
+		template.file = {$plugin.damlightbox.pmkslimbox.templateFile}
+		marks.CE_TITLE >
+
+		marks.DAM_TITLE.outerWrap >
+	
+	}
 }
+
+[global]

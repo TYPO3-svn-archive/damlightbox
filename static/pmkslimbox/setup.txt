@@ -99,21 +99,4 @@ damlightbox {
 	headerData.1232 < page.headerData.1232
 
 	includeCSS.file1 = {$plugin.damlightbox.pmkslimbox.cssFile}
-
-	10.10.conf.tt_content.20 {
-
-		template.file = {$plugin.damlightbox.pmkslimbox.templateFile}
-		marks.CE_TITLE >
-
-		marks.DAM_TITLE.outerWrap >
-	}
-	
-	10.10.conf.pages.20 {
-		
-		template.file = {$plugin.damlightbox.pmkslimbox.templateFile}
-		marks.CE_TITLE >
-
-		marks.DAM_TITLE.outerWrap >
-	
-	}
 }

@@ -170,11 +170,6 @@ plugin.tt_news {
 	}	
 }
 
-## pmkslimbox setup ##
-
-[globalVar = LIT:pmkslimbox = {$plugin.damlightbox.lightboxExtension}]
-[global]
-
 #####################################################################
 # TypoScrip configuration for the plugin.damlightbox_pi1			#
 # @author Torsten Schrade <schradt@uni-mainz.de>					#
@@ -185,3 +180,20 @@ damlightbox {
 	10.10.tables := addToList(tt_news)
 	10.10.conf.tt_news =< lib.damlightbox.clickEnlargeConf
 }
+
+#####################################################################
+# TypoScrip configuration for the plugin.damlightbox_pi1			#
+# @author Torsten Schrade <schradt@uni-mainz.de>					#
+# PART III: config for tt_news & pmkslimbox							#
+#####################################################################
+
+[globalVar = LIT:pmkslimbox = {$plugin.damlightbox.lightboxExtension}]
+
+plugin.tt_news.imageMarkerFunc.SINGLE.image.imageLinkWrap.typolink {
+	parameter.append >
+	
+	ATagParams >
+	ATagParams < lib.damlightbox.pmkslimbox.imageLinkWrap.typolink.ATagParams
+}
+
+[global]
