@@ -59,9 +59,6 @@ class tx_damlightbox_tceform {
 
 		// create a 'fake' damlightbox field in the tca of the incoming table
 		if (tx_damlightbox_div::tableAllowedForDamlightbox($table)) {
-			
-			// dynamically add the universal fields
-			tx_damlightbox_div::addDamlightboxFieldsToTableTCA($table);
 
 			// if it's not a new record fetch the configuration from the tx_damlightbox_ds table
 			if (substr($row['uid'], 0, 3) != 'NEW') $row['tx_damlightbox_flex'] = tx_damlightbox_div::getFlexFormForRecord($row['uid'], $table);

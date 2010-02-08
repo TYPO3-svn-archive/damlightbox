@@ -1,11 +1,8 @@
 Stuff
 ------
-- example setting for pages
-- checkup on pmkslimbox
 - other lightboxes
 - display of thumbs in pagemodule (tt_content, tt_news)
 - update of manual
-- ext_update script
 
 Bugs
 ----
@@ -13,6 +10,3 @@ Bugs
 
 Notes
 -----
-
-# Field config not via ext_conf_template but via PageTSConfig
-# slide config for pages
