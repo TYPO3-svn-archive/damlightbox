@@ -11,8 +11,8 @@ t3lib_extMgm::addStaticFile($_EXTKEY,'static/pages','DAM Lightbox: pages');
 #t3lib_extMgm::addStaticFile($_EXTKEY,'static/watermarks','DAM Lightbox: watermarks');
 
 if (TYPO3_MODE == 'BE') {
-	t3lib_extMgm::addModulePath('tools_txxmlimportM1', t3lib_extMgm::extPath($_EXTKEY) . 'mod1/');	
-	t3lib_extMgm::addModule('tools','txdamlightboxM1','',t3lib_extMgm::extPath($_EXTKEY).'mod1/');
+	t3lib_extMgm::addModulePath('tools_txdamlightboxM1', t3lib_extMgm::extPath($_EXTKEY) . 'mod1/');
+	t3lib_extMgm::addModule('tools', 'txdamlightboxM1', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod1/');
 }
 
 ### DAMLIGHTBOX FIELDS ###

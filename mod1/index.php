@@ -29,23 +29,12 @@
  *
  */
 
-// DEFAULT initialization of a module
-unset($MCONF);
-require ('conf.php');
-require ($BACK_PATH.'init.php');
-require ($BACK_PATH.'template.php');
-
 $LANG->includeLLFile('EXT:damlightbox/mod1/locallang.xml');
-$BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users has no permission for entry.
-
-// require module base
 require_once(PATH_t3lib . 'class.t3lib_scbase.php');
-// require TCEmain for record management
-require_once(PATH_t3lib . 'class.t3lib_tceforms.php');
-require_once(PATH_t3lib . 'class.t3lib_tcemain.php');
-// require class with helper functions
-require_once(t3lib_extMgm::extPath('damlightbox') . 'pi1/class.tx_damlightbox_div.php');
-require_once(t3lib_extMgm::extPath('dam') . 'tca_media_field.php');
+require ($BACK_PATH.'template.php');
+$BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users has no permission for entry.
+// DEFAULT initialization of a module [END]
+
 
 /**
  * Configuration module for the damlightbox extension
@@ -84,44 +73,9 @@ class  tx_damlightbox_module1 extends t3lib_SCbase {
 			$this->MOD_MENU = Array (
 				'function' => Array (
 					'1' => $LANG->getLL('function1'),
-					//'2' => $LANG->getLL('function2'),
 				)
 			);
 			parent::menuConfig();
-		}
-
-		/**
-		 * Create the panel of buttons for submitting the form or otherwise perform operations.
-		 *
-		 * @return	array		all available buttons as an assoc. array
-		 */
-		public function getButtons()	{
-/*
-			$buttons = array(
-				'csh' => '',
-				'record_list' => '',
-				'history_page' => '',
-				'shortcut' => '',
-			);
-
-			// csh for module
-			$buttons['csh'] = t3lib_BEfunc::cshItem('_MOD_web_txxmlimportM1', '', $GLOBALS['BACK_PATH']);
-
-			// If access to Web>List for user, then link to that module.
-			if ($GLOBALS['BE_USER']->check('modules','web_list')) {
-				$href = $BACK_PATH . 'db_list.php?id=' . $this->pageinfo['uid'] . '&returnUrl=' . rawurlencode(t3lib_div::getIndpEnv('REQUEST_URI'));
-				$buttons['record_list'] = '<a href="' . htmlspecialchars($href) . '">'.'<img'.t3lib_iconWorks::skinImg($BACK_PATH, 'gfx/list.gif').' title="'.$GLOBALS['LANG']->sL('LLL:EXT:lang/locallang_core.php:labels.showList', 1).'" alt="" />'.'</a>';
-			}
-
-			// page history
-			$buttons['history_page'] = '<a href="#" onclick="'.htmlspecialchars('jumpToUrl(\''.$BACK_PATH.'show_rechis.php?element='.rawurlencode('pages:'.$this->id).'&returnUrl='.rawurlencode(t3lib_div::getIndpEnv('REQUEST_URI')).'#latest\');return false;').'">'.'<img'.t3lib_iconWorks::skinImg($BACK_PATH, 'gfx/history2.gif', 'width="13" height="12"').' vspace="2" hspace="2" align="top" title="'.$GLOBALS['LANG']->sL('LLL:EXT:cms/layout/locallang.xml:recordHistory', 1).'" alt="" />'.'</a>';
-
-			// shortcut
-			if ($GLOBALS['BE_USER']->mayMakeShortcut())	{
-				$buttons['shortcut'] = $this->doc->makeShortcutIcon('', 'function', $this->MCONF['name']);
-			}
-*/
-			return $buttons;
 		}
 
 		/**
@@ -142,6 +96,11 @@ class  tx_damlightbox_module1 extends t3lib_SCbase {
 		public function main()	{
 
 			global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
+			
+			// Access check!
+			// The page will show only if there is a valid page and if this page may be viewed by the user
+			$this->pageinfo = t3lib_BEfunc::readPageAccess($this->id,$this->perms_clause);
+			$access = is_array($this->pageinfo) ? 1 : 0;			
 
 			// get general settings
 			$this->extConf = unserialize($TYPO3_CONF_VARS['EXT']['extConf']['damlightbox']);
@@ -149,7 +108,6 @@ class  tx_damlightbox_module1 extends t3lib_SCbase {
 			// get params
 			$this->params['action'] = (int) t3lib_div::_GP('action');
 			$this->params['function'] = (int) $this->MOD_SETTINGS['function'];
-			$this->params['cmd'] = (string) t3lib_div::_GP('cmd');
 			$this->params['postVars'] = t3lib_div::_POST();
 			$this->params['getVars'] = t3lib_div::_GET();
 
@@ -159,7 +117,7 @@ class  tx_damlightbox_module1 extends t3lib_SCbase {
 			$this->doc->backPath = $BACK_PATH;
 			$this->doc->docType = 'xhtml_trans';
 
-			if ($BE_USER->user['admin'])	{
+			if (($this->id && $access) || ($BE_USER->user['admin'] && !$this->id))	{
 
 				// Draw the form
 				$this->doc->form = '<form action="mod.php?M=tools_txdamlightboxM1&amp;id='.$this->id.'" method="post" enctype="'.$GLOBALS["TYPO3_CONF_VARS"]["SYS"]["form_enctype"].'" name="txdamlightboxM1" id="txdamlightboxM1">';
@@ -180,30 +138,23 @@ class  tx_damlightbox_module1 extends t3lib_SCbase {
 					</script>
 				';
 
-#				$docHeaderButtons = $this->getButtons();
-
+				// get module content
 				$this->moduleContent();
-			}
-/*
+				
+				// fill content to marker
+				$markers['CONTENT'] = $this->content;
+			
+			// no access
 			} else {
-				// If no access or if ID == zero
-				$docHeaderButtons = array(
-					'csh' => '',
-					'record_list' => '',
-					'history_page' => '',
-					'shortcut' => '',
-				);
-				$this->content .= $this->doc->spacer(10);
-				$this->content .= '<p>'.$GLOBALS['LANG']->getLL('errmsg.idFirst').'<p>';
+				
+				// no access message
+				$markers['CONTENT'] = $GLOBALS['LANG']->getLL('errmsg.noAccess');
 			}
-*/
-			// compile document
-			$markers['FUNC_MENU'] = t3lib_BEfunc::getFuncMenu($this->id, 'SET[function]', $this->MOD_SETTINGS['function'], $this->MOD_MENU['function']);
-			$markers['CONTENT'] = $this->content;
 
 			// Build the <body> for the module
 			$this->content = $this->doc->startPage($GLOBALS['LANG']->getLL('title'));
-			$this->content .= $this->doc->moduleBody($this->pageinfo, $docHeaderButtons, $markers);
+			$markers['FUNC_MENU'] = t3lib_BEfunc::getFuncMenu($this->id, 'SET[function]', $this->MOD_SETTINGS['function'], $this->MOD_MENU['function']);
+			$this->content .= $this->doc->moduleBody($this->pageinfo, '', $markers);
 			$this->content = $this->doc->insertStylesAndJS($this->content);
 		}
 

@@ -19,6 +19,7 @@
 			<label index="configAction">Step 2: Configure the fields for the chosen tables</label>
 			<label index="writeAction">Step 3: Finished!</label>			
 			<label index="errmsg.generalerror">Something is duly wrong here</label>
+			<label index="errmsg.noAccess">Sorry, you don't have access to this module</label>			
 			<label index="nextButton">Next</label>
 			<label index="writeButton">Write!</label>
 			<label index="configWritten">Your configuration was written. DAM Lightbox is now included in the chosen tables.</label>													
@@ -37,6 +38,7 @@
 			<label index="configAction">Schritt 2: DAM Lightbox Felder für die ausgewählten Tabellen konfigurieren</label>
 			<label index="writeAction">Schritt 3: Fertig!</label>				
 			<label index="errmsg.generalerror">Irgendwas läuft richtig schief</label>
+			<label index="errmsg.noAccess">Leider haben Sie keinen Zugriff auf dieses Modul</label>				
 			<label index="nextButton">Weiter</label>
 			<label index="writeButton">Konfiguration schreiben</label>
 			<label index="configWritten">Die Konfigurationsdatei wurde geschrieben. Die DAM Lightbox ist nun in die angegebenen Tabellen eingebunden.</label>							
