@@ -127,7 +127,7 @@ page.313 {
 		
 		ATagParams >
 		ATagParams < lib.damlightbox.pmkslimbox.imageLinkWrap.typolink.ATagParams
-	}
+	}	
 	stdWrap.postCObject = TEXT
 	stdWrap.postCObject {
 		if.isTrue.data = TSFE:register|tx_damlightbox|config|sDEF|imgPreview

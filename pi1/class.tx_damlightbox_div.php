@@ -88,6 +88,7 @@ final class tx_damlightbox_div {
 
 		return $ds;
 	}
+	
 
 	/**
 	 * Adds the current tablename in front of the submitted fieldnames in order to do proper SQL queries

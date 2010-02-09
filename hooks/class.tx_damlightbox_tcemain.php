@@ -45,6 +45,7 @@
 
 require_once(t3lib_extMgm::extPath('damlightbox').'pi1/class.tx_damlightbox_div.php');
 require_once(PATH_t3lib . 'class.t3lib_flexformtools.php');
+require_once(t3lib_extMgm::extPath('dam').'lib/class.tx_dam_db.php');
 
 class tx_damlightbox_tcemain {
 	
@@ -62,16 +63,13 @@ class tx_damlightbox_tcemain {
 		if (tx_damlightbox_div::tableAllowedForDamlightbox($table)) {
 
 			// keep incoming damlightbox values for post processing and unset the pseudo fields to avoid sql errors
+			
 			if (array_key_exists('tx_damlightbox_flex', $incomingFieldArray)) {
 				$pObj->tx_damlightbox_flex = $incomingFieldArray['tx_damlightbox_flex'];
 				unset($incomingFieldArray['tx_damlightbox_flex']);
 			}
 
-			if (array_key_exists('tx_damlightbox_image', $incomingFieldArray)) {
-				
-				// add the pseudo image field to the table TCA (necessary for correct processing of MM data)
-				$GLOBALS['TCA'][$table]['columns']['tx_damlightbox_image'] = txdam_getMediaTCA('image_field', 'tx_damlightbox_image');
-				
+			if (array_key_exists('tx_damlightbox_image', $incomingFieldArray)) {				
 				$pObj->tx_damlightbox_image = $incomingFieldArray['tx_damlightbox_image'];
 				unset($incomingFieldArray['tx_damlightbox_image']);
 			}
@@ -94,16 +92,21 @@ class tx_damlightbox_tcemain {
 
 		if (tx_damlightbox_div::tableAllowedForDamlightbox($table)) {
 
-			// MM relations
-			$valueArray = t3lib_div::trimExplode(',', $pObj->tx_damlightbox_image, 1);
-			$tcaFieldConf = $GLOBALS['TCA'][$table]['columns']['tx_damlightbox_image']['config'];
-			$pObj->checkValue_group_select_processDBdata($valueArray, $tcaFieldConf, $id, $status, 'group', $table);
+			// MM relations for image field
+			if ($pObj->tx_damlightbox_image) {
+				$valueArray = t3lib_div::trimExplode(',', $pObj->tx_damlightbox_image, 1);
+				$tcaFieldConf = $GLOBALS['TCA'][$table]['columns']['tx_damlightbox_image']['config'];
+				$pObj->checkValue_group_select_processDBdata($valueArray, $tcaFieldConf, $id, $status, 'group', $table);
+			}
 
-			if (is_array($pObj->tx_damlightbox_flex)) {
+			// MM relations for flexform field
+			if ($pObj->tx_damlightbox_flex) {
 
-				// transform flexform to xml
-				$flexformtools = t3lib_div::makeInstance('t3lib_flexformtools');
-				$tx_damlightbox_flex = $flexformtools->flexArray2Xml($pObj->tx_damlightbox_flex, 1);
+				// if the field is in array form, transform it to xml
+				if (is_array($pObj->tx_damlightbox_flex)) {
+					$flexformtools = t3lib_div::makeInstance('t3lib_flexformtools');
+					$tx_damlightbox_flex = $flexformtools->flexArray2Xml($pObj->tx_damlightbox_flex, 1);
+				}
 
 				if ($status == 'update') {
 
@@ -132,14 +135,53 @@ class tx_damlightbox_tcemain {
 			}
 		}
 	}
+	
+	/* In case this is a copy action the values of the generic fields for the current record need to be fetched and saved to the parent object for later retrieval
+	 * by the processCmdmap_postProvess hook. Since copy actions trigger a copied instance of TCEMAIN field values cannot be transfered to this copied opbject.
+	 * The solution is to store them here and build the MM relations after DB copy action based on the copied records id that's in the copyMappingArray.
+	 * 
+	 * @param	string		$command: The current action
+	 * @param	string		$table: The current tablename
+	 * @param	integer		$id: uid of the current record (NOT the new copied record!)
+	 * @param	string		$value: The value of the current cmd
+	 * @param	object		$pObj: The parent object
+	 * @return	void	
+	 * 
+	 */	
+	function processCmdmap_preProcess($command, $table, $id, $value, &$pObj) {
+		
+		if (tx_damlightbox_div::tableAllowedForDamlightbox($table)) {
+			
+			switch ($command) {
+				
+				case 'copy':
+					
+					// initialize a storage var
+					$pObj->copyDamlightboxFields = array();
+					
+					// set the flexform field if there was one in the record that is copied
+					$ds = tx_damlightbox_div::getFlexFormForRecord($id, $table);
+					if ($ds) $pObj->copyDamlightboxFields['tx_damlightbox_flex'] = $ds;
+
+					// image field
+					$damDB = t3lib_div::makeInstance('tx_dam_db');
+					$imgs = $damDB->getReferencedFiles($table, $id, 'tx_damlightbox_image', $MM_table='tx_dam_mm_ref', '', array(), '', 'sorting_foreign', 1000);				
+					if (is_array($imgs)) $pObj->copyDamlightboxFields['tx_damlightbox_image'] = array_keys($imgs['files']);
+
+				break;
+			}			
+		}		
+	}	
 
 	/**
-	 * Hook function that will set the relation between the current record and it's damlightbox flexform to deleted or not depending on the current cmd.
+	 * Hook function that sets 
+	 * 1. the MM relations for copied records
+	 * 2. the relation between the current record and it's damlightbox flexform to deleted or not
 	 *
 	 * @param	string		$command: The current action
 	 * @param	string		$table: The current tablename
 	 * @param	integer		$id: Uid of the current record
-	 * @param	[type]		$value: The value of the current cmd
+	 * @param	string		$value: The value of the current cmd
 	 * @param	object		$pObj: The parent object
 	 * @return	void
 	 */
@@ -148,6 +190,27 @@ class tx_damlightbox_tcemain {
 		if (tx_damlightbox_div::tableAllowedForDamlightbox($table)) {
 
 			switch ($command) {
+				
+				case 'copy':
+													
+					// MM relations for flexform field
+					if ($pObj->copyDamlightboxFields['tx_damlightbox_flex']) {
+						// insert relation
+						$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_damlightbox_ds', array('tablenames' => $table, 'uid_foreign' => (int)$pObj->copyMappingArray[$table][$id], 'tx_damlightbox_flex' => $pObj->copyDamlightboxFields['tx_damlightbox_flex']), null);
+					}
+					
+					// MM image relations
+					if (is_array($pObj->copyDamlightboxFields['tx_damlightbox_image'])) {
+						$valueArray = array();
+						foreach ($pObj->copyDamlightboxFields['tx_damlightbox_image'] as $key => $value) {
+							$valueArray[$key] = 'tx_dam_'.$value;
+						}
+						$tcaFieldConf = $GLOBALS['TCA'][$table]['columns']['tx_damlightbox_image']['config'];
+						$pObj->checkValue_group_select_processDBdata($valueArray, $tcaFieldConf, (int)$pObj->copyMappingArray[$table][$id], 'update', 'group', $table);
+					}
+					
+				break;
+				
 				case 'delete':
 					$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_damlightbox_ds', 'tablenames=\''.$table.'\' AND uid_foreign='.(int)$id.'', array('deleted' => '1'), null);
 				break;

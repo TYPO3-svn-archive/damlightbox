@@ -196,4 +196,31 @@ plugin.tt_news.imageMarkerFunc.SINGLE.image.imageLinkWrap.typolink {
 	ATagParams < lib.damlightbox.pmkslimbox.imageLinkWrap.typolink.ATagParams
 }
 
+plugin.tt_news.displaySingle.content_stdWrap {
+	postCObject = TEXT
+	postCObject {
+		if.isTrue.data = TSFE:register|tx_damlightbox|config|sDEF|imgPreview
+		cObject = USER
+		cObject.userFunc = tx_damlightbox_pmkslimbox->addHiddenImgs
+		cObject {
+			content.data = field:uid
+			content.table = tt_news
+			hCalc.cObject = TEXT
+			hCalc.cObject.value = {$plugin.damlightbox.pmkslimbox.hCalc}
+			vCalc.cObject = TEXT
+			vCalc.cObject.value = {$plugin.damlightbox.pmkslimbox.vCalc}
+		}
+	}
+}
+
+damlightbox {
+	10.10.conf.tt_news.20 {
+
+		template.file = {$plugin.damlightbox.pmkslimbox.templateFile}
+		marks.CE_TITLE >
+
+		marks.DAM_TITLE.outerWrap >
+	}
+}
+
 [global]
