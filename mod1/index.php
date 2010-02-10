@@ -31,9 +31,7 @@
 
 $LANG->includeLLFile('EXT:damlightbox/mod1/locallang.xml');
 require_once(PATH_t3lib . 'class.t3lib_scbase.php');
-require ($BACK_PATH.'template.php');
 $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users has no permission for entry.
-// DEFAULT initialization of a module [END]
 
 
 /**
@@ -281,11 +279,12 @@ class  tx_damlightbox_module1 extends t3lib_SCbase {
 						<select name ="tableConf['.$table.'][types][]" id="types" multiple="multiple" size="5" />
 						<option value="all" selected="selected">'.$GLOBALS['LANG']->getLL('allTypes').'</option>
 						';
-						$i = 0;
+						// get localized labels for the record types, exluding numeric returns (=invalid labels)
 						foreach ($GLOBALS['TCA'][$table]['types'] as $key => $value) {
 							$typefield = $GLOBALS['TCA'][$table]['ctrl']['type'];
-							$label = $GLOBALS['LANG']->sl($GLOBALS['TCA'][$table]['columns'][$typefield]['config']['items'][$i]['0']);
+							$label = $GLOBALS['LANG']->sl(t3lib_BEfunc::getLabelFromItemlist($table, $typefield, $key));
 							if (!$label) $label = $key;
+							if (is_numeric($label)) continue;
 							$configOptions .= '<option value="'.$key.'">'.$label.'</option>';
 							$i++;
 						}
@@ -299,6 +298,7 @@ class  tx_damlightbox_module1 extends t3lib_SCbase {
 						<p style="margin-bottom: 0.8em;">
 						<select name ="tableConf['.$table.'][after]" id="after" />
 						';
+						// get localized lables for all fields of the table
 						foreach ($GLOBALS['TCA'][$table]['columns'] as $key => $value) {
 							$label = rtrim($GLOBALS['LANG']->sl($GLOBALS['TCA'][$table]['columns'][$key]['label']), ':');
 							if (!$label) $label = $key; 
