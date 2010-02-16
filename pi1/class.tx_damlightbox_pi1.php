@@ -110,8 +110,7 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 				}
 			}
 		}
-		
-		$GLOBALS['TSFE']->register['tx_damlightbox']['test'] = 1;
+
 #		debug($GLOBALS['TSFE']->register['tx_damlightbox']);
 
 		// possibility to debug from TS

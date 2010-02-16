@@ -55,7 +55,7 @@ class tx_damlightbox_pages extends tx_damlightbox_pi1 {
 		$rootLine = $GLOBALS['TSFE']->rootLine;
 		
 		// leave out the current level (this function is called at a point where it's clear that there are no images at the current level)
-		array_shift($rootLine);
+		if ($conf['start'] == -1) array_shift($rootLine);
 		
 		// walk along the rootline and look if a damlightbox field carries images
 		foreach ($rootLine as $value) {

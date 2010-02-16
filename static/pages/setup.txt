@@ -96,6 +96,7 @@ page.313 {
 		stdWrap.ifEmpty.cObject {
 		
 			userFunc = tx_damlightbox_pages->rootLineSlide
+			start = -1
 			
 			image < page.313.20.image
 		}
