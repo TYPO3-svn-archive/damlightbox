@@ -61,19 +61,18 @@ class tx_damlightbox_tcemain {
 	function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, &$pObj) {
 
 		if (tx_damlightbox_div::tableAllowedForDamlightbox($table)) {
-
-			// keep incoming damlightbox values for post processing and unset the pseudo fields to avoid sql errors
 			
 			if (array_key_exists('tx_damlightbox_flex', $incomingFieldArray)) {
+				// keep incoming damlightbox values for post processing and unset the pseudo field
 				$pObj->tx_damlightbox_flex = $incomingFieldArray['tx_damlightbox_flex'];
 				unset($incomingFieldArray['tx_damlightbox_flex']);
 			}
 
 			if (array_key_exists('tx_damlightbox_image', $incomingFieldArray)) {				
+				// keep incoming damlightbox values for post processing and unset the pseudo field
 				$pObj->tx_damlightbox_image = $incomingFieldArray['tx_damlightbox_image'];
 				unset($incomingFieldArray['tx_damlightbox_image']);
-			}
-			
+			}	
 		}
 	}
 
@@ -91,13 +90,11 @@ class tx_damlightbox_tcemain {
 	function processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, &$pObj) {
 
 		if (tx_damlightbox_div::tableAllowedForDamlightbox($table)) {
-
-			// MM relations for image field
-			if ($pObj->tx_damlightbox_image) {
-				$valueArray = t3lib_div::trimExplode(',', $pObj->tx_damlightbox_image, 1);
-				$tcaFieldConf = $GLOBALS['TCA'][$table]['columns']['tx_damlightbox_image']['config'];
-				$pObj->checkValue_group_select_processDBdata($valueArray, $tcaFieldConf, $id, $status, 'group', $table);
-			}
+			
+			// MM relations for image field: Note that the field always needs to be processed to make sure that any MM relations are removed in case they were removed in the parent record (=the $incomingFieldArray had an empty value for the field)
+			$valueArray = t3lib_div::trimExplode(',', $pObj->tx_damlightbox_image, 1);
+			$tcaFieldConf = $GLOBALS['TCA'][$table]['columns']['tx_damlightbox_image']['config'];
+			$pObj->checkValue_group_select_processDBdata($valueArray, $tcaFieldConf, $id, $status, 'group', $table);
 
 			// MM relations for flexform field
 			if ($pObj->tx_damlightbox_flex) {

@@ -355,6 +355,7 @@ class  tx_damlightbox_module1 extends t3lib_SCbase {
 			
 			// reset conf
 			$conf = '';
+			$extconf = '';
 			
 			// walk through the configuration for each table and generate the call to t3lib_extmgm
 			foreach ($this->params['postVars']['tableConf'] as $table => $configuration) {
@@ -388,14 +389,16 @@ class  tx_damlightbox_module1 extends t3lib_SCbase {
 				// build the calls to t3lib_extMgm
 				$conf .= 't3lib_extMgm::addTCAcolumns(\''.$table.'\', $tempColumns, 1);'.chr(10);
 				$conf .= 't3lib_extMgm::addToAllTCAtypes(\''.$table.'\', \''.$fields.'\', \''.$types.'\', \'after:'.$after.'\');'.chr(10);
+				
+				$extconf .= $table.'|'.$fields.'|'.$types.'|'.$after.';';
 			}
 			
 			// write the contens of the file
-			fwrite($fd, '<?php'.chr(10).$conf.'?'.'>');
+			fwrite($fd, '<?php'.chr(10).$conf.'$GLOBALS[\'TYPO3_CONF_VARS\'][\'EXTCONF\'][\'damlightbox\'][\'allowedTables\']=\''.$extconf.'\''.chr(10).'?'.'>');
 		}
 	}
 		
-}
+}			
 
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/mod1/index.php'])	{
