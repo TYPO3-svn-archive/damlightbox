@@ -353,44 +353,6 @@ class  tx_damlightbox_module1 extends t3lib_SCbase {
 		// get the table configuration from module
 		if (is_array($this->params['postVars']['tableConf'])) {
 			
-			// tempColumns for both generic damlightbox fields
-			$tempColumns = Array (
-				'tx_damlightbox_flex' => Array (
-					'exclude' => 1,
-					'label' => 'LLL:EXT:damlightbox/locallang_db.xml:tx_damlightbox_flex',
-					'config' => Array (
-						'type' => 'flex',
-			         	'ds' => Array (
-			            	'default' => $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['damlightbox']['flexformFile'],
-			        	)
-			        )
-				),
-				'tx_damlightbox_image' => Array (
-					'exclude' => 1,
-					'label' => 'LLL:EXT:damlightbox/locallang_db.xml:tx_damlightbox_image',
-					'config' => Array (				
-						'form_type' => 'user',
-						'userFunc' => 'EXT:dam/lib/class.tx_dam_tcefunc.php:&tx_dam_tceFunc->getSingleField_typeMedia',
-						//'userProcessClass' => 'EXT:mmforeign/class.tx_mmforeign_tce.php:tx_mmforeign_tce',
-						'type' => 'group',
-						'internal_type' => 'db',
-						'allowed' => 'tx_dam',
-						'prepend_tname' => 1,
-						'MM' => 'tx_dam_mm_ref',
-						//'MM_foreign_select' => 1, // obsolete in 4.1
-						'MM_opposite_field' => 'file_usage',
-						'MM_match_fields' => array('ident' => 'tx_damlightbox_image'),
-						'allowed_types' => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'],	
-						'max_size' => '1000',
-						'show_thumbs' => 1,
-						'size' => 5,
-						'maxitems' => 200,
-						'minitems' => 0,
-						'autoSizeMax' => 30,
-					)
-				),
-			);
-			
 			// reset conf
 			$conf = '';
 			
@@ -429,7 +391,7 @@ class  tx_damlightbox_module1 extends t3lib_SCbase {
 			}
 			
 			// write the contens of the file
-			fwrite($fd, '<?php'.chr(10).'$tempColumns = '.var_export($tempColumns, true).';'.chr(10).$conf.'?'.'>');
+			fwrite($fd, '<?php'.chr(10).$conf.'?'.'>');
 		}
 	}
 		

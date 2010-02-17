@@ -18,7 +18,8 @@ page.313 {
 	
 	20 = USER
 	20 {
-		userFunc = tx_damlightbox_pi1->frontendImageIterator
+		userFunc = tx_damlightbox_pages->rootLineSlide
+#		start = -1
 
 		image = IMAGE
 		image {
@@ -89,16 +90,6 @@ page.313 {
 				20.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|{TSFE:register|tx_damlightbox|config|sDEF|imgCaption}
 				20.if.isTrue.data = TSFE:register|tx_damlightbox|config|sDEF|imgCaption
 			}
-		}
-		
-		## advanced feature: slide option for pages ##
-		stdWrap.ifEmpty.cObject = USER
-		stdWrap.ifEmpty.cObject {
-		
-			userFunc = tx_damlightbox_pages->rootLineSlide
-			start = -1
-			
-			image < page.313.20.image
 		}
 	}
 }

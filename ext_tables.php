@@ -19,6 +19,22 @@ if (TYPO3_MODE == 'BE') {
 
 define('TX_DAMLIGHTBOX_FIELDCONF_FILE', PATH_site . 'typo3conf/damlightbox_conf.php');
 
+$tempColumns = Array (
+	'tx_damlightbox_flex' => Array (
+		'exclude' => 1,
+		'label' => 'LLL:EXT:damlightbox/locallang_db.xml:tx_damlightbox_flex',
+		'config' => Array (
+			'type' => 'flex',
+			'ds' => Array (
+				'default' => 'FILE:EXT:damlightbox/flexform_ds.xml',
+			),
+		),
+	),
+	'tx_damlightbox_image' => txdam_getMediaTCA('image_field', 'tx_damlightbox_image'),
+);
+
+$tempColumns['tx_damlightbox_image']['label'] = 'LLL:EXT:damlightbox/locallang_db.xml:tx_damlightbox_image';
+
 if (@file_exists(TX_DAMLIGHTBOX_FIELDCONF_FILE)) {
 		@require_once(TX_DAMLIGHTBOX_FIELDCONF_FILE);
 }
