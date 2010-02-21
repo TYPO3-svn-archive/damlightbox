@@ -62,17 +62,25 @@ class tx_damlightbox_tcemain {
 
 		if (tx_damlightbox_div::tableAllowedForDamlightbox($table)) {
 			
+			// keep incoming damlightbox values for post processing and unset the pseudo field
+			
 			if (array_key_exists('tx_damlightbox_flex', $incomingFieldArray)) {
-				// keep incoming damlightbox values for post processing and unset the pseudo field
 				$pObj->tx_damlightbox_flex = $incomingFieldArray['tx_damlightbox_flex'];
 				unset($incomingFieldArray['tx_damlightbox_flex']);
 			}
 
-			if (array_key_exists('tx_damlightbox_image', $incomingFieldArray)) {				
-				// keep incoming damlightbox values for post processing and unset the pseudo field
+			// tx_damlightbox_image exists in field array and has values
+			if (empty($incomingFieldArray['tx_damlightbox_image']) == FALSE) {			
 				$pObj->tx_damlightbox_image = $incomingFieldArray['tx_damlightbox_image'];
 				unset($incomingFieldArray['tx_damlightbox_image']);
-			}	
+			// tx_damlightbox_image exists but is empty (=removed relations)
+			} elseif (array_key_exists('tx_damlightbox_image', $incomingFieldArray)) {
+				$pObj->tx_damlightbox_image = '-1';
+				unset($incomingFieldArray['tx_damlightbox_image']);
+			// tx_damlightbox_image doesn't exist in field array
+			} else {
+				$pObj->tx_damlightbox_image = '-2';
+			}
 		}
 	}
 
@@ -92,10 +100,18 @@ class tx_damlightbox_tcemain {
 		if (tx_damlightbox_div::tableAllowedForDamlightbox($table)) {
 			
 			// MM relations for image field: Note that the field always needs to be processed to make sure that any MM relations are removed in case they were removed in the parent record (=the $incomingFieldArray had an empty value for the field)
-			$valueArray = t3lib_div::trimExplode(',', $pObj->tx_damlightbox_image, 1);
-			$tcaFieldConf = $GLOBALS['TCA'][$table]['columns']['tx_damlightbox_image']['config'];
-			$pObj->checkValue_group_select_processDBdata($valueArray, $tcaFieldConf, $id, $status, 'group', $table);
+			if ($pObj->tx_damlightbox_image !== '-2') {
 
+				// get the config for the field
+				$tcaFieldConf = $GLOBALS['TCA'][$table]['columns']['tx_damlightbox_image']['config'];				
+				
+				// has the field values or should relations be removed
+				($pObj->tx_damlightbox_image !== '-1') ? $valueArray = t3lib_div::trimExplode(',', $pObj->tx_damlightbox_image, 1) : $valueArray = array();
+				
+				// execute according TCEMAIN function to build/update MM relations
+				$pObj->checkValue_group_select_processDBdata($valueArray, $tcaFieldConf, $id, $status, 'group', $table);
+			}
+			
 			// MM relations for flexform field
 			if ($pObj->tx_damlightbox_flex) {
 
