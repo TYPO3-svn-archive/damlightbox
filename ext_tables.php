@@ -34,6 +34,7 @@ $tempColumns = Array (
 );
 
 $tempColumns['tx_damlightbox_image']['label'] = 'LLL:EXT:damlightbox/locallang_db.xml:tx_damlightbox_image';
+$tempColumns['tx_damlightbox_image']['exclude'] = 1;
 
 if (@file_exists(TX_DAMLIGHTBOX_FIELDCONF_FILE)) {
 		@require_once(TX_DAMLIGHTBOX_FIELDCONF_FILE);
