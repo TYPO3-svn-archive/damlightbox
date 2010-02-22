@@ -256,7 +256,7 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 			foreach ($images as $image) {
 				
 				// produce the image
-				$content .= $this->cObj->cObjGetSingle($conf['image'], $conf['image.']);
+				$content .= $this->cObj->cObjGetSingle('IMAGE', $conf);
 				
 				// first image is preview
 				if ($GLOBALS['TSFE']->register['tx_damlightbox']['config']['sDEF']['imgPreview']) break;
@@ -264,8 +264,8 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 				// raise counter
 				$GLOBALS['TSFE']->register['currentImg']++;
 			}
-		}	
-		return $this->cObj->stdWrap($content, $conf['stdWrap.']);
+		}
+		return $content;
 	}
 
 }
