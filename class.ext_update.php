@@ -90,7 +90,7 @@ class ext_update {
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'uid_local', 
 				'tx_damlightbox_ds',
-				'uid_foreign = '.$record['uid_foreign'].'',
+				'uid_foreign = '.$record['uid_foreign'].' AND tablenames=\'tt_content\'',
 				null,
 				null,
 				null
@@ -101,7 +101,7 @@ class ext_update {
 				
 				$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
 					'tx_damlightbox_ds',
-					'uid_foreign = '.$record['uid_foreign'].'',
+					'uid_foreign = '.$record['uid_foreign'].' AND tablenames=\'tt_content\'',
 					array('tx_damlightbox_flex' => $record['tx_damlightbox_flex']),
 					null
 				);
