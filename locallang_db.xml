@@ -7,7 +7,7 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 			<label index="tx_damlightbox_image">DAM Images:</label>
-			<label index="tx_damlightbox_flex">DAM Image configuration:</label>
+			<label index="tx_damlightbox_flex">DAM Image configuration:</label>	
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="tx_damlightbox_image">DAM Bilder:</label>
