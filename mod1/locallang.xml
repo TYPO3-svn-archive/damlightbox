@@ -10,38 +10,42 @@
 			<label index="function1">Table configuration</label>
 			<label index="selectTable">Table selection</label>
 			<label index="tcaTables">Choose any tables from the following select box:</label>
-			<label index="flexFieldConf">Include the DAM flexform</label>
-			<label index="imageFieldConf">Include the DAM imagefield</label>
+			<label index="flexFieldConf">Include the DAM Lightbox flexform</label>
+			<label index="imageFieldConf">Include the DAM Lightbox imagefield</label>
 			<label index="typesConf">Record types in which the fields are included</label>
 			<label index="allTypes">All types</label>			
-			<label index="afterConf">Field after which the DAM fields are included</label>																	
-			<label index="defaultAction">Step 1: Choose tables for the DAM Lightbox</label>
-			<label index="configAction">Step 2: Configure the fields for the chosen tables</label>
-			<label index="writeAction">Step 3: Finished!</label>			
-			<label index="errmsg.generalerror">Something is duly wrong here</label>
+			<label index="afterConf">Field after which the DAM Lightbox fields are included</label>																	
+			<label index="defaultAction">Select tables in which to include DAM Lightbox</label>
+			<label index="configAction">Select tables in which to include the DAM Lightbox</label>
+			<label index="writeAction">Finished!</label>			
+			<label index="errmsg.generalerror">Something is duly wrong here...</label>
 			<label index="errmsg.noAccess">Sorry, you don't have access to this module</label>			
 			<label index="nextButton">Next</label>
-			<label index="writeButton">Write!</label>
-			<label index="configWritten">Your configuration was written. DAM Lightbox is now included in the chosen tables.</label>													
+			<label index="refreshButton">Refresh configuration</label>			
+			<label index="writeButton">Write configuration!</label>
+			<label index="configWritten">Your configuration was written. DAM Lightbox is now included and configured for the chosen tables.</label>
+			<label index="detailConfig">Configuration details for the selected tables</label>																		
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">DAM Lightbox Konfigurationstool</label>
 			<label index="function1">Tabellenkonfiguration</label>
 			<label index="selectTable">Tabellenauswahl</label>
 			<label index="tcaTables">Sie können mehrere Tabellen aus folgender Liste auswählen:</label>
-			<label index="flexFieldConf">DAM Flexform einbinden</label>
-			<label index="imageFieldConf">DAM Bildfeld einbinden</label>
+			<label index="flexFieldConf">DAM Lightbox Flexform einbinden</label>
+			<label index="imageFieldConf">DAM Lightbox Bildfeld einbinden</label>
 			<label index="typesConf">Bei diesen Datensatztypen sollen die Felder eingebunden werden</label>
 			<label index="allTypes">Alle Typen</label>				
 			<label index="afterConf">Feld nachdem die DAM Lightbox Felder eingebunden werden</label>						
-			<label index="defaultAction">Schritt 1: Tabellen für die DAM Lightbox auswählen</label>
-			<label index="configAction">Schritt 2: DAM Lightbox Felder für die ausgewählten Tabellen konfigurieren</label>
-			<label index="writeAction">Schritt 3: Fertig!</label>				
-			<label index="errmsg.generalerror">Irgendwas läuft richtig schief</label>
+			<label index="defaultAction">Tabellen für die DAM Lightbox auswählen</label>
+			<label index="configAction">Tabellen und Felder für die Benutzung der DAM Lightbox konfigurieren</label>
+			<label index="writeAction">Fertig!</label>				
+			<label index="errmsg.generalerror">Irgendetwas ist richtig schiefgelaufen...</label>
 			<label index="errmsg.noAccess">Leider haben Sie keinen Zugriff auf dieses Modul</label>				
 			<label index="nextButton">Weiter</label>
-			<label index="writeButton">Konfiguration schreiben</label>
-			<label index="configWritten">Die Konfigurationsdatei wurde geschrieben. Die DAM Lightbox ist nun in die angegebenen Tabellen eingebunden.</label>							
+			<label index="refreshButton">Konfiguration aktualisieren</label>			
+			<label index="writeButton">Konfiguration schreiben!</label>
+			<label index="configWritten">Die Konfigurationsdatei wurde geschrieben. Die DAM Lightbox ist nun in die angegebenen Tabellen eingebunden.</label>		
+			<label index="detailConfig">Detailkonfiguration der gewählten Tabellen</label>										
 		</languageKey>		
 	</data>
 </T3locallang>

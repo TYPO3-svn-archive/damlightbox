@@ -41,7 +41,6 @@
  * @subpackage 	damlightbox
  */
 
-require_once(PATH_t3lib.'class.t3lib_transferdata.php');
 require_once(t3lib_extMgm::extPath('damlightbox').'pi1/class.tx_damlightbox_div.php');
 
 class tx_damlightbox_tceform {
@@ -60,6 +59,15 @@ class tx_damlightbox_tceform {
 		// create a 'fake' damlightbox field in the tca of the incoming table
 		if (tx_damlightbox_div::tableAllowedForDamlightbox($table)) {
 
+			// making path to flexforms configurable from PageTSConfig
+			if ($fieldTSConfig = $pObj->setTSconfig($table,$row,'tx_damlightbox_flex')) {
+				if ($fieldTSConfig['config.']['ds.']) {
+					foreach ($fieldTSConfig['config.']['ds.'] as $key => $value) {
+						$GLOBALS['TCA'][$table]['columns']['tx_damlightbox_flex']['config']['ds'][$key] = $value;
+					}
+				}
+			}
+			
 			// if it's not a new record fetch the configuration from the tx_damlightbox_ds table
 			if (substr($row['uid'], 0, 3) != 'NEW') $row['tx_damlightbox_flex'] = tx_damlightbox_div::getFlexFormForRecord($row['uid'], $table);
 		}

@@ -48,7 +48,8 @@ class  tx_damlightbox_module1 extends t3lib_SCbase {
 		public $conf = array();				// configuration for the module
 		public $params = array();			// incoming parameters
 		public $content;					// the content of the module
-		public $extconf=array();			// extension configuration from EM
+		public $selectedTables = array();	// selected backend tables for damlightbox
+		public $tableConf = array();		// current configuration for the tables
 
 		/**
 		 * Initializes the Module
@@ -164,6 +165,22 @@ class  tx_damlightbox_module1 extends t3lib_SCbase {
 		protected function moduleContent()	{
 
 			global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
+			
+			// if damlightbox was alreary configured, reload the configuration
+			if ($TYPO3_CONF_VARS['EXTCONF']['damlightbox']['configuredTables']) $this->damlightboxConf = unserialize($TYPO3_CONF_VARS['EXTCONF']['damlightbox']['configuredTables']);
+			
+			// check if some tables were already selected
+			if ($this->params['postVars']['selectedTables'] || $this->params['postVars']['tableConf']) {
+				$this->selectedTables = $this->params['postVars']['selectedTables'];
+				$this->tableConf = $this->params['postVars']['tableConf'];			
+				
+			} elseif (is_array($this->damlightboxConf)) {			
+				$this->selectedTables = array_keys($this->damlightboxConf);
+				$this->tableConf = $this->damlightboxConf;
+			}
+			
+			// set write action if submitted
+			($this->params['postVars']['write']) ? $this->params['action'] = 2 : $this->params['action'] = 1;
 
 			// function 1: table configuration
 			if ($this->params['function'] == 1) {
@@ -176,22 +193,28 @@ class  tx_damlightbox_module1 extends t3lib_SCbase {
 						// function header
 						$this->content .= $this->doc->section($GLOBALS['LANG']->getLL('configAction'), $content, 0, 1);
 						
-						// if tables were chosen in step 1, get the config option for this tables
-						if (is_array($this->params['postVars']['selectedTables'])) $this->content .= $this->getConfigOptions();
+						// table selection
+						$content = $this->displayTableSelector();
+						
+						$content .= '<h3 class="uppercase">'.$GLOBALS['LANG']->getLL('detailConfig').'</h3>';
+						
+						// detailed config for each selected table
+						$content .= $this->getConfigOptions();
 						
 						// button for next step
 						$content .= '
 						</select>
 						</fieldset>
 						<div style="margin-top: 1em;">
-						<input type="hidden" name="action" value="2" />
-						<input type="submit" value="'.$GLOBALS['LANG']->getLL('writeButton').'" />
+						<input type="hidden" name="action" value="1" />
+						<input type="submit" name="refresh" value="'.$GLOBALS['LANG']->getLL('refreshButton').'" />						
+						<input type="submit" name="write" value="'.$GLOBALS['LANG']->getLL('writeButton').'" />
 						</div>
 						';
-
+						
 					break;
 					
-					// write the configuration to file
+					// write configuration
 					case 2:
 						
 						// write action
@@ -210,30 +233,16 @@ class  tx_damlightbox_module1 extends t3lib_SCbase {
 						
 						// set header
 						$this->content .= $this->doc->section($GLOBALS['LANG']->getLL('defaultAction'), $content, 0, 1);
+
+						// display table selector
+						$content = $this->displayTableSelector();
 						
-						// show a select box from which to select 
+						// display submit button
 						$content .= '
-						<fieldset>
-						<legend style="font-weight: bold;">'.$GLOBALS['LANG']->getLL('selectTable').'</legend>
-						<label for="selectedTables" style="display: block; margin: 0.5em 0 1em 0;">'.$GLOBALS['LANG']->getLL('tcaTables').'</label>
-						<select name="selectedTables[]" multiple="multiple" size="10">
-						';
-						// fetch the localized table options
-						while (list($table)=each($TCA)) {
-							if (substr($table, 0, 4) == 'sys_' || substr($table, 0, 3) == 'be_' || substr($table, 0, 7) == 'static_') continue;
-							$label = $GLOBALS['LANG']->sl($GLOBALS['TCA'][$table]['ctrl']['title']);
-							if (!$label) $label = $table;
-							$content .= '<option value="'.$table.'">'.$label.'</option>';
-						}
-						
-						$content .= '
-						</select>
-						</fieldset>
 						<div style="margin-top: 1em;">
-						<input type="hidden" name="action" value="1" />
-						<input type="submit" value="'.$GLOBALS['LANG']->getLL('nextButton').'" />
-						</div>
-						';
+							<input type="hidden" name="action" value="1" />
+							<input type="submit" value="'.$GLOBALS['LANG']->getLL('nextButton').'" />
+						</div>';
 						
 					break;
 				}
@@ -246,6 +255,37 @@ class  tx_damlightbox_module1 extends t3lib_SCbase {
 			$this->content .= $content;
 		}
 		
+		/* Generates the table selector for the damlightbox configuration
+		 * 
+		 * @return	string		HTML string
+		 */
+		protected function displayTableSelector() {
+			
+			global $TCA;	
+					
+			// show a select box for all reasonable BE tables; already selected tables are marked selected
+			$tableSelector .= '
+			<fieldset>
+			<legend style="font-weight: bold;">'.$GLOBALS['LANG']->getLL('selectTable').'</legend>
+			<label for="selectedTables" style="display: block; margin: 0.5em 0 1em 0;">'.$GLOBALS['LANG']->getLL('tcaTables').'</label>
+			<select name="selectedTables[]" id="selectedTables" multiple="multiple" size="10">
+			';
+			// fetch the localized table options
+			while (list($table)=each($TCA)) {
+				(in_array($table, $this->selectedTables)) ? $selected = ' selected="selected"' : $selected = '';
+				if (substr($table, 0, 4) == 'sys_' || substr($table, 0, 3) == 'be_' || substr($table, 0, 7) == 'static_') continue;
+				$label = $GLOBALS['LANG']->sl($GLOBALS['TCA'][$table]['ctrl']['title']);
+				if (!$label) $label = $table;
+				$tableSelector .= '<option value="'.$table.'"'.$selected.'>'.$label.'</option>';
+			}
+			
+			$tableSelector .= '
+			</select>
+			</fieldset>';
+			
+			return $tableSelector;	
+		}		
+		
 		/* Generates fieldsets with detail configuration for each chosen table
 		 * 
 		 * @return	string		HTML string
@@ -255,21 +295,33 @@ class  tx_damlightbox_module1 extends t3lib_SCbase {
 			$configOptions = '';
 
 			// walk through the chosen tables
-			foreach ($this->params['postVars']['selectedTables'] as $table) {
+			foreach ($this->selectedTables as $table) {
 				
 				// get the TCA
 				t3lib_div::loadTCA($table);
+				
+				// process existing conf values
+				if (in_array($table, $this->selectedTables)) {
+					($this->tableConf[$table]['tx_damlightbox_image'] == 'on') ? $tx_damlightbox_image_checked = ' checked="ckecked"' : $tx_damlightbox_image_checked = '';
+					($this->tableConf[$table]['tx_damlightbox_flex'] == 'on') ? $tx_damlightbox_flex_checked = ' checked="ckecked"' : $tx_damlightbox_flex_checked = '';					
+				}
+				
+				// making sure we are dealing with an array
+				if (!is_array($this->tableConf[$table]['types'])) $this->tableConf[$table]['types'] = array();
+				
+				// check if all types option was configured
+				($this->tableConf[$table]['types'][0] == 'all') ? $tx_damlightbox_types_all = ' selected="selected"' : $tx_damlightbox_types_all = '';
 				
 				// build the form with localized labels
 				$configOptions .= '		
 					<fieldset style="margin: 1em; padding: 0.5em;">
 						<legend style="font-weight: bold;">'.$GLOBALS['LANG']->sl($GLOBALS['TCA'][$table]['ctrl']['title']).'</legend>
 						<p style="margin-bottom: 0.8em;">
-						<input type="checkbox" name ="tableConf['.$table.'][tx_damlightbox_image]" id="tx_damlightbox_flex" checked="ckecked" />
+						<input type="checkbox" name ="tableConf['.$table.'][tx_damlightbox_image]" id="tx_damlightbox_flex"'.$tx_damlightbox_image_checked.' />
 						<label for="tx_damlightbox_image">'.$GLOBALS['LANG']->getLL('imageFieldConf').'</label>					
 						</p>
 						<p style="margin-bottom: 0.8em;">
-						<input type="checkbox" name ="tableConf['.$table.'][tx_damlightbox_flex]" id="tx_damlightbox_flex" checked="ckecked" />
+						<input type="checkbox" name ="tableConf['.$table.'][tx_damlightbox_flex]" id="tx_damlightbox_flex"'.$tx_damlightbox_flex_checked.' />
 						<label for="tx_damlightbox_flex">'.$GLOBALS['LANG']->getLL('flexFieldConf').'</label>							
 						</p>
 						';
@@ -277,7 +329,7 @@ class  tx_damlightbox_module1 extends t3lib_SCbase {
 						$configOptions .= '
 						<p style="margin-bottom: 0.8em;">
 						<select name ="tableConf['.$table.'][types][]" id="types" multiple="multiple" size="5" />
-						<option value="all" selected="selected">'.$GLOBALS['LANG']->getLL('allTypes').'</option>
+						<option value="all"'.$tx_damlightbox_types_all.'>'.$GLOBALS['LANG']->getLL('allTypes').'</option>
 						';
 						// get localized labels for the record types, exluding numeric returns (=invalid labels)
 						foreach ($GLOBALS['TCA'][$table]['types'] as $key => $value) {
@@ -285,7 +337,8 @@ class  tx_damlightbox_module1 extends t3lib_SCbase {
 							$label = $GLOBALS['LANG']->sl(t3lib_BEfunc::getLabelFromItemlist($table, $typefield, $key));
 							if (!$label) $label = $key;
 							if (is_numeric($label)) continue;
-							$configOptions .= '<option value="'.$key.'">'.$label.'</option>';
+							(in_array($key, $this->tableConf[$table]['types']) && $this->tableConf[$table]['types'][0] != 'all') ? $tx_damlightbox_types_selected = ' selected="selected"' : $tx_damlightbox_types_selected = '';
+							$configOptions .= '<option value="'.$key.'"'.$tx_damlightbox_types_selected.'>'.$label.'</option>';
 							$i++;
 						}
 						$configOptions .= '
@@ -301,8 +354,9 @@ class  tx_damlightbox_module1 extends t3lib_SCbase {
 						// get localized lables for all fields of the table
 						foreach ($GLOBALS['TCA'][$table]['columns'] as $key => $value) {
 							$label = rtrim($GLOBALS['LANG']->sl($GLOBALS['TCA'][$table]['columns'][$key]['label']), ':');
-							if (!$label) $label = $key; 
-							$configOptions .= '<option value="'.$key.'">'.$label.'</option>';
+							if (!$label) $label = $key;
+							($key == $this->tableConf[$table]['after']) ? $tx_damlightbox_after_selected = ' selected="selected"' : $tx_damlightbox_after_selected = '';							
+							$configOptions .= '<option value="'.$key.'"'.$tx_damlightbox_after_selected.'>'.$label.'</option>';
 						}				
 						$configOptions .= '
 						</select>
@@ -355,7 +409,6 @@ class  tx_damlightbox_module1 extends t3lib_SCbase {
 			
 			// reset conf
 			$conf = '';
-			$extconf = '';
 			
 			// walk through the configuration for each table and generate the call to t3lib_extmgm
 			foreach ($this->params['postVars']['tableConf'] as $table => $configuration) {
@@ -384,17 +437,15 @@ class  tx_damlightbox_module1 extends t3lib_SCbase {
 				$after = $configuration['after'];
 				
 				// types configuration
-				($configuration['types']['0'] == 'all') ? $types = '' : $types = implode(',', $configuration['types']);
+				(!$configuration['types'] || $configuration['types']['0'] == 'all') ? $types = '' : $types = implode(',', $configuration['types']);
 				
 				// build the calls to t3lib_extMgm
 				$conf .= 't3lib_extMgm::addTCAcolumns(\''.$table.'\', $tempColumns, 1);'.chr(10);
 				$conf .= 't3lib_extMgm::addToAllTCAtypes(\''.$table.'\', \''.$fields.'\', \''.$types.'\', \'after:'.$after.'\');'.chr(10);
-				
-				$extconf .= $table.'|'.$fields.'|'.$types.'|'.$after.';';
 			}
 			
 			// write the contens of the file
-			fwrite($fd, '<?php'.chr(10).$conf.'$GLOBALS[\'TYPO3_CONF_VARS\'][\'EXTCONF\'][\'damlightbox\'][\'allowedTables\']=\''.$extconf.'\''.chr(10).'?'.'>');
+			fwrite($fd, '<?php'.chr(10).$conf.'$GLOBALS[\'TYPO3_CONF_VARS\'][\'EXTCONF\'][\'damlightbox\'][\'configuredTables\']=\''.serialize($this->params['postVars']['tableConf']).'\';'.chr(10).'?'.'>');
 		}
 	}
 		
