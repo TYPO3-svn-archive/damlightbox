@@ -60,7 +60,7 @@ final class tx_damlightbox_div {
 		if (!isset($GLOBALS['TCA'][$table])) return FALSE;
 
 		// test if damlightbox field is allowed for the table according to damlightbox extconf
-		if (strpos($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['damlightbox']['allowedTables'], $table) === FALSE) return FALSE;
+		if (strpos($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['damlightbox']['configuredTables'], $table) === FALSE) return FALSE;
 		
 		return TRUE;
 	}

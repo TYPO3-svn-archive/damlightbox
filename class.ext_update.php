@@ -48,16 +48,18 @@ class ext_update {
 	 *
 	 * @return	string		HTML
 	 */
-	public function main() {
-		
-			$GLOBALS['TYPO3_DB']->store_lastBuiltQuery = TRUE;		
+	public function main() {	
 		
 		// if form was submitted, perform update
 		if ((int) t3lib_div::_GP('update') == 1) {
 			
 			$records2update = $this->query();
 			
-			$content = '<p>The database update has been performed. <strong>'.$records2update.'</strong> values have been transferred. You may now drop the tx_damlightbox_flex field from the tt_content table using the COMPARE function of the TYPO3 Install Tool.</p>';
+			if ($records2update) {
+				$content = '<p>The database update has been performed. <strong>'.$records2update.'</strong> values have been transferred. You may now drop the tx_damlightbox_flex field from the tt_content table using the COMPARE function of the TYPO3 Install Tool.</p>';
+			} else {
+				$content = '<p>An error has occured. No values for the old tx_damlightbox_flex field could be fetched from tt_content. Please make sure that the field still exists in the database.</p>';	
+			}
 		
 		// else show update form
 		} else {
@@ -74,6 +76,7 @@ class ext_update {
 	
 	public function query() {
 		
+		// fetch values for old damlightbox field
 		$updateArr = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 			'uid AS uid_foreign, deleted, tx_damlightbox_flex',
 			'tt_content',
@@ -84,43 +87,47 @@ class ext_update {
 			$uidIndexField = ''
 		);		
 		
-		foreach ($updateArr as $record) {
-			
-			// does the record already exist in tx_damlightbox_ds
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-				'uid_local', 
-				'tx_damlightbox_ds',
-				'uid_foreign = '.$record['uid_foreign'].' AND tablenames=\'tt_content\'',
-				null,
-				null,
-				null
-			);
-			
-			// then UPDATE
-			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
+		if (is_array($updateArr)) {
 				
-				$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
+			foreach ($updateArr as $record) {
+				
+				// does the record already exist in tx_damlightbox_ds
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+					'uid_local', 
 					'tx_damlightbox_ds',
 					'uid_foreign = '.$record['uid_foreign'].' AND tablenames=\'tt_content\'',
-					array('tx_damlightbox_flex' => $record['tx_damlightbox_flex']),
+					null,
+					null,
 					null
 				);
-
-			// else do an INSERT
-			} else {
 				
-				$record['tablenames'] = 'tt_content';
+				// then UPDATE
+				if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
+					
+					$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
+						'tx_damlightbox_ds',
+						'uid_foreign = '.$record['uid_foreign'].' AND tablenames=\'tt_content\'',
+						array('tx_damlightbox_flex' => $record['tx_damlightbox_flex']),
+						null
+					);
+	
+				// else do an INSERT
+				} else {
+					
+					$record['tablenames'] = 'tt_content';
+					
+					$GLOBALS['TYPO3_DB']->exec_INSERTquery(
+						'tx_damlightbox_ds',
+						$record,
+						null
+					);				
+				}
 				
-				$GLOBALS['TYPO3_DB']->exec_INSERTquery(
-					'tx_damlightbox_ds',
-					$record,
-					null
-				);				
-			}
-			
+			}		
+			return count($updateArr);
+		} else {
+			return FALSE;
 		}
-		
-		return count($updateArr);
 	}
 	
 	/* Shows the submit form for doing the DB update
