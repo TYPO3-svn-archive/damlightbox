@@ -93,9 +93,10 @@ page.313 {
 #####################################################################
 # TypoScrip configuration for the plugin.damlightbox_pi1			#
 # @author Torsten Schrade <schradt@uni-mainz.de>					#
-# PART II: configuration for click-enlarge for pages				#
+# PART II: click-enlarge for pages									#
 #####################################################################
 
+## register pages table in the click-enlargement pagetype ##
 damlightbox {
 	10.10.tables := addToList(pages)
 	10.10.conf.pages =< lib.damlightbox.clickEnlargeConf

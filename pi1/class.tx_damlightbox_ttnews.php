@@ -28,9 +28,11 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- *   54: function imageMarkerFunc($itemConfig, $pObjRef)
+ *   48: class tx_damlightbox_ttnews extends tx_ttnews
+ *   58:     public function imageMarkerFunc($itemConfig, $pObjRef)
+ *  146:     private function getImageMarkersClassic($pObj)
  *
- * TOTAL FUNCTIONS: 1
+ * TOTAL FUNCTIONS: 2
  * (This index is automatically created/updated by the extension "extdeveval")
  *
  */

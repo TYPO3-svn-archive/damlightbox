@@ -176,6 +176,7 @@ plugin.tt_news {
 # PART II: configuration for click-enlarge for tt_news				#
 #####################################################################
 
+## register tt_news in the click-enlargement pagetype ##
 damlightbox {
 	10.10.tables := addToList(tt_news)
 	10.10.conf.tt_news =< lib.damlightbox.clickEnlargeConf
@@ -191,7 +192,6 @@ damlightbox {
 
 plugin.tt_news.imageMarkerFunc.SINGLE.image.imageLinkWrap.typolink {
 	parameter.append >
-	
 	ATagParams >
 	ATagParams < lib.damlightbox.pmkslimbox.imageLinkWrap.typolink.ATagParams
 }

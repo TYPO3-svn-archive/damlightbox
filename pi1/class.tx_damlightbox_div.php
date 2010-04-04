@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009 Torsten Schrade <schradt@uni-mainz.de>
+*  (c) 2010 Torsten Schrade <schradt@uni-mainz.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -28,9 +28,10 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- *   54: static function tableAllowedForDamlightbox($table)
- *   72: static function getFlexFormForRecord($uid, $table)
- *   96: static function addTableToFieldnames($table, $fields)
+ *   47: class tx_damlightbox_div
+ *   55: static function tableAllowedForDamlightbox($table)
+ *   76: static function getFlexFormForRecord($uid, $table)
+ *  101: static function addTableToFieldnames($table, $fields)
  *
  * TOTAL FUNCTIONS: 3
  * (This index is automatically created/updated by the extension "extdeveval")

@@ -19,12 +19,12 @@ plugin.tx_damlightbox_pi1 {
 
 	select {
 			damFields = {$plugin.damlightbox.damFields}
-			mmTable = {$plugin.damlightbox.mmTable}
-			sorting = {$plugin.damlightbox.sorting}
 			
-			## if needed you can explicitly set the where clause/table to join against dam, but normally this should be determined automatically ##
+			## if needed you can explicitly configure the query, but normally this should be determined automatically ##
+			mmTable = tx_dam_mm_ref
 			# foreignTable =
 			# whereClause =
+			sorting = tx_dam_mm_ref.sorting_foreign				
 	}
 
 	settings {
@@ -52,6 +52,7 @@ plugin.tx_damlightbox_pi1 {
 
 lib.damlightbox {
 
+	## library object to retrieve metadata values from TSFE ##
 	getDAMvalues = TEXT
 	getDAMvalues {
 		wrap = {|}
@@ -67,6 +68,9 @@ lib.damlightbox {
 	## load registers for last image in stack and current image ##
 	imageRegisters = LOAD_REGISTER
 	imageRegisters {
+	
+		## first image will always be "0" ##
+	
 		## this register fetches the last number from stack ##
 		lastImg {
 			data = TSFE:register|tx_damlightbox|imgCount
@@ -79,16 +83,19 @@ lib.damlightbox {
 			listNum.stdWrap.cObject = TEXT
 			listNum.stdWrap.cObject.data = GPvar:img
 		}
-	}	
+	}
 
 	## html content for click enlargement - usable within a configured lightbox or the classic image popup ##
 	clickEnlargeConf = COA
 	clickEnlargeConf {
 		
+		## first execute the plugin ##
 		5 =< plugin.tx_damlightbox_pi1
 		
+		## determine the image numbers ##
 		10 =< lib.damlightbox.imageRegisters
 	
+		## for the popup/lightbox content a TEMPLATE object is used ##
 		20 = TEMPLATE
 		20 {
 			template = FILE
@@ -230,11 +237,11 @@ lib.damlightbox {
 	
 						params = id="lbImage"
 	
-						altText.cObject < lib.damlightbox.getDAMvalues
-						altText.cObject.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|alt_text
+						altText < lib.damlightbox.getDAMvalues
+						altText.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|alt_text
 	
 						titleText < lib.damlightbox.getDAMvalues
-						titleText.cObject.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|title
+						titleText.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|title
 					}
 				}
 	
@@ -289,14 +296,7 @@ damlightbox {
 	# no standard pagetitle - will be fetched from DAM ##
 	config.noPageTitle = 2
 
-	## write DAM data into TSFE ##
-	stdWrap.preCObject = COA
-	stdWrap.preCObject {
-		5 =< plugin.tx_damlightbox_pi1
-		10 =< lib.damlightbox.imageRegisters
-	}
-
-	## use the DAM title for the title tag of the popup ##
+	## use the DAM title for the title tag of the popup; this will work because page content is generated before header content ##
 	headerData.10 = TEXT
 	headerData.10 {
 		cObject < lib.damlightbox.getDAMvalues
@@ -312,10 +312,10 @@ damlightbox {
 	bodyTagCObject = TEXT
 	bodyTagCObject.dataWrap = <body id="damlightbox-{GPvar:content}" class="damlightbox">|
 
-	## page object ##
+	## page content ##	
 	10 = COA
 	10 {
-		## fetch the current record from DB and render the imagefield ##
+		## fetch the current record from DB with a RECORDS object; this ensures that damlightbox always has the right table context ##
 		10 = RECORDS
 		10 {
 			source.data = GPvar:content

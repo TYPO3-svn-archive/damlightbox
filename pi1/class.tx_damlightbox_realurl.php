@@ -32,8 +32,8 @@
  *
  *
  *
- *   48:	class tx_damlightbox_realurl
- *   57:	addDamlightboxConfig($params, &$pObj)
+ *   45: class tx_damlightbox_realurl
+ *   54:     function addDamlightboxConfig($params, &$pObj)
  *
  * TOTAL FUNCTIONS: 1
  * (This index is automatically created/updated by the extension "extdeveval")

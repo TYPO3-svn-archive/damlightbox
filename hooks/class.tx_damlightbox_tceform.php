@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009 Torsten Schrade (schradt@uni-mainz.de)
+*  (c) 2010 Torsten Schrade (schradt@uni-mainz.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,8 +26,8 @@
  *
  *
  *
- *   51: class tx_damlightbox_tceform
- *   62:     function getMainFields_preProcess($table, &$row, $pObj)
+ *   46: class tx_damlightbox_tceform
+ *   57:     function getMainFields_preProcess($table, &$row, $pObj)
  *
  * TOTAL FUNCTIONS: 1
  * (This index is automatically created/updated by the extension "extdeveval")

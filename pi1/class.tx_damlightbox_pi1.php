@@ -35,13 +35,12 @@
  *
  *
  *
- *   52: class tx_damlightbox_pi1 extends tslib_pibase
- *   70:     function main ($content, $conf)
- *  119:     function getDamRecords()
- *  226:     function addHiddenImgs($content, $conf)
- *  272:     function overrideDimsFromFlexform($content, $conf)
+ *   51: class tx_damlightbox_pi1 extends tslib_pibase
+ *   69:     public function main ($content, $conf)
+ *  129:     protected function getDamRecords()
+ *  244:     public function frontendImageIterator($content, $conf)
  *
- * TOTAL FUNCTIONS: 4
+ * TOTAL FUNCTIONS: 3
  * (This index is automatically created/updated by the extension "extdeveval")
  *
  */
@@ -123,7 +122,7 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 
 
 	/**
-	 * Fetches metadata from DAM and writes it to registers into $GLOBALS['TSFE']->register.
+	 * Fetches metadata from DAM and writes it to register into $GLOBALS['TSFE']->register.
 	 *
 	 * @return	void
 	 */
@@ -142,7 +141,7 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 
 		// set the parts for the select query
 		$mmTable = $this->conf['select.']['mmTable'];
-		$foreignTable = $this->conf['select.']['foreignTable'];
+		$foreignTable = $this->cObj->stdWrap($this->conf['select.']['foreignTable'], $this->conf['select.']['foreignTable']);
 		$whereClause = $this->cObj->stdWrap($this->conf['select.']['whereClause'], $this->conf['select.']['whereClause.']);
 		$sorting = $this->conf['select.']['sorting'];
 		

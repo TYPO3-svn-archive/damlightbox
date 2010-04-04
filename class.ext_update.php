@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009 Torsten Schrade <schradt@uni-mainz.de>
+*  (c) 2010 Torsten Schrade <schradt@uni-mainz.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -30,17 +30,22 @@
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
  *
- * TOTAL FUNCTIONS: 3
+ *
+ *   49: class ext_update
+ *   56:     public function main()
+ *   84:     public function access($what = 'all')
+ *   93:     public function query()
+ *  153:     private function showUpdateForm()
+ *
+ * TOTAL FUNCTIONS: 4
  * (This index is automatically created/updated by the extension "extdeveval")
  *
  */
 /**
- *
  * @author		Torsten Schrade <schradt@uni-mainz.de>
  * @package 	TYPO3
  * @subpackage 	damlightbox
  */
-
 class ext_update {
 
 	/**
@@ -48,34 +53,45 @@ class ext_update {
 	 *
 	 * @return	string		HTML
 	 */
-	public function main() {	
-		
+	public function main() {
+
 		// if form was submitted, perform update
 		if ((int) t3lib_div::_GP('update') == 1) {
-			
+
 			$records2update = $this->query();
-			
+
 			if ($records2update) {
 				$content = '<p>The database update has been performed. <strong>'.$records2update.'</strong> values have been transferred. You may now drop the tx_damlightbox_flex field from the tt_content table using the COMPARE function of the TYPO3 Install Tool.</p>';
 			} else {
-				$content = '<p>An error has occured. No values for the old tx_damlightbox_flex field could be fetched from tt_content. Please make sure that the field still exists in the database.</p>';	
+				$content = '<p>An error has occured. No values for the old tx_damlightbox_flex field could be fetched from tt_content. Please make sure that the field still exists in the database.</p>';
 			}
-		
+
 		// else show update form
 		} else {
 			$content = $this->showUpdateForm();
 		}
-		
+
 		return $content;
 
 	}
-	
-	public function access($what = 'all') {	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @param	[type]		$what: ...
+	 * @return	[type]		...
+	 */
+	public function access($what = 'all') {
 		return 1;
 	}
-	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @return	[type]		...
+	 */
 	public function query() {
-		
+
 		// fetch values for old damlightbox field
 		$updateArr = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 			'uid AS uid_foreign, deleted, tx_damlightbox_flex',
@@ -85,57 +101,57 @@ class ext_update {
 			$orderBy = 'uid',
 			$limit = '',
 			$uidIndexField = ''
-		);		
-		
+		);
+
 		if (is_array($updateArr)) {
-				
+
 			foreach ($updateArr as $record) {
-				
+
 				// does the record already exist in tx_damlightbox_ds
 				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-					'uid_local', 
+					'uid_local',
 					'tx_damlightbox_ds',
 					'uid_foreign = '.$record['uid_foreign'].' AND tablenames=\'tt_content\'',
 					null,
 					null,
 					null
 				);
-				
+
 				// then UPDATE
 				if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
-					
+
 					$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
 						'tx_damlightbox_ds',
 						'uid_foreign = '.$record['uid_foreign'].' AND tablenames=\'tt_content\'',
 						array('tx_damlightbox_flex' => $record['tx_damlightbox_flex']),
 						null
 					);
-	
+
 				// else do an INSERT
 				} else {
-					
+
 					$record['tablenames'] = 'tt_content';
-					
+
 					$GLOBALS['TYPO3_DB']->exec_INSERTquery(
 						'tx_damlightbox_ds',
 						$record,
 						null
-					);				
+					);
 				}
-				
-			}		
+
+			}
 			return count($updateArr);
 		} else {
 			return FALSE;
 		}
 	}
-	
+
 	/* Shows the submit form for doing the DB update
 	 *
 	 * return 		string		The HTML for the submit form
 	 */
 	private function showUpdateForm() {
-		
+
 			$onClick = "document.location='".t3lib_div::linkThisScript(array('update' => 1))."'; return false;";
 
 			// start form

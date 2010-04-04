@@ -179,6 +179,7 @@ tt_content.image.20 {
 # PART II: config for tt_content click-enlarge						#
 #####################################################################
 
+## register tt_content in the click-enlargement pagetype ##
 damlightbox {
 	10.10.tables := addToList(tt_content)
 	10.10.conf.tt_content =< lib.damlightbox.clickEnlargeConf	
@@ -239,10 +240,8 @@ tt_content.image.20 {
 
 damlightbox {
 	10.10.conf.tt_content.20 {
-
 		template.file = {$plugin.damlightbox.pmkslimbox.templateFile}
 		marks.CE_TITLE >
-
 		marks.DAM_TITLE.outerWrap >
 	}
 }

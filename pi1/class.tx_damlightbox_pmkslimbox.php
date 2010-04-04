@@ -28,8 +28,12 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
+ *   47: class tx_damlightbox_pmkslimbox extends tx_damlightbox_pi1
+ *   60:     public function addHiddenImgs($content, $conf)
+ *  114:     public function overrideDimsFromFlexform($content, $conf)
  *
- * TOTAL FUNCTIONS: 1
+ *
+ * TOTAL FUNCTIONS: 2
  * (This index is automatically created/updated by the extension "extdeveval")
  *
  */

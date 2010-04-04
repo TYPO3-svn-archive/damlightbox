@@ -28,6 +28,8 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
+ *   45: class tx_damlightbox_pages extends tx_damlightbox_pi1
+ *   54: public function rootLineSlide($content, $conf) 
  *
  * TOTAL FUNCTIONS: 1
  * (This index is automatically created/updated by the extension "extdeveval")

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009 Torsten Schrade (schradt@uni-mainz.de)
+*  (c) 2010 Torsten Schrade (schradt@uni-mainz.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,12 +26,13 @@
  *
  *
  *
- *   49: class tx_damlightbox_tcemain
- *   60:     function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, &$pObj)
- *   88:     function processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, &$pObj)
- *  141:     function processCmdmap_postProcess($command, $table, $id, $value, $pObj)
+ *   51: class tx_damlightbox_tcemain
+ *   62:     function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, &$pObj)
+ *   99:     function processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, &$pObj)
+ *  165:     function processCmdmap_preProcess($command, $table, $id, $value, &$pObj)
+ *  202:     function processCmdmap_postProcess($command, $table, $id, $value, $pObj)
  *
- * TOTAL FUNCTIONS: 3
+ * TOTAL FUNCTIONS: 4
  * (This index is automatically created/updated by the extension "extdeveval")
  *
  */
