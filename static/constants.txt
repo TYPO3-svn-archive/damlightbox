@@ -24,10 +24,10 @@ plugin.damlightbox.maxH = 600
 
 ## FILES ##
 
-#cat=plugin.damlightbox/file/10; type=file; label= Template file: Standard template file for the lightbox
+#cat=plugin.damlightbox/file/10; type=string; label= Template file: Standard template file for the lightbox
 plugin.damlightbox.templateFile = EXT:damlightbox/res/basic/template.html
 
-#cat=plugin.damlightbox/file/20; type=file; label= CSS file: Standard CSS file for the popup window
+#cat=plugin.damlightbox/file/20; type=string; label= CSS file: Standard CSS file for the popup window
 plugin.damlightbox.cssFile = EXT:damlightbox/res/basic/damlightbox.css
 
 
