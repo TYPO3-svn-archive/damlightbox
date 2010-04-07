@@ -65,10 +65,11 @@ tt_content.image.20 {
 		useCacheHash = 1
 
 		## if image_link field is filled ##
-		parameter {
+		parameter >
+		parameter.cObject = TEXT
+		parameter.cObject {
 			field = image_link
-			#listNum.stdWrap.data = register : IMAGE_NUM_CURRENT
-			listNum >
+			listNum.stdWrap.data = register : IMAGE_NUM_CURRENT
 		}
 
 		## if image_link field is not filled, link to the current id ##
@@ -76,7 +77,7 @@ tt_content.image.20 {
 			cObject = TEXT
 			cObject.data = TSFE:id
 			stdWrap.if.isFalse.field = image_link
-			stdWrap.if.isTrue.data = field:image_zoom // TSFE:register|tx_damlightbox|config|sDEF|imgPreview
+			stdWrap.if.isTrue.data = field:image_zoom
 		}
 
 		## append the parameters for the lightbox page ##
