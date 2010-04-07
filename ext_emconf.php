@@ -19,7 +19,6 @@ $EM_CONF[$_EXTKEY] = array(
 	'dependencies' => '',
 	'conflicts' => '',
 	'priority' => '',
-	'loadOrder' => '',
 	'module' => 'mod1',
 	'state' => 'alpha',
 	'uploadfolder' => 0,

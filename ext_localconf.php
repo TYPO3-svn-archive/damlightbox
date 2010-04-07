@@ -36,4 +36,9 @@ if (!t3lib_extMgm::isLoaded('dam_ttcontent')) {
 		43
 	);
 }
+
+// tt_address hook
+if (t3lib_extMgm::isLoaded('tt_address')) {
+	$TYPO3_CONF_VARS['EXTCONF']['tt_address']['extraItemMarkerHook']['tx_damlightbox_pi1'] = 'EXT:damlightbox/pi1/class.tx_damlightbox_ttaddress.php:tx_damlightbox_ttaddress';
+}
 ?>

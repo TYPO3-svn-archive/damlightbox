@@ -44,17 +44,18 @@ if (@file_exists(TX_DAMLIGHTBOX_FIELDCONF_FILE)) {
 
 # tt_news
 if (t3lib_extMgm::isLoaded('tt_news')) {
-
 	t3lib_extMgm::addStaticFile($_EXTKEY,'static/tt_news','DAM Lightbox: tt_news');
+}
 
+# tt_address
+if (t3lib_extMgm::isLoaded('tt_address')) {
+	t3lib_extMgm::addStaticFile($_EXTKEY,'static/tt_address','DAM Lightbox: tt_address');
 }
 
 ### LIGHTBOXES ###
 
 # pmkslimbox
 if (t3lib_extMgm::isLoaded('pmkslimbox')) {
-
 	t3lib_extMgm::addStaticFile($_EXTKEY,'static/pmkslimbox','DAM Lightbox: pmkslimbox');
-
 }
 ?>
