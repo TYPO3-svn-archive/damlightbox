@@ -72,7 +72,7 @@ plugin.tx_ttaddress_pi1.templates.default.dam_image.cObject {
 # PART II: click-enlarge for tt_address								#
 #####################################################################
 
-## register pages table in the click-enlargement pagetype ##
+## register tt_address table in the click-enlargement pagetype ##
 damlightbox {
 	10.10.tables := addToList(tt_address)
 	10.10.conf.tt_address =< lib.damlightbox.clickEnlargeConf

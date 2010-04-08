@@ -44,8 +44,6 @@
  * @subpackage 	damlightbox
  */
 
-require_once(PATH_tslib.'class.tslib_pibase.php');
-
 class tx_damlightbox_ttaddress extends tx_ttaddress_pi1 {
 
 	/* Hook function for inserting custom markers in tt_address. Used for connecting DAM Lightbox to tt_address
