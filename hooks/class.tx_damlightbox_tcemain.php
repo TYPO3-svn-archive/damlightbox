@@ -165,62 +165,61 @@ class tx_damlightbox_tcemain {
 	 */
 	function processCmdmap_postProcess($command, $table, $id, $value, $pObj) {
 
-			switch ($command) {
+		switch ($command) {
 
-				case 'copy':
+			case 'copy':
 
-					// traverse the copyMappingArray, fetch values for the generic fields from the original records and then update the MM relations for the copied (=new) records
-					foreach ($pObj->copyMappingArray as $copiedTable => $copiedRecords) {
+				// traverse the copyMappingArray, fetch values for the generic fields from the original records and then update the MM relations for the copied (=new) records
+				foreach ($pObj->copyMappingArray as $copiedTable => $copiedRecords) {
 
-						// only if the generic fields are activated for the current table
-						if (tx_damlightbox_div::tableAllowedForDamlightbox($copiedTable)) {
+					// only if the generic fields are activated for the current table
+					if (tx_damlightbox_div::tableAllowedForDamlightbox($copiedTable)) {
 
-							// traverse the sets of original ids from the copied table & get the values for the generic fields of the original records
-							foreach ($copiedRecords as $origId => $copyId) {
+						// traverse the sets of original ids from the copied table & get the values for the generic fields of the original records
+						foreach ($copiedRecords as $origId => $copyId) {
 
-								// MM relations for generic flexform field on copied records
-								$row = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('tx_damlightbox_flex', 'tx_damlightbox_ds', 'tablenames=\''.$copiedTable.'\' AND uid_foreign='.(int)$origId.' AND deleted=0', null, null, null, null);
-								if (is_array($row)) {
-									// insert a new entry in the datastructure table
-									$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_damlightbox_ds', array('tablenames' => $copiedTable, 'uid_foreign' => (int)$copyId, 'tx_damlightbox_flex' => $row['0']['tx_damlightbox_flex']), null);
+							// MM relations for generic flexform field on copied records
+							$row = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('tx_damlightbox_flex', 'tx_damlightbox_ds', 'tablenames=\''.$copiedTable.'\' AND uid_foreign='.(int)$origId.' AND deleted=0', null, null, null, null);
+							if (is_array($row)) {
+								// insert a new entry in the datastructure table
+								$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_damlightbox_ds', array('tablenames' => $copiedTable, 'uid_foreign' => (int)$copyId, 'tx_damlightbox_flex' => $row['0']['tx_damlightbox_flex']), null);
+							}
+
+							// MM relations of generic image field on copied records
+							$damDB = t3lib_div::makeInstance('tx_dam_db');
+							// first find out what files are referenced in the original record - tx_damlightbox_image is used as ident field, if another field (like from dam_ttcontent) is used, nothing happens
+							$damData = $damDB->getReferencedFiles($copiedTable, $origId, 'tx_damlightbox_image', $MM_table='tx_dam_mm_ref', '', array(), '', 'sorting_foreign', 1000);
+							if (is_array($damData)) {
+
+								// determine the referenced ids of the dam records
+								$imgs = array_keys($damData['files']);
+								// now prepare a value array for using the group_select function from TCEMain
+								$valueArray = array();
+								foreach ($imgs as $key => $value) {
+									$valueArray[$key] = 'tx_dam_'.$value;
 								}
-
-								// MM relations of generic image field on copied records
-								$damDB = t3lib_div::makeInstance('tx_dam_db');
-								// first find out what files are referenced in the original record - tx_damlightbox_image is used as ident field, if another field (like from dam_ttcontent) is used, nothing happens
-								$damData = $damDB->getReferencedFiles($copiedTable, $origId, 'tx_damlightbox_image', $MM_table='tx_dam_mm_ref', '', array(), '', 'sorting_foreign', 1000);
-								if (is_array($damData)) {
-
-									// determine the referenced ids of the dam records
-									$imgs = array_keys($damData['files']);
-									// now prepare a value array for using the group_select function from TCEMain
-									$valueArray = array();
-									foreach ($imgs as $key => $value) {
-										$valueArray[$key] = 'tx_dam_'.$value;
-									}
-									// load $TCA configuration for tx_damlightbox_image
-									$tcaFieldConf = $GLOBALS['TCA'][$table]['columns']['tx_damlightbox_image']['config'];
-									// let the group_select function do the rest
-									$pObj->checkValue_group_select_processDBdata($valueArray, $tcaFieldConf, (int)$copyId, 'update', 'group', $copiedTable);
-								}
+								// load $TCA configuration for tx_damlightbox_image
+								$tcaFieldConf = $GLOBALS['TCA'][$table]['columns']['tx_damlightbox_image']['config'];
+								// let the group_select function do the rest
+								$pObj->checkValue_group_select_processDBdata($valueArray, $tcaFieldConf, (int)$copyId, 'update', 'group', $copiedTable);
 							}
 						}
 					}
+				}
 
-				break;
+			break;
 
-				case 'delete':
-					if (tx_damlightbox_div::tableAllowedForDamlightbox($table)) {
-						$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_damlightbox_ds', 'tablenames=\''.$table.'\' AND uid_foreign='.(int)$id.'', array('deleted' => '1'), null);
-					}
-				break;
+			case 'delete':
+				if (tx_damlightbox_div::tableAllowedForDamlightbox($table)) {
+					$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_damlightbox_ds', 'tablenames=\''.$table.'\' AND uid_foreign='.(int)$id.'', array('deleted' => '1'), null);
+				}
+			break;
 
-				case 'undelete':
-					if (tx_damlightbox_div::tableAllowedForDamlightbox($table)) {
-						$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_damlightbox_ds', 'tablenames=\''.$table.'\' AND uid_foreign='.(int)$id.'', array('deleted' => '0'), null);
-					}
-				break;
-			}
+			case 'undelete':
+				if (tx_damlightbox_div::tableAllowedForDamlightbox($table)) {
+					$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_damlightbox_ds', 'tablenames=\''.$table.'\' AND uid_foreign='.(int)$id.'', array('deleted' => '0'), null);
+				}
+			break;
 		}
 	}
 
