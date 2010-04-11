@@ -1,0 +1,44 @@
+#####################################################################
+# TypoScrip configuration for the plugin.damlightbox 				#
+# @author Torsten Schrade <schradt@uni-mainz.de>					#
+# Example for how to use watermarks on clickenlarged images			#
+#####################################################################
+
+damlightbox.10.10.conf.tt_content.20.marks.DAM_IMAGE.10 {
+
+	file >
+
+	file = GIFBUILDER
+	file  {
+		XY = [10.w],[10.h]
+		quality = 100
+		format = jpg
+
+		10 = IMAGE
+		10.file {
+			import.cObject < temp.getDAMvalues
+			import.cObject.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|fullPath
+
+			width.cObject < temp.getDAMvalues
+			width.cObject.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|hpixels
+
+			height.cObject < temp.getDAMvalues
+			height.cObject.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|vpixels
+		}
+
+		20 = TEXT
+		20 {
+			text {
+				cObject < temp.getDAMvalues
+				cObject.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|copyright
+				required = 1
+				noTrimWrap = |(C) ||
+			}
+			align = left
+			offset = 20,30
+			fontSize = 20
+			fontColor = #FFFFFF
+			nicetext = 1
+		}
+	}
+}

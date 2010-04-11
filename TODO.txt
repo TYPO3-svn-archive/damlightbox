@@ -1,0 +1,12 @@
+Stuff
+------
+- other lightboxes
+- display of thumbs in pagemodule (tt_content, tt_news)
+- update of manual
+
+Bugs
+----
+- BUG: tx_damlighbox_flex displays standard FF if well edited in list module/single field mode
+
+Notes
+-----

@@ -1,0 +1,226 @@
+#####################################################################
+# TypoScrip configuration for the plugin.damlightbox_pi1			#
+# @author Torsten Schrade <schradt@uni-mainz.de>					#
+# PART I: Configuration for tt_news									#
+#####################################################################
+
+## include the damlightbox class for tt_news image rendering ##
+includeLibs.tx_damlightbox_ttnews = EXT:damlightbox/pi1/class.tx_damlightbox_ttnews.php
+
+plugin.tt_news {
+	
+	## include the damlightbox image marker function ##
+	imageMarkerFunc = tx_damlightbox_ttnews->imageMarkerFunc
+	imageMarkerFunc {
+	
+		## call to damlightbox ##
+		executeDamlightbox =< plugin.tx_damlightbox_pi1
+
+		## configuration of images for list view ##
+		LIST {
+
+			## list of images to process ##
+			imgList = TEXT
+			imgList {
+			
+				data = TSFE:register|tx_damlightbox|damImages
+				
+				## override if imgPreview is set in damlightbox ##
+				override {
+					cObject = TEXT
+					cObject {
+						data = TSFE:register|tx_damlightbox|damImages
+						listNum = 0
+					}
+					if {
+						value = 1
+						equals.data = TSFE:register|tx_damlightbox|config|sDEF|imgPreview
+					}
+				}
+			}
+		
+			## configuration for each image ##
+			image = IMAGE
+			image {
+			
+				file {
+					import.cObject < lib.damlightbox.getDAMvalues
+					import.cObject {
+						cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|fullPath
+					}	
+					maxW < plugin.tt_news.displayList.image.file.maxW
+					maxH < plugin.tt_news.displayList.image.file.maxH
+				}
+
+				## alt texts from DAM ##
+				altText.cObject < lib.damlightbox.getDAMvalues
+				altText.cObject.cObject.value  = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|alt_text
+				
+				## allow override from record ##
+				altText.override {
+					if.isTrue.field = imagealttext
+					
+					field = imagealttext
+					split.token.char = 10
+					split.returnKey.data = register:currentImg
+					
+				}
+				
+				## title texts from DAM ##
+				titleText.cObject < lib.damlightbox.getDAMvalues
+				titleText.cObject.cObject.value  = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|title
+				
+				## allow override from record ##
+				titleText.override {
+					if.isTrue.field = imagetitletext
+					
+					field = imagetitletext	
+					split.token.char = 10
+					split.returnKey.data = register:currentImg	
+				}
+			}
+			
+			## additional wraps from tt_news
+			imageWrapIfAny < plugin.tt_news.displayList.imageWrapIfAny
+			noImage_stdWrap < plugin.tt_news.displayList.image.noImage_stdWrap
+		}
+		
+		## configuration of images for latest view ##
+		LATEST < plugin.tt_news.imageMarkerFunc.LIST
+		LATEST {
+		
+			image.file {
+				maxW < plugin.tt_news.displayLatest.image.file.maxW
+				maxH < plugin.tt_news.displayLatest.image.file.maxH
+			}
+		
+			## additional wraps from tt_news
+			imageWrapIfAny < plugin.tt_news.displayLatest.imageWrapIfAny
+			noImage_stdWrap < plugin.tt_news.displayLatest.image.noImage_stdWrap
+		}
+		
+		## configuration of images in single view ##
+		SINGLE < plugin.tt_news.imageMarkerFunc.LIST
+		SINGLE {
+		
+			image {
+
+				file {
+					maxW < plugin.tt_news.displaySingle.image.file.maxW
+					maxH < plugin.tt_news.displaySingle.image.file.maxH
+				}
+			
+				imageLinkWrap = 1
+				imageLinkWrap {
+					enable = 1
+					typolink {
+					
+						## caching ##
+						no_cache = 0
+						useCacheHash = 1
+						
+						parameter.data = TSFE:id	
+						
+						parameter.append = TEXT
+						parameter.append {
+							if.isFalse.field = image_link
+							value = {$plugin.damlightbox.jsParams}
+							noTrimWrap = | ||
+						}
+							
+						additionalParams.cObject = TEXT
+						additionalParams.cObject {
+							htmlspecialchars = 1
+							dataWrap = |&type=313&content=tt_news_{field:uid}&img={register:currentImg}
+						}
+						
+						ATagParams.cObject = TEXT
+						ATagParams.cObject {
+							value = {$plugin.damlightbox.imageLinkAttributes}
+						}
+					}
+				}
+			}
+			
+			## captions ##
+			caption = COA
+			caption {
+				
+				## DAM metadata ##
+				10 < lib.damlightbox.getDAMvalues
+				10.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|{TSFE:register|tx_damlightbox|config|sDEF|imgCaption}
+				10.if.isFalse.field = imagecaption
+			
+				## override from record ##
+				20 = TEXT
+				20.if.isTrue.field = imagecaption
+				20 {
+					field = imagecaption
+					split.token.char = 10
+					split.returnKey.data = register:currentImg
+				}
+			}
+			
+			
+			## additional wraps from tt_news
+			imageWrapIfAny < plugin.tt_news.displaySingle.imageWrapIfAny
+			noImage_stdWrap < plugin.tt_news.displaySingle.image.noImage_stdWrap
+			caption_stdWrap < plugin.tt_news.displaySingle.caption_stdWrap
+		}
+	}	
+}
+
+#####################################################################
+# TypoScrip configuration for the plugin.damlightbox_pi1			#
+# @author Torsten Schrade <schradt@uni-mainz.de>					#
+# PART II: configuration for click-enlarge for tt_news				#
+#####################################################################
+
+## register tt_news in the click-enlargement pagetype ##
+damlightbox {
+	10.10.tables := addToList(tt_news)
+	10.10.conf.tt_news =< lib.damlightbox.clickEnlargeConf
+}
+
+#####################################################################
+# TypoScrip configuration for the plugin.damlightbox_pi1			#
+# @author Torsten Schrade <schradt@uni-mainz.de>					#
+# PART III: config for tt_news & pmkslimbox							#
+#####################################################################
+
+[globalVar = LIT:pmkslimbox = {$plugin.damlightbox.lightboxExtension}]
+
+plugin.tt_news.imageMarkerFunc.SINGLE.image.imageLinkWrap.typolink {
+	parameter.append >
+	ATagParams >
+	ATagParams < lib.damlightbox.pmkslimbox.imageLinkWrap.typolink.ATagParams
+}
+
+plugin.tt_news.displaySingle.content_stdWrap {
+	postCObject = TEXT
+	postCObject {
+		if.isTrue.data = TSFE:register|tx_damlightbox|config|sDEF|imgPreview
+		cObject = USER
+		cObject.userFunc = tx_damlightbox_pmkslimbox->addHiddenImgs
+		cObject {
+			content.data = field:uid
+			content.table = tt_news
+			hCalc.cObject = TEXT
+			hCalc.cObject.value = {$plugin.damlightbox.pmkslimbox.hCalc}
+			vCalc.cObject = TEXT
+			vCalc.cObject.value = {$plugin.damlightbox.pmkslimbox.vCalc}
+		}
+	}
+}
+
+damlightbox {
+	10.10.conf.tt_news.20 {
+
+		template.file = {$plugin.damlightbox.pmkslimbox.templateFile}
+		marks.CE_TITLE >
+
+		marks.DAM_TITLE.outerWrap >
+	}
+}
+
+[global]

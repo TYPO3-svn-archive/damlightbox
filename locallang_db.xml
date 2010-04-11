@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>database</type>
+		<description>Language labels for database fields belonging to extension 'damlightbox'</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="tx_damlightbox_image">DAM Images:</label>
+			<label index="tx_damlightbox_flex">DAM Image configuration:</label>	
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="tx_damlightbox_image">DAM Bilder:</label>
+			<label index="tx_damlightbox_flex">DAM Bildkonfiguration:</label>
+		</languageKey>
+	</data>
+</T3locallang>

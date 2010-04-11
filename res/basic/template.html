@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Damlightbox example template</title>
+</head>
+
+<body>
+
+<strong>Common markers that may be substituted by the TS configuration</strong>
+<em>Markers:</em>
+CE_TITLE - The title of the current record that carries the images
+IMAGEBROWSER - If there is more than one image users can browse to the next/prev images
+DAM_IMAGE - The current image from DAM
+DAM_TITLE - The title of the current DAM image
+DAM_COPYRIGHT - Copyright information for the current DAM image
+DAM_LOCATION - Location information for the current DAM image
+DAM_DESCRIPTION - Description metadata for the current DAM IMAGE
+
+<h1>DAMLIGHTBOX STANDARD TEMPLATE</h1>
+<h2>This template is used if no lightbox extension is installed</h2>
+
+<!-- ###CLICKENLARGE### begin -->
+<div id="container">
+
+	<h2 id="header">###CE_TITLE###</h2>
+	
+	###IMAGEBROWSER###
+	
+	<div id="image">
+		###DAM_IMAGE###
+	</div>
+	
+	<p id="source">
+		###DAM_TITLE###
+		###DAM_COPYRIGHT###
+		###DAM_LOCATION###
+	</p>
+	
+	<p id="description">
+		###DAM_DESCRIPTION###
+	</p>
+	
+	<div id="footer">
+		<a href="javascript:window.close();">Close</a>
+	</div>
+	
+</div>
+<!-- ###CLICKENLARGE### end -->
+
+</body>
+</html>

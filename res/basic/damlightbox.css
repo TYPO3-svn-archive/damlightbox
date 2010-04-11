@@ -1,0 +1,65 @@
+/* Standard CSS styles for the damlightbox popup */
+
+body {
+	margin: 0;
+	padding: 0;
+	font: 76% Verdana, Geneva, sans-serif;
+}
+#container {
+	margin: 0 auto;
+	width: 950px;
+}
+#container h2 {
+	margin: 0.8em 0;
+	padding: 0;
+	font-size: 1.4em;
+}
+#header {
+	text-align: center;
+}
+#imagebrowser {
+	text-align: center;
+	font-size: 0.9em;
+}
+#imagebrowser #imgcount {
+	padding: 0 1.5em;
+}
+#image {
+	position: relative;
+	width: 860px;
+	height: 620px;
+	margin: 0 auto;
+	border: 1px solid #9F9F9F;
+	background: #EFEFEF;
+	padding: 2px 0;
+	text-align: center;
+}
+#source {
+	width: 860px;
+	margin: 1.3em auto 1em auto;
+	font-size: 0.9em;
+	font-weight: bold;
+}
+#source span {
+	border-left: 2px solid black;
+	padding: 0 0.5em;
+}
+#source #damtitle {
+	border-left: none;
+	padding-left: 0;
+}
+#description {
+	position: relative;
+	overflow: auto;
+	width: 860px;
+	height: 120px;
+	margin: 1em auto;
+	font-size: 0.9em;
+}
+#footer {
+	position: absolute;
+	text-align: center;
+	font-size: 0.9em;
+	bottom: 1em;
+	right: 44px;
+}

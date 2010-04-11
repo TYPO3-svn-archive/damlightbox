@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>database</type>
+		<description>Language labels for the flexform belonging to damlightbox</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="tx_damlightbox.sDEF">Image configuration</label>
+			<label index="tx_damlightbox.imgPreview">Show only first image (preview mode)</label>
+			<label index="tx_damlightbox.imgCaption">Use as caption:</label>
+			<label index="tx_damlightbox.imgCaption.title">Media: title</label>
+			<label index="tx_damlightbox.imgCaption.caption">Media: caption</label>
+			<label index="tx_damlightbox.imgCaption.description">Media: description</label>
+			<label index="tx_damlightbox.showCopyright">Show Copyright notice in caption</label>
+			<label index="tx_damlightbox.sLIGHTBOX">Lightbox configuration</label>
+			<label index="tx_damlightbox.lbCaption">Use as caption:</label>
+			<label index="tx_damlightbox.lbCaption.title">Media: title</label>
+			<label index="tx_damlightbox.lbCaption.caption">Media: caption</label>
+			<label index="tx_damlightbox.lbCaption.description">Media: description</label>
+			<label index="tx_damlightbox.setSpecificDimensions">Custom Dimensions (Notation = Imagenr:width,height;)</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="tx_damlightbox.sDEF">Bilder:</label>
+			<label index="tx_damlightbox.imgPreview">Zeige nur erstes Bild (Vorschaumodus)</label>
+			<label index="tx_damlightbox.imgCaption">Benutze als Bildunterschrift:</label>
+			<label index="tx_damlightbox.imgCaption.title">Media: Titel</label>
+			<label index="tx_damlightbox.imgCaption.caption">Media: Bildunterschrift</label>
+			<label index="tx_damlightbox.imgCaption.description">Media: Bildbeschreibung</label>
+			<label index="tx_damlightbox.showCopyright">Zeige Copyright in Bildunterschrift</label>
+			<label index="tx_damlightbox.sLIGHTBOX">Lightbox:</label>
+			<label index="tx_damlightbox.lbCaption">Benutze als Lightbox-Caption:</label>
+			<label index="tx_damlightbox.lbCaption.title">Media: Titel</label>
+			<label index="tx_damlightbox.lbCaption.caption">Media: Bildunterschrift</label>
+			<label index="tx_damlightbox.lbCaption.description">Media: Bildbeschreibung</label>
+			<label index="tx_damlightbox.setSpecificDimensions">Spezifische Maße (Notation = Bildnr:Höhe,Breite;)</label>
+		</languageKey>
+	</data>
+</T3locallang>

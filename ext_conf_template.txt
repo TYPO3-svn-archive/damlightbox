@@ -1,0 +1,2 @@
+# cat=basic/enable; type=string; label=Flexform file: Specify the standard flexform file to be used for configuring the display of the DAM images
+flexformFile = FILE:EXT:damlightbox/flexform_ds.xml

@@ -1,0 +1,76 @@
+#################################################################################
+# Constants for the plugin.damlightbox_pi1										#
+# @author Torsten Schrade <schradt@uni-mainz.de>								#
+#################################################################################
+
+
+## BASICS ##
+
+#cat=plugin.damlightbox/enable/10; type=string; label= DAM fields: Specify the fields you want to fetch from DAM for TSFE display
+plugin.damlightbox.damFields = *
+
+#cat=plugin.damlightbox/enable/20; type=options[0,1]; label= Debug data: Show debug information
+plugin.damlightbox.debugData = 0
+
+
+## DIMENSIONS ##
+
+#cat=plugin.damlightbox/dims/10; type=int+; label= Maximum width: Maximum width of the images in the lightbox and at the same time the basis value for the calculation of the lightbox dimensions
+plugin.damlightbox.maxW = 800
+
+#cat=plugin.damlightbox/dims/20; type=int+; label= Maximum height: Maximum height of the images in the lightbox and at the same time the basis value for the calculation of the lightbox dimensions
+plugin.damlightbox.maxH = 600
+
+
+## FILES ##
+
+#cat=plugin.damlightbox/file/10; type=string; label= Template file: Standard template file for the lightbox
+plugin.damlightbox.templateFile = EXT:damlightbox/res/basic/template.html
+
+#cat=plugin.damlightbox/file/20; type=string; label= CSS file: Standard CSS file for the popup window
+plugin.damlightbox.cssFile = EXT:damlightbox/res/basic/damlightbox.css
+
+
+## WRAPS & STUFF ##
+
+#cat=plugin.damlightbox/other/10; type=string; label= JS parameters: These are the JS parameters for the popup window if no lightbox is installed
+plugin.damlightbox.jsParams = 950x780:status=0,menubar=0,scrollbars=1,resizable=1,location=0,directories=0,toolbar=0
+
+#cat=plugin.damlightbox/other/15; type=string; label= Additional link attributes: Here you can enter additional class attributes etc. for the imagelinks
+plugin.damlightbox.imageLinkAttributes =
+
+#cat=plugin.damlightbox/other/20; type=options[0,1]; label= 1st Image is preview: If set to 1 only the first image is shown on the page while the rest is opened in the popup/lightbox
+plugin.damlightbox.imgPreview = 0
+
+#cat=plugin.damlightbox/other/25; type=options[,title,caption,description]; label= Use as imagecaption: 1=media:title, 2=media:caption, 3=media:description
+plugin.damlightbox.imgCaption =
+
+#cat=plugin.damlightbox/other/30; type=options[0,1]; label= Show Copyright notice: If set to 1 the copyright field from DAM is prepended to the imagecation
+plugin.damlightbox.showCopyright = 0
+
+#cat=plugin.damlightbox/other/35; type=options[,title,caption,description]; label= Lightbox caption: Use this DAM field for the lightbox caption
+plugin.damlightbox.lbCaption = description
+
+#cat=plugin.damlightbox/other/40; type=string; label= Header field: The values for the headlines above the imagebrowser are taken from these fields
+plugin.damlightbox.headerField =  title // header // subheader
+
+#cat=plugin.damlightbox/other/45; type=wrap; label=DAM title wrap: Wraps the DAM title in the lightbox
+plugin.damlightbox.damTitleWrap = <span id="damtitle">|</span>
+
+#cat=plugin.damlightbox/other/50; type=wrap; label= Classic Imagebrowser: The imagebrowser is only shown in the standard popup
+plugin.damlightbox.imgBrowserWrap = <div id="imagebrowser">|</div>
+
+#cat=plugin.damlightbox/other/55; type=string; label= Classic Imagebrowser: Word for previous link
+plugin.damlightbox.prevWord = Previous image
+
+#cat=plugin.damlightbox/other/60; type=string; label= Classic Imagebrowser: Word for next link
+plugin.damlightbox.nextWord = Next image
+
+#cat=plugin.damlightbox/other/65; type=wrap; label= Classic Imagebrowser: Wraps the n / n part in the imagebrowser
+plugin.damlightbox.imgCountWrap = <span id="imgcount">|</span>
+
+#cat=plugin.damlightbox/other/70; type=wrap; label= Wrap for copyright: This wraps the copyright notice in the caption and the lightbox
+plugin.damlightbox.copyrightWrap = <span class="copyright">|</span>
+
+#cat=plugin.damlightbox/other/75; type=wrap; label=DAM location wrap: Wraps the DAM location in the lightbox
+plugin.damlightbox.damLocationWrap = <span id="damlocation">|</span>
