@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3DataStructure>
+	<meta>
+		<langDisable>1</langDisable>
+	</meta>
+  	<sheets>
+		<sDEF>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:damlightbox/locallang_flexform.xml:tx_damlightbox.sDEF</sheetTitle>
+				</TCEforms>
+		        <type>array</type>
+		        <el>
+
+			  	<imgPreview>
+					<TCEforms>
+					<label>LLL:EXT:damlightbox/locallang_flexform.xml:tx_damlightbox.imgPreview</label>
+						<config>
+							<type>check</type>
+						</config>
+					</TCEforms>
+				</imgPreview>
+
+				<imgCaption>
+				  	<TCEforms>
+					<label>LLL:EXT:damlightbox/locallang_flexform.xml:tx_damlightbox.imgCaption</label>
+						<config>
+							<type>select</type>
+							<items type="array">
+								<numIndex index="0" type="array">
+									<numIndex index="0"></numIndex>
+									<numIndex index="1"></numIndex>
+								</numIndex>
+								<numIndex index="1" type="array">
+									<numIndex index="0">LLL:EXT:damlightbox/locallang_flexform.xml:tx_damlightbox.imgCaption.title</numIndex>
+									<numIndex index="1">title</numIndex>
+								</numIndex>
+								<numIndex index="2" type="array">
+									<numIndex index="0">LLL:EXT:damlightbox/locallang_flexform.xml:tx_damlightbox.imgCaption.caption</numIndex>
+									<numIndex index="1">caption</numIndex>
+								</numIndex>
+								<numIndex index="3" type="array">
+									<numIndex index="0">LLL:EXT:damlightbox/locallang_flexform.xml:tx_damlightbox.imgCaption.description</numIndex>
+									<numIndex index="1">description</numIndex>
+								</numIndex>
+							</items>
+							<minitems>0</minitems>
+							<maxitems>1</maxitems>
+							<size>1</size>
+						</config>
+					</TCEforms>
+				 </imgCaption>
+
+				<showCopyright>
+					<TCEforms>
+					<label>LLL:EXT:damlightbox/locallang_flexform.xml:tx_damlightbox.showCopyright</label>
+						<config>
+							<type>check</type>
+						</config>
+					</TCEforms>
+				</showCopyright>
+
+		        </el>
+			</ROOT>
+		</sDEF>
+		<sLIGHTBOX>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:damlightbox/locallang_flexform.xml:tx_damlightbox.sLIGHTBOX</sheetTitle>
+				</TCEforms>
+		        <type>array</type>
+		        <el>
+
+				<lbCaption>
+				  	<TCEforms>
+					<label>LLL:EXT:damlightbox/locallang_flexform.xml:tx_damlightbox.lbCaption</label>
+						<config>
+							<type>select</type>
+							<items type="array">
+								<numIndex index="0" type="array">
+									<numIndex index="0"></numIndex>
+									<numIndex index="1"></numIndex>
+								</numIndex>
+								<numIndex index="1" type="array">
+									<numIndex index="0">LLL:EXT:damlightbox/locallang_flexform.xml:tx_damlightbox.lbCaption.title</numIndex>
+									<numIndex index="1">title</numIndex>
+								</numIndex>
+								<numIndex index="2" type="array">
+									<numIndex index="0">LLL:EXT:damlightbox/locallang_flexform.xml:tx_damlightbox.lbCaption.caption</numIndex>
+									<numIndex index="1">caption</numIndex>
+								</numIndex>
+								<numIndex index="3" type="array">
+									<numIndex index="0">LLL:EXT:damlightbox/locallang_flexform.xml:tx_damlightbox.lbCaption.description</numIndex>
+									<numIndex index="1">description</numIndex>
+								</numIndex>
+							</items>
+							<minitems>0</minitems>
+							<maxitems>1</maxitems>
+							<size>1</size>
+						</config>
+					</TCEforms>
+				 </lbCaption>
+
+				<setSpecificDimensions>
+					<TCEforms>
+					<label>LLL:EXT:damlightbox/locallang_flexform.xml:tx_damlightbox.setSpecificDimensions</label>
+						<config>
+							<type>input</type>
+							<checkbox></checkbox>
+							<size>30</size>
+						</config>
+					</TCEforms>
+				</setSpecificDimensions>
+
+		        </el>
+			</ROOT>
+		</sLIGHTBOX>
+  	</sheets>
+</T3DataStructure>

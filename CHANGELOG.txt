@@ -1,0 +1,21 @@
+2008-04-05 Torsten Schrade <schradt@uni-mainz.de>
+	* NEW: vCalc and hCalc for tx_damlightbox->addAdditionalImg now use stdWrap to retrieve their values
+	* NEW: Field in flexform that allows to override the lightbox dimensions for a specific image (cf. manual)
+
+2008-03-24 Torsten Schrade <schradt@uni-mainz.de>
+
+	* NEW: possibility to set ff sheet values from TS
+	* NEW: watermark example
+	* NEW: new examples in manual
+	* BUGFIX: function addAdditionalImg now uses typolink function
+	* BUGFIX: corrected extension dependencies
+
+2008-02-11 Torsten Schrade <schradt@uni-mainz.de>
+
+	* VERSION: 0.0.2
+	* BUGFIX: wrong sorting field was set as default
+
+2008-02-10 Torsten Schrade <schradt@uni-mainz.de>
+
+	* VERSION: 0.0.1
+	* INFO: first public version
