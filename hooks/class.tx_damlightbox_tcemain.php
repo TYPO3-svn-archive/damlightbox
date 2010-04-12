@@ -111,7 +111,7 @@ class tx_damlightbox_tcemain {
 				($pObj->tx_damlightbox_image !== '-1') ? $valueArray = t3lib_div::trimExplode(',', $pObj->tx_damlightbox_image, 1) : $valueArray = array();
 
 				// execute according TCEMAIN function to build/update MM relations
-				$pObj->checkValue_group_select_processDBdata($valueArray, $tcaFieldConf, $id, $status, 'group', $table);
+				$pObj->checkValue_group_select_processDBdata($valueArray, $tcaFieldConf, $id, $status, 'group', $table, 'tx_damlightbox_image');
 			}
 
 			// MM relations for flexform field
@@ -201,7 +201,7 @@ class tx_damlightbox_tcemain {
 								// load $TCA configuration for tx_damlightbox_image
 								$tcaFieldConf = $GLOBALS['TCA'][$table]['columns']['tx_damlightbox_image']['config'];
 								// let the group_select function do the rest
-								$pObj->checkValue_group_select_processDBdata($valueArray, $tcaFieldConf, (int)$copyId, 'update', 'group', $copiedTable);
+								$pObj->checkValue_group_select_processDBdata($valueArray, $tcaFieldConf, (int)$copyId, 'update', 'group', $copiedTable, 'tx_damlightbox_image');
 							}
 						}
 					}
