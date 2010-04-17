@@ -323,3 +323,15 @@ damlightbox {
 		}
 	}
 }
+
+# Using gpvar in TypoScript getText is deprecated since TYPO3 4.3 - Use gp instead of gpvar
+[compatVersion = 4.3.0]
+lib.damlightbox.clickEnlargeConf.20.marks.IMAGEBROWSER.10.override.cObject.typolink.additionalParams.cObject.stdWrap.dataWrap = &type=313&content={GP:content}&img=|
+lib.damlightbox.clickEnlargeConf.20.marks.IMAGEBROWSER.30.override.cObject.typolink.additionalParams.cObject.stdWrap.dataWrap = &type=313&content={GP:content}&img=|
+lib.damlightbox.clickEnlargeConf.20.marks.IMAGEBROWSER.10.override.cObject.typolink.additionalParams.cObject.10.prevpic.cObject.10.dataWrap = {GP:img}-1
+lib.damlightbox.clickEnlargeConf.20.marks.IMAGEBROWSER.30.override.cObject.typolink.additionalParams.cObject.10.nextpic.cObject.10.dataWrap = {GP:img}+1
+lib.damlightbox.clickEnlargeConf.20.marks.IMAGEBROWSER.10.override.if.isGreaterThan.data = GP:img
+lib.damlightbox.imageRegisters.currentImg.listNum.stdWrap.cObject.data = GP:img
+damlightbox.bodyTagCObject.dataWrap = <body id="damlightbox-{GP:content}" class="damlightbox">|
+damlightbox.10.10.source.data = GP:content
+[global]

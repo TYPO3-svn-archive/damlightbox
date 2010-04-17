@@ -1,3 +1,8 @@
+2010-04-17 Torsten Schrade <schradt@uni-mainz.de>
+	* BUGFIX #7312: titleText and altText generation from DAM in tt_content_image.20 was not correct
+	* FEATURE #7311: file_usage is now filled with the records in which the DAM record is referenced 
+	* BUGFIX #7272: ATagParams in addHiddenImgs were hardcoded - now configurable using linkConfig and lbCaption in the userFunc
+
 2009-09-27 Torsten Schrade <schradt@uni-mainz.de>
 	* BUGFIX: Moved inclusion of pseudo fields into a function that is called by TCEforms/TCEmain hooks. This way the extensions installation order is not relevant anymore (which it was when ext_tables.php was used for inclusion)
 

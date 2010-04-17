@@ -65,14 +65,16 @@ class tx_damlightbox_pmkslimbox extends tx_damlightbox_pi1 {
 
 				// leave out the first image and any image that is hidden in DAM
 				if ($key == '0' || $value['hidden'] == 1) continue;
+				
+				// set current image number
+				$GLOBALS['TSFE']->register['currentImg'] = $key;
 
-				// get uid & table of the current record
+				// get uid & table & caption of the current record & image
 				$this->uid = $this->cObj->stdWrap($conf['content'], $conf['content.']);
 				$this->table = $conf['content.']['table'];
 				
-				// get the caption for the title attribute of the links
-				$lbCaption = $GLOBALS['TSFE']->register['tx_damlightbox']['config']['sLIGHTBOX']['lbCaption'];
-				$this->title = $GLOBALS['TSFE']->register['tx_damlightbox']['metaData'][$key][''.$lbCaption.''];
+				// lightbox caption
+				$GLOBALS['TSFE']->register['lbCaption'] = $this->cObj->stdWrap($conf['lbCaption'], $conf['lbCaption.']);
 
 				// specific width/height calculations
 				$hCalc = t3lib_div::trimExplode('|',$this->cObj->stdWrap(null,$conf['hCalc.']));
@@ -80,7 +82,8 @@ class tx_damlightbox_pmkslimbox extends tx_damlightbox_pi1 {
 				$GLOBALS['TSFE']->register['widthCalc'] = intval(t3lib_div::calcParenthesis($hCalc[0].$GLOBALS['TSFE']->register['tx_damlightbox']['metaData'][$key]['hpixels'].$hCalc[1]));
 				$GLOBALS['TSFE']->register['heightCalc'] = intval(t3lib_div::calcParenthesis($vCalc[0].$GLOBALS['TSFE']->register['tx_damlightbox']['metaData'][$key]['vpixels'].$vCalc[1]));
 				
-				$fullPath = t3lib_div::getIndpEnv('TYPO3_SITE_URL').$GLOBALS['TSFE']->register['tx_damlightbox']['metaData'][$key]['fullPath'];
+				// full path register
+				$GLOBALS['TSFE']->register['fullPath'] = t3lib_div::getIndpEnv('TYPO3_SITE_URL').$GLOBALS['TSFE']->register['tx_damlightbox']['metaData'][$key]['fullPath'];
 
 				// check if specific dimensions are set in the flexform
 				if ($GLOBALS['TSFE']->register['tx_damlightbox']['config']['sLIGHTBOX']['setSpecificDimensions']) $this->overrideDimsFromFlexform($key,null);
@@ -88,10 +91,10 @@ class tx_damlightbox_pmkslimbox extends tx_damlightbox_pi1 {
 				// configurations for the typolink
 				$linkConfig=array();
 				$linkConfig['parameter'] = $GLOBALS['TSFE']->id;
-				$linkConfig['no_cache'] = 0;
-				$linkConfig['useCacheHash'] = 1;
+				$linkConfig['no_cache'] = $conf['linkConfig.']['no_cache'];
+				$linkConfig['useCacheHash'] = $conf['linkConfig.']['useCacheHash'];
 				$linkConfig['additionalParams'] = '&type=313&content='.$this->table.'_'.$this->uid.'&img='.$key.'';
-				$linkConfig['ATagParams'] = 'title="'.$this->title.'" rev="width='.$GLOBALS['TSFE']->register['widthCalc'].', height='.$GLOBALS['TSFE']->register['heightCalc'].', src='.$fullPath.'" rel="lightbox[sb'.$this->uid.']"';
+				$linkConfig['ATagParams'] = $this->cObj->stdWrap($conf['linkConfig.']['ATagParams'], $conf['linkConfig.']['ATagParams.']);
 				$linkConfig['ATagBeforeWrap'] = 1;
 
 				$hiddenLinks .= $this->cObj->typoLink(null,$linkConfig);

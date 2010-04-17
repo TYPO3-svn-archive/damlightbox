@@ -126,6 +126,15 @@ page.313 {
 		cObject {
 			content.data = field:uid
 			content.table = pages
+			
+			lbCaption < page.313.20.imageLinkWrap.typolink.ATagParams.cObject.10.lbCaption
+
+			linkConfig {
+				no_cache = 0
+				useCacheHash = 1
+				ATagParams.dataWrap = rel="lightbox[sb{field:uid}]" rev="width={register:widthCalc}, height={register:heightCalc}, src={register:fullPath}" title="{register:lbCaption}"
+			}			
+			
 			hCalc.cObject = TEXT
 			hCalc.cObject.value = {$plugin.damlightbox.pmkslimbox.hCalc}
 			vCalc.cObject = TEXT

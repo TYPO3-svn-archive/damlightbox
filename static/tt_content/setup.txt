@@ -104,31 +104,36 @@ tt_content.image.20 {
 
 	## new title and alt text objects with metadata but can be overidden with standard fields ##
 	1.titleText >
-	1.titleText {
-		cObject < lib.damlightbox.getDAMvalues
-		cObject.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:IMAGE_NUM_CURRENT}|title
-		override {
+	1.titleText.cObject = COA
+	1.titleText.cObject {
+		
+		10 < lib.damlightbox.getDAMvalues
+		10.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:IMAGE_NUM_CURRENT}|title
+		10.if.isFalse.field = titleText
+		
+		20 = TEXT
+		20 {
 			if.isTrue.field = titleText
-			cObject {
-				field = titleText
-				split.token.char = 10
-				split.returnKey.data = register:IMAGE_NUM_CURRENT
-			}
+			field = titleText
+			split.token.char = 10
+			split.returnKey.data = register:IMAGE_NUM_CURRENT		
 		}
-		cObject.override >
 	}
 
 	1.altText >
-	1.altText {
-		cObject < lib.damlightbox.getDAMvalues
-		cObject.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:IMAGE_NUM_CURRENT}|alt_text
-		override {
+	1.altText.cObject = COA
+	1.altText.cObject {
+		
+		10 < lib.damlightbox.getDAMvalues
+		10.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:IMAGE_NUM_CURRENT}|alt_text
+		10.if.isFalse.field = altText
+		
+		20 = TEXT
+		20 {
 			if.isTrue.field = altText
-			cObject {
-				field = altText
-				split.token.char = 10
-				split.returnKey.data = register:IMAGE_NUM_CURRENT
-			}
+			field = altText
+			split.token.char = 10
+			split.returnKey.data = register:IMAGE_NUM_CURRENT		
 		}
 	}
 
@@ -137,6 +142,9 @@ tt_content.image.20 {
 	caption {
 
 		1 >
+		
+#		5 = TEXT
+#		5.debugData = 1
 
 		## if selected first insert the copyright notice ##
 		10 < lib.damlightbox.getDAMvalues
@@ -221,7 +229,6 @@ tt_content.image.20 {
 			cObject.20.if.isFalse.field = image_link
 		}
 	}
-
 	## if slimbox is used together with the preview function all imgs despite the first one need to be inserted into a hidden div ##
 	stdWrap.postCObject = TEXT
 	stdWrap.postCObject {
@@ -229,8 +236,19 @@ tt_content.image.20 {
 		cObject = USER
 		cObject.userFunc = tx_damlightbox_pmkslimbox->addHiddenImgs
 		cObject {
+
 			content.data = field:uid
 			content.table = tt_content
+			
+			lbCaption < tt_content.image.20.1.imageLinkWrap.typolink.ATagParams.cObject.10.lbCaption
+			lbCaption.cObject.10.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|{TSFE:register|tx_damlightbox|config|sLIGHTBOX|lbCaption}
+			
+			linkConfig {
+				no_cache = 0
+				useCacheHash = 1
+				ATagParams.dataWrap = rel="lightbox[sb{field:uid}]" rev="width={register:widthCalc}, height={register:heightCalc}, src={register:fullPath}" title="{register:lbCaption}"
+			}			
+ 	
 			hCalc.cObject = TEXT
 			hCalc.cObject.value = {$plugin.damlightbox.pmkslimbox.hCalc}
 			vCalc.cObject = TEXT

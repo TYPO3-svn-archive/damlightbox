@@ -108,14 +108,14 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 					$GLOBALS['TSFE']->register['tx_damlightbox']['config'][$sheet][$key] = $value;
 				}
 			}
-		}
+		} 
 
 #		debug($GLOBALS['TSFE']->register['tx_damlightbox']);
 
 		// possibility to debug from TS
 		if ($this->conf['debugData'] == 1) {
 			debug($GLOBALS['TSFE']->register['tx_damlightbox']);
-		}
+		} 
 		return;
 	}
 
@@ -217,6 +217,20 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 				$GLOBALS['TSFE']->register['tx_damlightbox']['metaData'][$i]['category'] = implode(',', $tmpCategories);
 				// free memory
 				$GLOBALS['TYPO3_DB']->sql_free_result($subRes);
+			}
+			
+			// get file usage
+			if ($this->conf['select.']['damFields'] == '*' || strpos($this->conf['select.']['damFields'], 'file_usage')) {
+				
+				$fileUsage = tx_dam_db::getMediaUsageReferences($row['uid']);
+				
+				if (is_array($fileUsage)) {
+					$GLOBALS['TSFE']->register['tx_damlightbox']['metaData'][$i]['file_usage'] = array();			
+					foreach ($fileUsage as $value) {
+						$GLOBALS['TSFE']->register['tx_damlightbox']['metaData'][$i]['file_usage'][] = $value['tablenames'].'_'.$value['uid_foreign'];
+					}
+					$GLOBALS['TSFE']->register['tx_damlightbox']['metaData'][$i]['file_usage'] = implode(',', $GLOBALS['TSFE']->register['tx_damlightbox']['metaData'][$i]['file_usage']);
+				}
 			}
 
 			$i++;
