@@ -7,6 +7,8 @@
 ## include the damlightbox class for tt_news image rendering ##
 includeLibs.tx_damlightbox_pages = EXT:damlightbox/pi1/class.tx_damlightbox_pages.php
 
+plugin.tx_damlightbox_pi1.settings.fileUsage.getTables := addToList(pages)
+
 ## configuration of example pages object ##
 
 page.313 = COA

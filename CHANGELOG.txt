@@ -1,3 +1,6 @@
+2010-04-29 Torsten Schrade <schradt@uni-mainz.de>
+	* FEATURE #7311: file_usage list can now be filtered for specific tables using plugin.tx_damlightbox_pi1.settings.fileUsage.getTables property
+
 2010-04-17 Torsten Schrade <schradt@uni-mainz.de>
 	* BUGFIX #7312: titleText and altText generation from DAM in tt_content_image.20 was not correct
 	* FEATURE #7311: file_usage is now filled with the records in which the DAM record is referenced 

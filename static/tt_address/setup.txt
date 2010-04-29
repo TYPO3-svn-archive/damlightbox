@@ -4,6 +4,8 @@
 # PART I: Configuration for tt_address								#
 #####################################################################
 
+plugin.tx_damlightbox_pi1.settings.fileUsage.getTables := addToList(tt_address)
+
 ## configuration of example tt_address object ##
 
 plugin.tx_ttaddress_pi1.templates.default.dam_image.cObject = COA

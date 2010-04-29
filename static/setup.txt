@@ -30,6 +30,7 @@ plugin.tx_damlightbox_pi1 {
 	settings {
 		maxW = {$plugin.damlightbox.maxW}
 		maxH = {$plugin.damlightbox.maxH}
+		fileUsage.getTables =
 	}
 
 	config {

@@ -223,11 +223,14 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 			if ($this->conf['select.']['damFields'] == '*' || strpos($this->conf['select.']['damFields'], 'file_usage')) {
 				
 				$fileUsage = tx_dam_db::getMediaUsageReferences($row['uid']);
+				$getTables = t3lib_div::trimExplode(',', $this->conf['settings.']['fileUsage.']['getTables'], 1);
 				
 				if (is_array($fileUsage)) {
 					$GLOBALS['TSFE']->register['tx_damlightbox']['metaData'][$i]['file_usage'] = array();			
 					foreach ($fileUsage as $value) {
-						$GLOBALS['TSFE']->register['tx_damlightbox']['metaData'][$i]['file_usage'][] = $value['tablenames'].'_'.$value['uid_foreign'];
+						if (in_array($value['tablenames'], $getTables)) {
+							$GLOBALS['TSFE']->register['tx_damlightbox']['metaData'][$i]['file_usage'][] = $value['tablenames'].'_'.$value['uid_foreign'];
+						}
 					}
 					$GLOBALS['TSFE']->register['tx_damlightbox']['metaData'][$i]['file_usage'] = implode(',', $GLOBALS['TSFE']->register['tx_damlightbox']['metaData'][$i]['file_usage']);
 				}

@@ -4,6 +4,8 @@
 # PART I: config for tt_content image and text/w image CEs			#
 #####################################################################
 
+plugin.tx_damlightbox_pi1.settings.fileUsage.getTables := addToList(tt_content)
+
 ## configuration of the class call to fetch the DAM data into TSFE ##
 
 tt_content.image.15 =< plugin.tx_damlightbox_pi1
