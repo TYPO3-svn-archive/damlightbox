@@ -58,10 +58,13 @@ class tx_damlightbox_ttnews extends tx_ttnews {
 	public function imageMarkerFunc($itemConfig, $pObjRef) {
 
 		// reference to the parent-object
-		$pObj = &$pObjRef['parentObj'];
+		$pObj = $pObjRef['parentObj'];
 
 		// $config of the current news item in an array
 		$this->itemConfig = $itemConfig[1];
+		
+		// current marker array
+		$markerArray = $itemConfig[0];
 
 		// set current row from parent object
 		$this->row = $pObj->local_cObj->data;
@@ -88,9 +91,9 @@ class tx_damlightbox_ttnews extends tx_ttnews {
 		// get the final image list / enable TS processing
 		$images = t3lib_div::trimExplode(',', $pObj->local_cObj->cObjGetSingle($this->conf[$this->mode.'.']['imgList'], $this->conf[$this->mode.'.']['imgList.']), 1);
 		
-		// reset image marker
+		// reset image marker		
 		$markerArray['###NEWS_IMAGE###'] = '';
-		
+				
 		// processing of the images
 		if ($images) {
 			
@@ -119,7 +122,7 @@ class tx_damlightbox_ttnews extends tx_ttnews {
 			
 			// fill the accumulated image code into the marker
 			$markerArray['###NEWS_IMAGE###'] = $pObj->local_cObj->wrap(trim($theImgCode), $this->conf[$this->mode.'.']['imageWrapIfAny']);
-
+			
 		// to allow easy transition from classic newsimages to damlightbox handling implement the standard function from tt_news
 		} elseif ($this->row['image']) {
 
