@@ -108,9 +108,7 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 					$GLOBALS['TSFE']->register['tx_damlightbox']['config'][$sheet][$key] = $value;
 				}
 			}
-		} 
-
-#		debug($GLOBALS['TSFE']->register['tx_damlightbox']);
+		}
 
 		// possibility to debug from TS
 		if ($this->conf['debugData'] == 1) {
@@ -241,6 +239,35 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 
 		// free memory
 		$GLOBALS['TYPO3_DB']->sql_free_result($res);
+		
+		// translation handling
+		(t3lib_div::_GP('L')) ? $language = (int) t3lib_div::_GP('L') : $language = (int) $this->conf['select.']['language'];
+		
+		if ($language > 0) {
+			
+			// fetch the overlays from DB
+			$i = 0;
+			foreach ($GLOBALS['TSFE']->register['tx_damlightbox']['metaData'] as $key => $value) {
+				
+				// exec select query to fetch the overlay
+				$language_overlay = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($selectFields, 'tx_dam', 'tx_dam.sys_language_uid='.$language.' AND l18n_parent='.$value['uid'].'', '', '', '', '');
+				
+				// if there was a query result
+				if (count($language_overlay)) {
+				
+					// merge the default data with any translated data
+					$translated_data = t3lib_div::array_merge_recursive_overrule($value, $language_overlay[0], 0, 1);
+				
+					// replace the register with the translated data
+					$GLOBALS['TSFE']->register['tx_damlightbox']['metaData'][$i] = $translated_data;
+				
+				}
+				
+				$i++;
+
+			}
+			
+		}
 
 		// remove the final commas from the lists
 		$GLOBALS['TSFE']->register['tx_damlightbox']['imgCount'] = substr($GLOBALS['TSFE']->register['tx_damlightbox']['imgCount'], 0,-1);
