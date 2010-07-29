@@ -1,3 +1,6 @@
+2010-07-29 Torsten Schrade <schradt@uni-mainz.de>
+	* FEATURE #3711: Explanation about translation handling
+
 2010-04-29 Torsten Schrade <schradt@uni-mainz.de>
 	* FEATURE #7311: file_usage list can now be filtered for specific tables using plugin.tx_damlightbox_pi1.settings.fileUsage.getTables property
 

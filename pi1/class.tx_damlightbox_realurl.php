@@ -25,7 +25,7 @@
 * Autoconfiguration for usage with the extensions realurl
 *
 * @author Christopher Torgalson <manager@bedlamhotel.com>
-*
+* @coauthor Torsten Schrade <schradt@uni-mainz.de>
 */
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
@@ -64,6 +64,11 @@ class tx_damlightbox_realurl {
 				),
 				'postVarSets' => array(
 					'_DEFAULT' => array(
+						'table' => array(
+							array(
+								'GETvar' => 'table',
+							),
+						),				
 						'content' => array(
 							array(
 								'GETvar' => 'content',
