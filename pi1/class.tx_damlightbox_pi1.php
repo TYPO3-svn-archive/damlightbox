@@ -71,11 +71,21 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 		// making TypoScript $conf generally available in class
 		$this->conf = $conf;
 		
-		// get the current tablename and record uid which invoked this function call - either we are in the standard page context and a current record is set in TSFE
-		if ($this->cObj->currentRecord) {
+		// get the current tablename and record uid which invoked this function call; normally both values should be in currentRecord property like 'pages:5'
+		if ($this->cObj->currentRecord) {			
+			
+			// set the table name of the current record
 			$this->currentTable = substr($this->cObj->currentRecord, 0, strpos($this->cObj->currentRecord, ':'));
-			$this->currentUid = (int) substr($this->cObj->currentRecord, strpos($this->cObj->currentRecord, ':')+1);			
-		// or we are in a lightbox context (pagetype 313) and need to retrieve the current record via parameters	
+			
+			// if this fails, try a fallback from TS
+			if ($this->currentTable == '_NO_TABLE') {
+				$this->currentTable = $this->cObj->stdWrap($this->conf['select.']['foreignTable'], $this->conf['select.']['foreignTable']);
+			}
+				
+			// set the current uid from cObj
+			$this->currentUid = (int) $this->cObj->data['uid'];
+		
+			// or we are in a lightbox context (pagetype 313) and need to retrieve the current record via parameters	
 		} else {
 			$this->currentTable = substr(t3lib_div::_GP('content'), 0, strrpos(t3lib_div::_GP('content'), '_')); // value fully quoted below
 			$this->currentUid = (int) substr(t3lib_div::_GP('content'), strrpos(t3lib_div::_GP('content'), '_')+1);
