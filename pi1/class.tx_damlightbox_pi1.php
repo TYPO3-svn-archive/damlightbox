@@ -78,7 +78,7 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 			$this->currentTable = substr($this->cObj->currentRecord, 0, strpos($this->cObj->currentRecord, ':'));
 			
 			// if this fails, try a fallback from TS
-			if ($this->currentTable == '_NO_TABLE' || !$this->currentTable) {
+			if ($this->currentTable == '_NO_TABLE' || $this->currentTable == '') {
 				$this->currentTable = $this->cObj->stdWrap($this->conf['select.']['foreignTable'], $this->conf['select.']['foreignTable']);
 			}
 				
