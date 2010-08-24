@@ -44,19 +44,23 @@
 require_once(t3lib_extMgm::extPath('damlightbox').'pi1/class.tx_damlightbox_div.php');
 
 class tx_damlightbox_tceform {
-
+		
 	/**
 	 * Checks if the current table is allowed to display the fields for damlightbox, and if so fetches the flexform configuration from tx_damlightbox_ds
 	 * that belongs to the current record.
 	 *
 	 * @param	string		$table: The current tablename
+	 * @param	string		$field: The current field name
 	 * @param	string		$row: The current record
+	 * @param	string 		$altName
+	 * @param	string		$palette
+	 * @param	string		$extra
+	 * @param	string		$pal
 	 * @param	object		$pObj: The parent object
 	 * @return	void
-	 */
-	function getMainFields_preProcess($table, &$row, $pObj) {
+	 */	
+	function getSingleField_preProcess($table, $field, &$row, $altName, $palette, $extra, $pal, $pObj) {
 
-		// create a 'fake' damlightbox field in the tca of the incoming table
 		if (tx_damlightbox_div::tableAllowedForDamlightbox($table)) {
 
 			// making path to flexforms configurable from PageTSConfig
@@ -71,7 +75,7 @@ class tx_damlightbox_tceform {
 			// if it's not a new record fetch the configuration from the tx_damlightbox_ds table
 			if (substr($row['uid'], 0, 3) != 'NEW') $row['tx_damlightbox_flex'] = tx_damlightbox_div::getFlexFormForRecord($row['uid'], $table);
 		}
-	}
+	}	
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/hooks/class.tx_damlightbox_tceform.php'])    {

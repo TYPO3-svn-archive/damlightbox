@@ -9,7 +9,7 @@ $TYPO3_CONF_VARS['EXTCONF']['damlightbox'] = unserialize($_EXTCONF);
 $TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] = 'EXT:damlightbox/hooks/class.tx_damlightbox_tcemain.php:tx_damlightbox_tcemain';
 $TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass'][] = 'EXT:damlightbox/hooks/class.tx_damlightbox_tcemain.php:tx_damlightbox_tcemain';
 // TCEForms
-$TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/class.t3lib_tceforms.php']['getMainFieldsClass'][] = 'EXT:damlightbox/hooks/class.tx_damlightbox_tceform.php:tx_damlightbox_tceform';
+$TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/class.t3lib_tceforms.php']['getSingleFieldClass'][] = 'EXT:damlightbox/hooks/class.tx_damlightbox_tceform.php:tx_damlightbox_tceform';
 // List module
 $TYPO3_CONF_VARS['SC_OPTIONS']['typo3/class.db_list_extra.inc']['getTable'][] = 'EXT:damlightbox/hooks/class.tx_damlightbox_dblist.php:tx_damlightbox_dblist';
 
