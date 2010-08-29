@@ -27,7 +27,7 @@
  *
  *
  *   46: class tx_damlightbox_tceform
- *   57:     function getMainFields_preProcess($table, &$row, $pObj)
+ *   62:     function getSingleField_preProcess($table, $field, &$row, $altName, $palette, $extra, $pal, $pObj)
  *
  * TOTAL FUNCTIONS: 1
  * (This index is automatically created/updated by the extension "extdeveval")
@@ -72,7 +72,7 @@ class tx_damlightbox_tceform {
 				}
 			}
 			
-			// if it's not a new record fetch the configuration from the tx_damlightbox_ds table
+			// if its not a new record fetch the configuration from the tx_damlightbox_ds table
 			if (substr($row['uid'], 0, 3) != 'NEW') $row['tx_damlightbox_flex'] = tx_damlightbox_div::getFlexFormForRecord($row['uid'], $table);
 		}
 	}	
