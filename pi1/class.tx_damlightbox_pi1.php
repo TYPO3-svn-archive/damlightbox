@@ -149,7 +149,7 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 
 		// set the parts for the select query
 		$mmTable = $this->conf['select.']['mmTable'];
-		$foreignTable = $this->cObj->stdWrap($this->conf['select.']['foreignTable'], $this->conf['select.']['foreignTable']);
+		$foreignTable = $this->cObj->stdWrap($this->conf['select.']['foreignTable'], $this->conf['select.']['foreignTable.']);
 		$whereClause = $this->cObj->stdWrap($this->conf['select.']['whereClause'], $this->conf['select.']['whereClause.']);
 		$sorting = $this->conf['select.']['sorting'];
 		

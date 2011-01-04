@@ -1,3 +1,6 @@
+2011-01-04 Torsten Schrade <schradt@uni-mainz.de>
+	* BUGFIX: Missing "." prevented stdWrap for select.foreignTable property
+
 2010-07-29 Torsten Schrade <schradt@uni-mainz.de>
 	* FEATURE #3711: Explanation about translation handling
 
