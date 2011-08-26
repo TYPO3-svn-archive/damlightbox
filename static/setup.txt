@@ -82,6 +82,7 @@ lib.damlightbox {
 			data = TSFE:register|tx_damlightbox|imgCount
 			listNum.stdWrap.cObject = TEXT
 			listNum.stdWrap.cObject.data = GPvar:img
+			listNum.stdWrap.cObject.intval = 1
 		}
 	}
 
@@ -128,6 +129,7 @@ lib.damlightbox {
 	
 						if.value = 0
 						if.isGreaterThan.data = GPvar:img
+						if.isGreaterThan.intval = 1
 	
 						cObject = TEXT
 						cObject.value = {$plugin.damlightbox.prevWord}
@@ -141,7 +143,7 @@ lib.damlightbox {
 							additionalParams.cObject {
 	
 								stdWrap.dataWrap = &type=313&content={GPvar:content}&img=|
-								stdWrap.htmlspecialchars = 1
+								stdWrap.htmlSpecialChars = 1
 	
 								10 = LOAD_REGISTER
 								10 {
@@ -149,6 +151,7 @@ lib.damlightbox {
 									prevpic.cObject {
 										10 = TEXT
 										10.dataWrap = {GPvar:img}-1
+										10.intval = 1
 									}
 								}
 								20 = TEXT
@@ -201,7 +204,7 @@ lib.damlightbox {
 							additionalParams.cObject {
 	
 								stdWrap.dataWrap = &type=313&content={GPvar:content}&img=|
-								stdWrap.htmlspecialchars = 1
+								stdWrap.htmlSpecialChars = 1
 	
 								10 = LOAD_REGISTER
 								10 {
@@ -209,6 +212,7 @@ lib.damlightbox {
 									nextpic.cObject {
 										10 = TEXT
 										10.dataWrap = {GPvar:img}+1
+										10.intval = 1
 									}
 								}
 								20 = TEXT
@@ -310,7 +314,10 @@ damlightbox {
 
 	## body tag ##
 	bodyTagCObject = TEXT
-	bodyTagCObject.dataWrap = <body id="damlightbox-{GPvar:content}" class="damlightbox">|
+	bodyTagCObject.data = GPvar:content
+	bodyTagCObject.htmlSpecialChars = 1
+	bodyTagCObject.wrap = <body id="damlightbox-|" class="damlightbox">
+	
 
 	## page content ##	
 	10 = COA
