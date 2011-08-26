@@ -258,7 +258,11 @@ damlightbox {
 			table = tt_content
 			select {
 				orderBy = sorting
-				andWhere.dataWrap = uid={GPvar:content}
+				andWhere {
+					data = GPvar:content
+					intval = 1
+					wrap = uid=|
+				}
 			}
 
 			renderObj = COA
@@ -282,6 +286,7 @@ damlightbox {
 						data = TSFE:register|tx_damlightbox|imgCount
 						listNum.stdWrap.cObject = TEXT
 						listNum.stdWrap.cObject.data = GPvar:img
+						listNum.stdWrap.cObject.data.intval = 1
 					}
 				}
 
@@ -318,6 +323,7 @@ damlightbox {
 
 								if.value = 0
 								if.isGreaterThan.data = GPvar:img
+								if.isGreaterThan.data.intval = 1
 
 								cObject = TEXT
 								cObject.value = {$plugin.damlightbox.prevWord}
@@ -336,6 +342,7 @@ damlightbox {
 											prevpic.cObject {
 												10 = TEXT
 												10.dataWrap = {GPvar:img}-1
+												10.intval = 1
 											}
 										}
 										20 = TEXT
@@ -393,6 +400,7 @@ damlightbox {
 											nextpic.cObject {
 												10 = TEXT
 												10.dataWrap = {GPvar:img}+1
+												10.intval = 1
 											}
 										}
 										20 = TEXT
