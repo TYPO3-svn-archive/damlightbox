@@ -87,7 +87,15 @@ class tx_damlightbox_pi1 extends tslib_pibase {
 		
 			// or we are in a lightbox context (pagetype 313) and need to retrieve the current record via parameters	
 		} else {
-			$this->currentTable = substr(t3lib_div::_GP('content'), 0, strrpos(t3lib_div::_GP('content'), '_')); // value fully quoted below
+			// get table by going reverse from the last underscore - make sure its a valid table from $TCA
+			$table = substr(t3lib_div::_GP('content'), 0, strrpos(t3lib_div::_GP('content'), '_'));
+			if (isset($GLOBALS['TCA'][$table])) {
+				$this->currentTable = $GLOBALS['TYPO3_DB']->fullQuoteStr($table, $table);
+			// invalid incoming value, return
+			} else {
+				return;
+			}			
+			// get uid of record by starting from last underscore - must be int
 			$this->currentUid = (int) substr(t3lib_div::_GP('content'), strrpos(t3lib_div::_GP('content'), '_')+1);
 		}
 

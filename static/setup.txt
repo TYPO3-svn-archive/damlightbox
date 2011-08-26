@@ -129,6 +129,7 @@ lib.damlightbox {
 	
 						if.value = 0
 						if.isGreaterThan.data = GPvar:img
+						if.isGreaterThan.intval = 1
 	
 						cObject = TEXT
 						cObject.value = {$plugin.damlightbox.prevWord}
@@ -142,7 +143,7 @@ lib.damlightbox {
 							additionalParams.cObject {
 	
 								stdWrap.dataWrap = &type=313&content={GPvar:content}&img=|
-								stdWrap.htmlspecialchars = 1
+								stdWrap.htmlSpecialChars = 1
 	
 								10 = LOAD_REGISTER
 								10 {
@@ -202,7 +203,7 @@ lib.damlightbox {
 							additionalParams.cObject {
 	
 								stdWrap.dataWrap = &type=313&content={GPvar:content}&img=|
-								stdWrap.htmlspecialchars = 1
+								stdWrap.htmlSpecialChars = 1
 	
 								10 = LOAD_REGISTER
 								10 {
@@ -311,7 +312,11 @@ damlightbox {
 
 	## body tag ##
 	bodyTagCObject = TEXT
-	bodyTagCObject.dataWrap = <body id="damlightbox-{GPvar:content}" class="damlightbox">|
+	bodyTagCObject {
+		data = GPvar:content
+		htmlSpecialChars = 1
+		wrap = <body id="damlightbox-|" class="damlightbox">
+	}
 
 	## page content ##	
 	10 = COA
@@ -325,7 +330,7 @@ damlightbox {
 	}
 }
 
-# Using gpvar in TypoScript getText is deprecated since TYPO3 4.3 - Use gp instead of gpvar
+# Using GPvar in TypoScript getText is deprecated since TYPO3 4.3 - Use GP instead of GPvar
 [compatVersion = 4.3.0]
 lib.damlightbox.clickEnlargeConf.20.marks.IMAGEBROWSER.10.override.cObject.typolink.additionalParams.cObject.stdWrap.dataWrap = &type=313&content={GP:content}&img=|
 lib.damlightbox.clickEnlargeConf.20.marks.IMAGEBROWSER.30.override.cObject.typolink.additionalParams.cObject.stdWrap.dataWrap = &type=313&content={GP:content}&img=|
@@ -333,6 +338,6 @@ lib.damlightbox.clickEnlargeConf.20.marks.IMAGEBROWSER.10.override.cObject.typol
 lib.damlightbox.clickEnlargeConf.20.marks.IMAGEBROWSER.30.override.cObject.typolink.additionalParams.cObject.10.nextpic.cObject.10.dataWrap = {GP:img}+1
 lib.damlightbox.clickEnlargeConf.20.marks.IMAGEBROWSER.10.override.if.isGreaterThan.data = GP:img
 lib.damlightbox.imageRegisters.currentImg.listNum.stdWrap.cObject.data = GP:img
-damlightbox.bodyTagCObject.dataWrap = <body id="damlightbox-{GP:content}" class="damlightbox">|
+damlightbox.bodyTagCObject.data = GP:content
 damlightbox.10.10.source.data = GP:content
 [global]
