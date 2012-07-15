@@ -34,12 +34,12 @@ $EM_CONF[$_EXTKEY] = array(
 	'constraints' => array(
 		'depends' => array(
 			'dam' => '1.1.1-',
-			'typo3' => '4.2.0-0.0.0',
+			'typo3' => '4.2.0-',
 		),
 		'conflicts' => array(
 		),
 		'suggests' => array(
-			'pmkslimbox' => '3.0.1-',
+			'd4u_slimbox' => '2.2.0-',
 			'dam_ttcontent' => '1.1.0-',
 			'dam_ttnews' => '0.1.9-',
 			'dam_pages' => '0.1.7-',

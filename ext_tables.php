@@ -54,8 +54,8 @@ if (t3lib_extMgm::isLoaded('tt_address')) {
 
 ### LIGHTBOXES ###
 
-# pmkslimbox
-if (t3lib_extMgm::isLoaded('pmkslimbox')) {
-	t3lib_extMgm::addStaticFile($_EXTKEY,'static/pmkslimbox','DAM Lightbox: pmkslimbox');
+# d4u_slimbox
+if (t3lib_extMgm::isLoaded('d4u_slimbox')) {
+	t3lib_extMgm::addStaticFile($_EXTKEY,'static/d4u_slimbox','DAM Lightbox: d4u_slimbox');
 }
 ?>

@@ -1,17 +1,17 @@
 #####################################################################
 # TypoScrip configuration for the plugin.damlightbox 				#
 # @author Torsten Schrade <schradt@uni-mainz.de>					#
-# PART III: config for image CEs with pmkslimbox					#
+# PART III: config for image CEs with d4u_slimbox					#
 #####################################################################
 
-## include the damlightbox class for pmkslimbox rendering ##
-includeLibs.tx_damlightbox_pmkslimbox = EXT:damlightbox/pi1/class.tx_damlightbox_pmkslimbox.php
+## include the damlightbox class for d4u_slimbox rendering ##
+includeLibs.tx_damlightbox_d4u_slimbox = EXT:damlightbox/pi1/class.tx_damlightbox_d4u_slimbox.php
 
 # use a slightly modified slimboxplus.js to provide all functions
-page.1230.20.jsfile.dataWrap = EXT:damlightbox/res/pmkslimbox/slimboxplus.js
+page.1230.20.jsfile.dataWrap = EXT:damlightbox/res/d4u_slimbox/slimboxplus.js
 
-## library for pmkslimbox link treatment ##
-lib.damlightbox.pmkslimbox.imageLinkWrap.typolink {
+## library for d4u_slimbox link treatment ##
+lib.damlightbox.d4u_slimbox.imageLinkWrap.typolink {
 
 	ATagParams.cObject = COA
 	ATagParams.cObject.10 = LOAD_REGISTER
@@ -22,14 +22,14 @@ lib.damlightbox.pmkslimbox.imageLinkWrap.typolink {
 		hpixels {
 			cObject < lib.damlightbox.getDAMvalues
 			cObject.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|hpixels
-			wrap = {$plugin.damlightbox.pmkslimbox.hCalc}
+			wrap = {$plugin.damlightbox.d4u_slimbox.hCalc}
 		}
 		
 		vpixels = TEXT
 		vpixels {
 			cObject < lib.damlightbox.getDAMvalues
 			cObject.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|vpixels
-			wrap = {$plugin.damlightbox.pmkslimbox.vCalc}
+			wrap = {$plugin.damlightbox.d4u_slimbox.vCalc}
 		}
 		
 		## width/height calculated to determine the actual lightbox dimensions ##
@@ -64,7 +64,7 @@ lib.damlightbox.pmkslimbox.imageLinkWrap.typolink {
 		# remove the first entity again
 		lbCaption.substring = 6	
 		
-		## the real img path will be passed on to savefile.php from pmkslimbox
+		## the real img path will be passed on to savefile.php from d4u_slimbox
 		fullPath.cObject = COA
 		fullPath.cObject.10 < lib.damlightbox.getDAMvalues
 		fullPath.cObject.10 {
@@ -76,7 +76,7 @@ lib.damlightbox.pmkslimbox.imageLinkWrap.typolink {
 	## check if the calculated dimensions have to be overriden due to a value in the flexform configuration
 	ATagParams.cObject.15 = TEXT
 	ATagParams.cObject.15.data = register:currentImg
-	ATagParams.cObject.15.postUserFunc = tx_damlightbox_pmkslimbox->overrideDimsFromFlexform
+	ATagParams.cObject.15.postUserFunc = tx_damlightbox_d4u_slimbox->overrideDimsFromFlexform
 
 	## the a-tag parameters used for slimbox
 	ATagParams.cObject.20 = TEXT
@@ -88,15 +88,15 @@ lib.damlightbox.pmkslimbox.imageLinkWrap.typolink {
 #####################################################################
 # TypoScrip configuration for the plugin.damlightbox 				#
 # @author Torsten Schrade <schradt@uni-mainz.de>					#
-# PART IV: config for pmkslimbox / iframe							#
+# PART IV: config for d4u_slimbox / iframe							#
 #####################################################################
 
 damlightbox {
 
-	## this clears any leftovers from pmkslimbox
+	## this clears any leftovers from d4u_slimbox
 	headerData.1230 >
 	1230 >
 	headerData.1232 < page.headerData.1232
 
-	includeCSS.file1 = {$plugin.damlightbox.pmkslimbox.cssFile}
+	includeCSS.file1 = {$plugin.damlightbox.d4u_slimbox.cssFile}
 }

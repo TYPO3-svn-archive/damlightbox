@@ -1,0 +1,24 @@
+#################################################################################
+# Constants for the plugin.damlightbox_pi1.d4u_slimbox							#
+# @author Torsten Schrade <schradt@uni-mainz.de>								#
+#################################################################################
+
+## FILES ##
+
+#cat=plugin.damlightbox.d4u_slimbox/file/10; type=string; label= Template file: Template file that will be used within d4u_slimbox
+plugin.damlightbox.d4u_slimbox.templateFile = EXT:damlightbox/res/d4u_slimbox/template.html
+
+#cat=plugin.damlightbox.d4u_slimbox/file/20; type=string; label= CSS File: CSS file for clickenlarge iframe with d4u_slimbox.
+plugin.damlightbox.d4u_slimbox.cssFile = EXT:damlightbox/res/d4u_slimbox/damlightbox.css
+
+## DIMENSIONS ##
+
+#cat=plugin.damlightbox.d4u_slimbox/dims/10; type=wrap; label= Width calculation: Here you can add arithmetic expressions that will be combined with the horizontal pixel value of the image to determine the actual height of the lightbox
+plugin.damlightbox.d4u_slimbox.hCalc =
+
+#cat=plugin.damlightbox.d4u_slimbox/dims/20; type=wrap; label= Height calculation: Here you can add arithmetic expressions that will be combined with the vertical pixel value of the image determine the actual width lightbox
+plugin.damlightbox.d4u_slimbox.vCalc = |+54
+
+
+## TURN ON D4U_SLIMBOX ##
+plugin.damlightbox.lightboxExtension = d4u_slimbox

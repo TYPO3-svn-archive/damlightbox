@@ -107,10 +107,10 @@ damlightbox {
 #####################################################################
 # TypoScrip configuration for the plugin.damlightbox_pi1			#
 # @author Torsten Schrade <schradt@uni-mainz.de>					#
-# PART III: config for pages & pmkslimbox							#
+# PART III: config for pages & d4u_slimbox							#
 #####################################################################
 
-[globalVar = LIT:pmkslimbox = {$plugin.damlightbox.lightboxExtension}]
+[globalVar = LIT:d4u_slimbox = {$plugin.damlightbox.lightboxExtension}]
 
 page.313 {
 	20.imageLinkWrap.typolink {
@@ -118,13 +118,13 @@ page.313 {
 		parameter.append >
 		
 		ATagParams >
-		ATagParams < lib.damlightbox.pmkslimbox.imageLinkWrap.typolink.ATagParams
+		ATagParams < lib.damlightbox.d4u_slimbox.imageLinkWrap.typolink.ATagParams
 	}	
 	stdWrap.postCObject = TEXT
 	stdWrap.postCObject {
 		if.isTrue.data = TSFE:register|tx_damlightbox|config|sDEF|imgPreview
 		cObject = USER
-		cObject.userFunc = tx_damlightbox_pmkslimbox->addHiddenImgs
+		cObject.userFunc = tx_damlightbox_d4u_slimbox->addHiddenImgs
 		cObject {
 			content.data = field:uid
 			content.table = pages
@@ -138,9 +138,9 @@ page.313 {
 			}			
 			
 			hCalc.cObject = TEXT
-			hCalc.cObject.value = {$plugin.damlightbox.pmkslimbox.hCalc}
+			hCalc.cObject.value = {$plugin.damlightbox.d4u_slimbox.hCalc}
 			vCalc.cObject = TEXT
-			vCalc.cObject.value = {$plugin.damlightbox.pmkslimbox.vCalc}
+			vCalc.cObject.value = {$plugin.damlightbox.d4u_slimbox.vCalc}
 		}
 	}
 }
@@ -148,7 +148,7 @@ page.313 {
 damlightbox {
 	10.10.conf.pages.20 {
 		
-		template.file = {$plugin.damlightbox.pmkslimbox.templateFile}
+		template.file = {$plugin.damlightbox.d4u_slimbox.templateFile}
 		marks.CE_TITLE >
 
 		marks.DAM_TITLE.outerWrap >

@@ -22,13 +22,13 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 /**
- * Contains damlightbox functions for pmkslimbox usage
+ * Contains damlightbox functions for d4u_slimbox usage
  *
  */
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- *   47: class tx_damlightbox_pmkslimbox extends tx_damlightbox_pi1
+ *   47: class tx_damlightbox_d4u_slimbox extends tx_damlightbox_pi1
  *   60:     public function addHiddenImgs($content, $conf)
  *  114:     public function overrideDimsFromFlexform($content, $conf)
  *
@@ -44,14 +44,14 @@
  * @subpackage 	damlightbox
  */
 
-class tx_damlightbox_pmkslimbox extends tx_damlightbox_pi1 {
+class tx_damlightbox_d4u_slimbox extends tx_damlightbox_pi1 {
 	
 	var $uid = 0;
 	var $table = '';
 	var $title = '';
 	
 	/**
-	 * If the preview mode is set and pmkslimbox is used the remaining imagelinks need to be inserted in a hidden div. Otherwise the lightbox will not be browsable and just open the preview image.
+	 * If the preview mode is set and d4u_slimbox is used the remaining imagelinks need to be inserted in a hidden div. Otherwise the lightbox will not be browsable and just open the preview image.
 	 *
 	 * @param	[type]		$content: ...
 	 * @param	[type]		$conf: ...
@@ -137,7 +137,7 @@ class tx_damlightbox_pmkslimbox extends tx_damlightbox_pi1 {
 	
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/pi1/class.tx_damlightbox_pmkslimbox.php'])    {
-    include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/pi1/class.tx_damlightbox_pmkslimbox.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/pi1/class.tx_damlightbox_d4u_slimbox.php'])    {
+    include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/pi1/class.tx_damlightbox_d4u_slimbox.php']);
 }
 ?>
