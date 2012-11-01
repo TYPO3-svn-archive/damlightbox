@@ -43,7 +43,7 @@
 require_once(t3lib_extMgm::extPath('realurl', 'class.tx_realurl_advanced.php'));
 
 class tx_damlightbox_realurl {
-	
+
 	/**
 	 * Generates additional RealURL configuration and merges it with provided configuration
 	 *
@@ -86,7 +86,7 @@ class tx_damlightbox_realurl {
 	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/pi1/class.tx_damlightbox_realurl.php'])	{
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/pi1/class.tx_damlightbox_realurl.php']) {
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/pi1/class.tx_damlightbox_realurl.php']);
 }
 ?>

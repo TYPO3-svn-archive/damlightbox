@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010 Torsten Schrade <schradt@uni-mainz.de>
+*  (c) 2012 Torsten Schrade <schradt@uni-mainz.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -46,7 +46,7 @@
 
 class tx_damlightbox_ttaddress extends tx_ttaddress_pi1 {
 
-	/* Hook function for inserting custom markers in tt_address. Used for connecting DAM Lightbox to tt_address
+	/** Hook function for inserting custom markers in tt_address. Used for connecting DAM Lightbox to tt_address
 	 *
 	 * @param	array		The existing marker array for tt_address
 	 * @param	array		The current tt_address record
@@ -70,7 +70,7 @@ class tx_damlightbox_ttaddress extends tx_ttaddress_pi1 {
 
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/pi1/class.tx_damlightbox_ttaddress.php'])    {
-    include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/pi1/class.tx_damlightbox_ttaddress.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/pi1/class.tx_damlightbox_ttaddress.php']) {
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/pi1/class.tx_damlightbox_ttaddress.php']);
 }
 ?>

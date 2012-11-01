@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010 Torsten Schrade <schradt@uni-mainz.de>
+*  (c) 2012 Torsten Schrade <schradt@uni-mainz.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -45,11 +45,11 @@
  */
 
 class tx_damlightbox_d4u_slimbox extends tx_damlightbox_pi1 {
-	
+
 	var $uid = 0;
 	var $table = '';
 	var $title = '';
-	
+
 	/**
 	 * If the preview mode is set and d4u_slimbox is used the remaining imagelinks need to be inserted in a hidden div. Otherwise the lightbox will not be browsable and just open the preview image.
 	 *
@@ -58,37 +58,37 @@ class tx_damlightbox_d4u_slimbox extends tx_damlightbox_pi1 {
 	 * @return	string		Hidden div with the remaining imagelinks
 	 */
 	public function addHiddenImgs($content, $conf) {
-		
-		// check if there is more than one image and if yes insert a hidden div
+
+			// check if there is more than one image and if yes insert a hidden div
 		if (count($GLOBALS['TSFE']->register['tx_damlightbox']['metaData']) > 1) {
 			foreach ($GLOBALS['TSFE']->register['tx_damlightbox']['metaData'] as $key => $value) {
 
-				// leave out the first image and any image that is hidden in DAM
+					// leave out the first image and any image that is hidden in DAM
 				if ($key == '0' || $value['hidden'] == 1) continue;
-				
-				// set current image number
+
+					// set current image number
 				$GLOBALS['TSFE']->register['currentImg'] = $key;
 
-				// get uid & table & caption of the current record & image
+					// get uid & table & caption of the current record & image
 				$this->uid = $this->cObj->stdWrap($conf['content'], $conf['content.']);
 				$this->table = $conf['content.']['table'];
-				
-				// lightbox caption
+
+					// lightbox caption
 				$GLOBALS['TSFE']->register['lbCaption'] = $this->cObj->stdWrap($conf['lbCaption'], $conf['lbCaption.']);
 
-				// specific width/height calculations
+					// specific width/height calculations
 				$hCalc = t3lib_div::trimExplode('|',$this->cObj->stdWrap(null,$conf['hCalc.']));
-				$vCalc = t3lib_div::trimExplode('|',$this->cObj->stdWrap(null,$conf['vCalc.']));			
+				$vCalc = t3lib_div::trimExplode('|',$this->cObj->stdWrap(null,$conf['vCalc.']));
 				$GLOBALS['TSFE']->register['widthCalc'] = intval(t3lib_div::calcParenthesis($hCalc[0].$GLOBALS['TSFE']->register['tx_damlightbox']['metaData'][$key]['hpixels'].$hCalc[1]));
 				$GLOBALS['TSFE']->register['heightCalc'] = intval(t3lib_div::calcParenthesis($vCalc[0].$GLOBALS['TSFE']->register['tx_damlightbox']['metaData'][$key]['vpixels'].$vCalc[1]));
-				
-				// full path register
+
+					// full path register
 				$GLOBALS['TSFE']->register['fullPath'] = t3lib_div::getIndpEnv('TYPO3_SITE_URL').$GLOBALS['TSFE']->register['tx_damlightbox']['metaData'][$key]['fullPath'];
 
-				// check if specific dimensions are set in the flexform
+					// check if specific dimensions are set in the flexform
 				if ($GLOBALS['TSFE']->register['tx_damlightbox']['config']['sLIGHTBOX']['setSpecificDimensions']) $this->overrideDimsFromFlexform($key,null);
 
-				// configurations for the typolink
+					// configurations for the typolink
 				$linkConfig=array();
 				$linkConfig['parameter'] = $GLOBALS['TSFE']->id;
 				$linkConfig['no_cache'] = $conf['linkConfig.']['no_cache'];
@@ -115,14 +115,14 @@ class tx_damlightbox_d4u_slimbox extends tx_damlightbox_pi1 {
 	 * @return	string		Hidden div with the remaining imagelinks
 	 */
 	public function overrideDimsFromFlexform($content, $conf) {
-		
-		// check if some specific dimensions are set in the flexform
+
+			// check if some specific dimensions are set in the flexform
 		$customDims = array();
 		$customDims = t3lib_div::trimExplode(';', $GLOBALS['TSFE']->register['tx_damlightbox']['config']['sLIGHTBOX']['setSpecificDimensions'], 1);
 
 		if ($customDims) {
 			foreach($customDims as $value) {
-				// check if the current image dimensions in the GLOBAL register need to be overridden
+					// check if the current image dimensions in the GLOBAL register need to be overridden
 				if (substr($value, 0, 1)-1 == $content) {
 					$dims = t3lib_div::trimExplode(',',substr($value,strpos($value,':')+1));
 					if ($dims) {
@@ -134,10 +134,10 @@ class tx_damlightbox_d4u_slimbox extends tx_damlightbox_pi1 {
 		}
 		return;
 	}
-	
+
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/pi1/class.tx_damlightbox_d4u_slimbox.php'])    {
-    include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/pi1/class.tx_damlightbox_d4u_slimbox.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/pi1/class.tx_damlightbox_d4u_slimbox.php']) {
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/pi1/class.tx_damlightbox_d4u_slimbox.php']);
 }
 ?>

@@ -16,12 +16,12 @@ plugin.tx_ttaddress_pi1.templates.default.dam_image.cObject {
 	20 = USER
 	20 {
 		userFunc = tx_damlightbox_pi1->frontendImageIterator
-	
+
 		file {
 			import.cObject < lib.damlightbox.getDAMvalues
 			import.cObject {
 				cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|fullPath
-			}	
+			}
 			maxW = 300
 			maxH = 200
 		}
@@ -29,36 +29,36 @@ plugin.tx_ttaddress_pi1.templates.default.dam_image.cObject {
 		## alt texts from DAM ##
 		altText.cObject < lib.damlightbox.getDAMvalues
 		altText.cObject.cObject.value  = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|alt_text
-		
+
 		## title texts from DAM ##
 		titleText.cObject < lib.damlightbox.getDAMvalues
 		titleText.cObject.cObject.value  = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|title
-		
+
 		## image link for click enlarge ##
 		imageLinkWrap = 1
 		imageLinkWrap {
 			enable = 1
 			typolink {
-			
+
 				## caching ##
 				no_cache = 0
 				useCacheHash = 1
-				
+
 				parameter.data = TSFE:id
-				
+
 				parameter.append = TEXT
 				parameter.append {
 					if.isFalse.field = image_link
 					value = {$plugin.damlightbox.jsParams}
 					noTrimWrap = | ||
-				}				
-					
+				}
+
 				additionalParams.cObject = TEXT
 				additionalParams.cObject {
 					htmlspecialchars = 1
 					dataWrap = |&type=313&content=tt_address_{field:uid}&img={register:currentImg}
 				}
-				
+
 				ATagParams.cObject = TEXT
 				ATagParams.cObject {
 					value = {$plugin.damlightbox.imageLinkAttributes}
@@ -92,12 +92,12 @@ damlightbox {
 plugin.tx_ttaddress_pi1.templates.default.dam_image.cObject {
 
 	20.imageLinkWrap.typolink {
-	
+
 		parameter.append >
-		
+
 		ATagParams >
 		ATagParams < lib.damlightbox.d4u_slimbox.imageLinkWrap.typolink.ATagParams
-	}	
+	}
 	stdWrap.postCObject = TEXT
 	stdWrap.postCObject {
 		if.isTrue.data = TSFE:register|tx_damlightbox|config|sDEF|imgPreview

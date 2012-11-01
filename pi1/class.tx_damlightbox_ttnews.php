@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010 Torsten Schrade <schradt@uni-mainz.de>
+*  (c) 2012 Torsten Schrade <schradt@uni-mainz.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -46,96 +46,96 @@
 require_once (t3lib_extMgm::extPath('tt_news') . 'pi/class.tx_ttnews.php');
 
 class tx_damlightbox_ttnews extends tx_ttnews {
-	
+
 	/**
 	 * Connects tt_news image processing to the damlightbox routine to fetch DAM images and according metadata. The rest of the processing can be done with pure TypoScript.
 	 * Just have a look in the static include file for tt_news.
-	 *
+	 * 
 	 * @param	string		$itemConfig: TypoScript configuration of the current news item
 	 * @param	string		$pObjRef: Reference to the parent object
 	 * @return	string		The accumulated HTML for the news images
 	 */
 	public function imageMarkerFunc($itemConfig, $pObjRef) {
 
-		// reference to the parent-object
+			// reference to the parent-object
 		$pObj = $pObjRef['parentObj'];
 
-		// $config of the current news item in an array
+			// $config of the current news item in an array
 		$this->itemConfig = $itemConfig[1];
-		
-		// current marker array
+
+			// current marker array
 		$markerArray = $itemConfig[0];
 
-		// set current row from parent object
+			// set current row from parent object
 		$this->row = $pObj->local_cObj->data;
 
-		// conf of the image marker function
+			// conf of the image marker function
 		$this->conf = $pObj->conf['imageMarkerFunc.'];
 
-		// execute damlightbox function to fetch images and metadata
+			// execute damlightbox function to fetch images and metadata
 		$pObj->local_cObj->cObjGetSingle($this->conf['executeDamlightbox'], $this->conf['executeDamlightbox.']);
 
-		// set display mode
+			// set display mode
 		$this->mode = $pObj->config['code'];
-		
-		// maxW & maxH
+
+			// maxW & maxH
 		$this->conf[$this->mode.'.']['image.']['file.']['maxW'] = $this->itemConfig['image.']['file.']['maxW'];
 		$this->conf[$this->mode.'.']['image.']['file.']['maxH'] = $this->itemConfig['image.']['file.']['maxH'];
 
-		// fistImageIsPreview mode in SINGLE: remove the first image from the list
+			// fistImageIsPreview mode in SINGLE: remove the first image from the list
 		if ($this->mode == 'SINGLE' && substr_count($GLOBALS['TSFE']->register['tx_damlightbox']['damImages'], ',') > 0 && $pObj->config['firstImageIsPreview']) {
 			$GLOBALS['TSFE']->register['tx_damlightbox']['damImages'] = substr($GLOBALS['TSFE']->register['tx_damlightbox']['damImages'], strpos($GLOBALS['TSFE']->register['tx_damlightbox']['damImages'], ',')+1);
 			array_shift($GLOBALS['TSFE']->register['tx_damlightbox']['metaData']);
 		}
 
-		// get the final image list / enable TS processing
+			// get the final image list / enable TS processing
 		$images = t3lib_div::trimExplode(',', $pObj->local_cObj->cObjGetSingle($this->conf[$this->mode.'.']['imgList'], $this->conf[$this->mode.'.']['imgList.']), 1);
-		
-		// reset image marker		
+
+			// reset image marker
 		$markerArray['###NEWS_IMAGE###'] = '';
-				
-		// processing of the images
+
+			// processing of the images
 		if ($images) {
-			
-			// image count in tt_news
+
+				// image count in tt_news
 			$imageCount = isset($this->itemConfig['imageCount']) ? $this->itemConfig['imageCount']:1;
 
-			// set global counter - can be accessed like IMAGE_NUM_CURRENT from TS but in tt_news context
+				// set global counter - can be accessed like IMAGE_NUM_CURRENT from TS but in tt_news context
 			$GLOBALS['TSFE']->register['currentImg'] = 0;
 
-			// walk through each image
+				// walk through each image
 			foreach ($images as $img) {
 
-				// if imgCount is reached stop the processing
+					// if imgCount is reached stop the processing
 				if ($GLOBALS['TSFE']->register['currentImg'] == $imageCount) break;
 
-				// image
+					// image
 				$theImgCode .= $pObj->local_cObj->IMAGE($this->conf[$this->mode.'.']['image.']);
 	
-				// caption
+					// caption
 				$theImgCode .= $pObj->local_cObj->stdWrap($pObj->local_cObj->cObjGetSingle($this->conf[$this->mode.'.']['caption'], $this->conf[$this->mode.'.']['caption.']), $this->conf[$this->mode.'.']['caption_stdWrap.']);
 
-				// raise the global image count
+					// raise the global image count
 				$GLOBALS['TSFE']->register['currentImg']++;
 
 			}
-			
-			// fill the accumulated image code into the marker
+
+				// fill the accumulated image code into the marker
 			$markerArray['###NEWS_IMAGE###'] = $pObj->local_cObj->wrap(trim($theImgCode), $this->conf[$this->mode.'.']['imageWrapIfAny']);
-			
-		// to allow easy transition from classic newsimages to damlightbox handling implement the standard function from tt_news
+
+			// to allow easy transition from classic newsimages to damlightbox handling implement the standard function from tt_news
 		} elseif ($this->row['image']) {
 
 			$theImgCode = $this->getImageMarkersClassic($pObj);
-			
+
 			if ($theImgCode) $markerArray['###NEWS_IMAGE###'] = $pObj->local_cObj->wrap(trim($theImgCode), $this->conf[$this->mode.'.']['imageWrapIfAny']);
-		
-		// if no images are present execute noImage_stdWrap as normal
+
+			// if no images are present execute noImage_stdWrap as normal
 		} else {
 			$markerArray['###NEWS_IMAGE###'] = $pObj->local_cObj->stdWrap($markerArray['###NEWS_IMAGE###'], $this->conf[$this->mode.'.']['noImage_stdWrap.']);
-		}		
-		
-		// pass the image HTML back to tt_news
+		}
+
+			// pass the image HTML back to tt_news
 		return $markerArray;
 	}
 
@@ -147,7 +147,7 @@ class tx_damlightbox_ttnews extends tx_ttnews {
 	 * @return	string		The HTML code for the images
 	 */
 	private function getImageMarkersClassic($pObj) {
-		
+
 		$imageNum = isset($this->itemConfig['imageCount']) ? $this->itemConfig['imageCount']:1;
 		$imageNum = t3lib_div::intInRange($imageNum, 0, 100);
 		$theImgCode = '';
@@ -159,7 +159,7 @@ class tx_damlightbox_ttnews extends tx_ttnews {
 		reset($imgs);
 
 		$cc = 0;
-		// remove first img from the image array in single view if the TSvar firstImageIsPreview is set
+			// remove first img from the image array in single view if the TSvar firstImageIsPreview is set
 		if ((	(count($imgs) > 1 && $this->itemConfig['firstImageIsPreview'])
 				||
 				(count($imgs) >= 1 && $this->itemConfig['forceFirstImageIsPreview'])
@@ -169,7 +169,7 @@ class tx_damlightbox_ttnews extends tx_ttnews {
 			array_shift($imgsAltTexts);
 			array_shift($imgsTitleTexts);
 		}
-		// get img array parts for single view pages
+			// get img array parts for single view pages
 		if ($pObj->piVars[$this->itemConfig['singleViewPointerName']]) {
 			$spage = $pObj->piVars[$this->itemConfig['singleViewPointerName']];
 			$astart = $imageNum*$spage;
@@ -196,7 +196,7 @@ class tx_damlightbox_ttnews extends tx_ttnews {
 	
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/pi1/class.tx_damlightbox_ttnews.php'])    {
-    include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/pi1/class.tx_damlightbox_ttnews.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/pi1/class.tx_damlightbox_ttnews.php']) {
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/pi1/class.tx_damlightbox_ttnews.php']);
 }
 ?>

@@ -24,7 +24,7 @@ plugin.tx_damlightbox_pi1 {
 			mmTable = tx_dam_mm_ref
 			# foreignTable =
 			# whereClause =
-			sorting = tx_dam_mm_ref.sorting_foreign				
+			sorting = tx_dam_mm_ref.sorting_foreign
 	}
 
 	settings {
@@ -65,19 +65,19 @@ lib.damlightbox {
 		insertData = 1
 		htmlSpecialChars = 1
 	}
-	
+
 	## load registers for last image in stack and current image ##
 	imageRegisters = LOAD_REGISTER
 	imageRegisters {
-	
+
 		## first image will always be "0" ##
-	
+
 		## this register fetches the last number from stack ##
 		lastImg {
 			data = TSFE:register|tx_damlightbox|imgCount
 			listNum = last
 		}
-	
+
 		## this register points to the current image by checking the img=imagenumber parameter ##
 		currentImg {
 			data = TSFE:register|tx_damlightbox|imgCount
@@ -89,62 +89,62 @@ lib.damlightbox {
 	## html content for click enlargement - usable within a configured lightbox or the classic image popup ##
 	clickEnlargeConf = COA
 	clickEnlargeConf {
-		
+
 		## first execute the plugin ##
 		5 =< plugin.tx_damlightbox_pi1
-		
+
 		## determine the image numbers ##
 		10 =< lib.damlightbox.imageRegisters
-	
+
 		## for the popup/lightbox content a TEMPLATE object is used ##
 		20 = TEMPLATE
 		20 {
 			template = FILE
 			template.file = {$plugin.damlightbox.templateFile}
-	
+
 			workOnSubpart = CLICKENLARGE
-	
+
 			marks {
-	
+
 				## get the title for the record ##
 				CE_TITLE = TEXT
 				CE_TITLE.field = {$plugin.damlightbox.headerField}
-	
+
 				## render the imagebrowser (but only if there is more than one image) ##
 				IMAGEBROWSER = COA
 				IMAGEBROWSER {
-	
+
 					## check if there is only one image
 					stdWrap.if {
 						value = 0
 						isGreaterThan.data = register:lastImg
 					}
-	
+
 					wrap = {$plugin.damlightbox.imgBrowserWrap}
-	
+
 					## prev word: it's ONLY linked if we are not seeing first image
 					10 = TEXT
 					10.value = {$plugin.damlightbox.prevWord}
 					10.override {
-	
+
 						if.value = 0
 						if.isGreaterThan.data = GPvar:img
 						if.isGreaterThan.intval = 1
-	
+
 						cObject = TEXT
 						cObject.value = {$plugin.damlightbox.prevWord}
 						cObject.typolink {
-	
+
 							no_cache = 0
 							useCacheHash = 1
-	
+
 							parameter.data = page:uid
 							additionalParams.cObject = COA
 							additionalParams.cObject {
-	
+
 								stdWrap.dataWrap = &type=313&content={GPvar:content}&img=|
 								stdWrap.htmlSpecialChars = 1
-	
+
 								10 = LOAD_REGISTER
 								10 {
 									prevpic.cObject = COA
@@ -161,7 +161,7 @@ lib.damlightbox {
 							}
 						}
 					}
-	
+
 					## imagecount n / n ##
 					20 = COA
 					20.wrap = {$plugin.damlightbox.imgCountWrap}
@@ -173,7 +173,7 @@ lib.damlightbox {
 							prioriCalc = intval
 							noTrimWrap = || / |
 						}
-	
+
 						20 = TEXT
 						20 {
 							cObject = TEXT
@@ -182,29 +182,29 @@ lib.damlightbox {
 							wrap = |
 						}
 					}
-	
+
 					## next word: ONLY linked if we are not seeing last image ##
 					30 = TEXT
 					30.value = {$plugin.damlightbox.nextWord}
 					30.override {
-	
+
 						if.value.data = register:lastImg
 						if.isLessThan.data = register:currentImg
-	
+
 						cObject = TEXT
 						cObject.value = {$plugin.damlightbox.nextWord}
 						cObject.typolink {
-	
+
 							no_cache = 0
 							useCacheHash = 1
-	
+
 							parameter.data = page:uid
 							additionalParams.cObject = COA
 							additionalParams.cObject {
-	
+
 								stdWrap.dataWrap = &type=313&content={GPvar:content}&img=|
 								stdWrap.htmlSpecialChars = 1
-	
+
 								10 = LOAD_REGISTER
 								10 {
 									nextpic.cObject = COA
@@ -222,38 +222,38 @@ lib.damlightbox {
 						}
 					}
 				}
-	
+
 				## render current image from DAM ##
 				DAM_IMAGE = COA
 				DAM_IMAGE {
-	
+
 					10 = IMAGE
 					10 {
-	
+
 						file {
 							import.cObject < lib.damlightbox.getDAMvalues
 							import.cObject.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|fullPath
 							maxW = {$plugin.damlightbox.maxW}
 							maxH = {$plugin.damlightbox.maxH}
 						}
-	
+
 						params = id="lbImage"
-	
+
 						altText < lib.damlightbox.getDAMvalues
 						altText.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|alt_text
-	
+
 						titleText < lib.damlightbox.getDAMvalues
 						titleText.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|title
 					}
 				}
-	
+
 				## fetch some other interesting metadata ##
 				DAM_TITLE < lib.damlightbox.getDAMvalues
 				DAM_TITLE {
 					cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|title
 					outerWrap = {$plugin.damlightbox.damTitleWrap}
 				}
-	
+
 				DAM_COPYRIGHT < lib.damlightbox.getDAMvalues
 				DAM_COPYRIGHT {
 					cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|copyright
@@ -263,7 +263,7 @@ lib.damlightbox {
 						isTrue.cObject.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|copyright
 					}
 				}
-	
+
 				DAM_LOCATION < lib.damlightbox.getDAMvalues
 				DAM_LOCATION {
 					cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|file_orig_location
@@ -273,13 +273,13 @@ lib.damlightbox {
 						isTrue.cObject.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|file_orig_location
 					}
 				}
-	
+
 				DAM_DESCRIPTION < lib.damlightbox.getDAMvalues
 				DAM_DESCRIPTION {
 					cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|description
 				}
 			}
-		}	
+		}
 	}
 }
 
@@ -318,7 +318,7 @@ damlightbox {
 		wrap = <body id="damlightbox-|" class="damlightbox">
 	}
 
-	## page content ##	
+	## page content ##
 	10 = COA
 	10 {
 		## fetch the current record from DB with a RECORDS object; this ensures that damlightbox always has the right table context ##

@@ -22,12 +22,12 @@ page.313 {
 	20 {
 		userFunc = tx_damlightbox_pages->rootLineSlide
 #		start = -1
-	
+
 		file {
 			import.cObject < lib.damlightbox.getDAMvalues
 			import.cObject {
 				cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|fullPath
-			}	
+			}
 			maxW = 400
 			maxH = 300
 		}
@@ -35,35 +35,35 @@ page.313 {
 		## alt texts from DAM ##
 		altText.cObject < lib.damlightbox.getDAMvalues
 		altText.cObject.cObject.value  = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|alt_text
-		
+
 		## title texts from DAM ##
 		titleText.cObject < lib.damlightbox.getDAMvalues
 		titleText.cObject.cObject.value  = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|title
-		
+
 		imageLinkWrap = 1
 		imageLinkWrap {
 			enable = 1
 			typolink {
-			
+
 				## caching ##
 				no_cache = 0
 				useCacheHash = 1
-				
+
 				parameter.data = TSFE:id
-				
+
 				parameter.append = TEXT
 				parameter.append {
 					if.isFalse.field = image_link
 					value = {$plugin.damlightbox.jsParams}
 					noTrimWrap = | ||
-				}				
-					
+				}
+
 				additionalParams.cObject = TEXT
 				additionalParams.cObject {
 					htmlspecialchars = 1
 					dataWrap = |&type=313&content=pages_{field:uid}&img={register:currentImg}
 				}
-				
+
 				ATagParams.cObject = TEXT
 				ATagParams.cObject {
 					value = {$plugin.damlightbox.imageLinkAttributes}
@@ -73,9 +73,9 @@ page.313 {
 
 		stdWrap.postCObject = COA
 		stdWrap.postCObject {
-			
+
 			stdWrap.outerWrap = <p class="caption"> | </p>
-			stdWrap.required = 1	
+			stdWrap.required = 1
 
 			## if selected first insert the copyright notice ##
 			10 < lib.damlightbox.getDAMvalues
@@ -84,7 +84,7 @@ page.313 {
 				if.isTrue.data = TSFE:register|tx_damlightbox|config|sDEF|showCopyright
 				outerWrap = {$plugin.damlightbox.copyrightWrap}
 			}
-			
+
 			20 < lib.damlightbox.getDAMvalues
 			20.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|{TSFE:register|tx_damlightbox|config|sDEF|imgCaption}
 			20.if.isTrue.data = TSFE:register|tx_damlightbox|config|sDEF|imgCaption
@@ -114,12 +114,12 @@ damlightbox {
 
 page.313 {
 	20.imageLinkWrap.typolink {
-	
+
 		parameter.append >
-		
+
 		ATagParams >
 		ATagParams < lib.damlightbox.d4u_slimbox.imageLinkWrap.typolink.ATagParams
-	}	
+	}
 	stdWrap.postCObject = TEXT
 	stdWrap.postCObject {
 		if.isTrue.data = TSFE:register|tx_damlightbox|config|sDEF|imgPreview
@@ -128,15 +128,15 @@ page.313 {
 		cObject {
 			content.data = field:uid
 			content.table = pages
-			
+
 			lbCaption < page.313.20.imageLinkWrap.typolink.ATagParams.cObject.10.lbCaption
 
 			linkConfig {
 				no_cache = 0
 				useCacheHash = 1
 				ATagParams.dataWrap = rel="lightbox[sb{field:uid}]" rev="width={register:widthCalc}, height={register:heightCalc}, src={register:fullPath}" title="{register:lbCaption}"
-			}			
-			
+			}
+
 			hCalc.cObject = TEXT
 			hCalc.cObject.value = {$plugin.damlightbox.d4u_slimbox.hCalc}
 			vCalc.cObject = TEXT
@@ -147,7 +147,7 @@ page.313 {
 
 damlightbox {
 	10.10.conf.pages.20 {
-		
+
 		template.file = {$plugin.damlightbox.d4u_slimbox.templateFile}
 		marks.CE_TITLE >
 

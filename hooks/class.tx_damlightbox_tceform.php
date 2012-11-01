@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010 Torsten Schrade (schradt@uni-mainz.de)
+*  (c) 2012 Torsten Schrade (schradt@uni-mainz.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -44,7 +44,7 @@
 require_once(t3lib_extMgm::extPath('damlightbox').'pi1/class.tx_damlightbox_div.php');
 
 class tx_damlightbox_tceform {
-		
+
 	/**
 	 * Checks if the current table is allowed to display the fields for damlightbox, and if so fetches the flexform configuration from tx_damlightbox_ds
 	 * that belongs to the current record.
@@ -71,14 +71,14 @@ class tx_damlightbox_tceform {
 					}
 				}
 			}
-			
+
 			// if its not a new record fetch the configuration from the tx_damlightbox_ds table
 			if (substr($row['uid'], 0, 3) != 'NEW') $row['tx_damlightbox_flex'] = tx_damlightbox_div::getFlexFormForRecord($row['uid'], $table);
 		}
-	}	
+	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/hooks/class.tx_damlightbox_tceform.php'])    {
-    include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/hooks/class.tx_damlightbox_tceform.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/hooks/class.tx_damlightbox_tceform.php']) {
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/hooks/class.tx_damlightbox_tceform.php']);
 }
 ?>

@@ -18,7 +18,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/realurl/class.tx_realurl_autoconf
 
 // check if dam_ttcontent is loaded, and if so include TS
 if (!t3lib_extMgm::isLoaded('dam_ttcontent')) {
-	
+
 	t3lib_extMgm::addTypoScript(
 		$_EXTKEY,
 		'setup','

@@ -118,7 +118,7 @@ tt_content.image.20 {
 			if.isTrue.field = titleText
 			field = titleText
 			split.token.char = 10
-			split.returnKey.data = register:IMAGE_NUM_CURRENT		
+			split.returnKey.data = register:IMAGE_NUM_CURRENT
 		}
 	}
 
@@ -135,7 +135,7 @@ tt_content.image.20 {
 			if.isTrue.field = altText
 			field = altText
 			split.token.char = 10
-			split.returnKey.data = register:IMAGE_NUM_CURRENT		
+			split.returnKey.data = register:IMAGE_NUM_CURRENT
 		}
 	}
 
@@ -144,7 +144,7 @@ tt_content.image.20 {
 	caption {
 
 		1 >
-		
+
 #		5 = TEXT
 #		5.debugData = 1
 
@@ -193,7 +193,7 @@ tt_content.image.20 {
 ## register tt_content in the click-enlargement pagetype ##
 damlightbox {
 	10.10.tables := addToList(tt_content)
-	10.10.conf.tt_content =< lib.damlightbox.clickEnlargeConf	
+	10.10.conf.tt_content =< lib.damlightbox.clickEnlargeConf
 }
 
 #####################################################################
@@ -241,16 +241,16 @@ tt_content.image.20 {
 
 			content.data = field:uid
 			content.table = tt_content
-			
+
 			lbCaption < tt_content.image.20.1.imageLinkWrap.typolink.ATagParams.cObject.10.lbCaption
 			lbCaption.cObject.10.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|{TSFE:register|tx_damlightbox|config|sLIGHTBOX|lbCaption}
-			
+
 			linkConfig {
 				no_cache = 0
 				useCacheHash = 1
 				ATagParams.dataWrap = rel="lightbox[sb{field:uid}]" rev="width={register:widthCalc}, height={register:heightCalc}, src={register:fullPath}" title="{register:lbCaption}"
-			}			
- 	
+			}
+
 			hCalc.cObject = TEXT
 			hCalc.cObject.value = {$plugin.damlightbox.d4u_slimbox.hCalc}
 			vCalc.cObject = TEXT

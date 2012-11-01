@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010 Torsten Schrade (schradt@uni-mainz.de)
+*  (c) 2012 Torsten Schrade (schradt@uni-mainz.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -58,41 +58,41 @@ class tx_damlightbox_dblist implements t3lib_localRecordListGetTableHook {
 	 * @return	void
 	 */
 	function getDBlistQuery($table, $pageId, &$additionalWhereClause, &$selectedFieldsList, &$pObj) {
-		
-		// case 1: tx_damlightbox_image set
+
+			// case 1: tx_damlightbox_image set
 		if (tx_damlightbox_div::tableAllowedForDamlightbox($table) && strpos($selectedFieldsList, 'tx_damlightbox_image') !== FALSE && strpos($selectedFieldsList, 'tx_damlightbox_flex') === FALSE) {
-			
-			// remove the field from the list
+
+				// remove the field from the list
 			$selectedFieldsList = str_replace('tx_damlightbox_image,', '', $selectedFieldsList);
-			// and add it at the end using a subselect
+				// and add it at the end using a subselect
 			$selectedFieldsList = tx_damlightbox_div::addTableToFieldnames($table, $selectedFieldsList).', (SELECT COUNT(*) FROM tx_dam_mm_ref, tx_dam WHERE tx_dam_mm_ref.uid_foreign='.$table.'.uid AND tx_dam.uid=tx_dam_mm_ref.uid_local AND tx_dam_mm_ref.tablenames=\''.$table.'\' AND tx_dam_mm_ref.ident=\'tx_damlightbox_image\' ORDER BY tx_dam_mm_ref.sorting_foreign) AS tx_damlightbox_image';
-			
-		}
-		
-		// case 2: tx_damlightbox_flex set
-		if (tx_damlightbox_div::tableAllowedForDamlightbox($table) && strpos($selectedFieldsList, 'tx_damlightbox_flex') !== FALSE && strpos($selectedFieldsList, 'tx_damlightbox_image') === FALSE) {			
 
-			// remove the field from the list
+		}
+
+			// case 2: tx_damlightbox_flex set
+		if (tx_damlightbox_div::tableAllowedForDamlightbox($table) && strpos($selectedFieldsList, 'tx_damlightbox_flex') !== FALSE && strpos($selectedFieldsList, 'tx_damlightbox_image') === FALSE) {
+
+				// remove the field from the list
 			$selectedFieldsList = str_replace('tx_damlightbox_flex,', '', $selectedFieldsList);
-			// and add it at the end using a subselect
-			$selectedFieldsList = tx_damlightbox_div::addTableToFieldnames($table, $selectedFieldsList).', (SELECT tx_damlightbox_flex FROM tx_damlightbox_ds WHERE tx_damlightbox_ds.uid_foreign='.$table.'.uid AND tx_damlightbox_ds.tablenames=\''.$table.'\') AS tx_damlightbox_flex';		
+				// and add it at the end using a subselect
+			$selectedFieldsList = tx_damlightbox_div::addTableToFieldnames($table, $selectedFieldsList).', (SELECT tx_damlightbox_flex FROM tx_damlightbox_ds WHERE tx_damlightbox_ds.uid_foreign='.$table.'.uid AND tx_damlightbox_ds.tablenames=\''.$table.'\') AS tx_damlightbox_flex';
 
 		}
-		
-		// case 3: tx_damlightbox_image && tx_damlightbox_flex set
-		if (tx_damlightbox_div::tableAllowedForDamlightbox($table) && strpos($selectedFieldsList, 'tx_damlightbox_image') !== FALSE && strpos($selectedFieldsList, 'tx_damlightbox_flex') !== FALSE) {			
 
-			// remove both fields from the list
+			// case 3: tx_damlightbox_image && tx_damlightbox_flex set
+		if (tx_damlightbox_div::tableAllowedForDamlightbox($table) && strpos($selectedFieldsList, 'tx_damlightbox_image') !== FALSE && strpos($selectedFieldsList, 'tx_damlightbox_flex') !== FALSE) {
+
+				// remove both fields from the list
 			$selectedFieldsList = str_replace('tx_damlightbox_image,', '', $selectedFieldsList);
 			$selectedFieldsList = str_replace('tx_damlightbox_flex,', '', $selectedFieldsList);	
-			// and add them at the end using subselects
-			$selectedFieldsList = tx_damlightbox_div::addTableToFieldnames($table, $selectedFieldsList).', (SELECT COUNT(*) FROM tx_dam_mm_ref, tx_dam WHERE tx_dam_mm_ref.uid_foreign='.$table.'.uid AND tx_dam.uid=tx_dam_mm_ref.uid_local AND tx_dam_mm_ref.tablenames=\''.$table.'\' AND tx_dam_mm_ref.ident=\'tx_damlightbox_image\' ORDER BY tx_dam_mm_ref.sorting_foreign) AS tx_damlightbox_image, (SELECT tx_damlightbox_flex FROM tx_damlightbox_ds WHERE tx_damlightbox_ds.uid_foreign='.$table.'.uid AND tx_damlightbox_ds.tablenames=\''.$table.'\') AS tx_damlightbox_flex';		
+				// and add them at the end using subselects
+			$selectedFieldsList = tx_damlightbox_div::addTableToFieldnames($table, $selectedFieldsList).', (SELECT COUNT(*) FROM tx_dam_mm_ref, tx_dam WHERE tx_dam_mm_ref.uid_foreign='.$table.'.uid AND tx_dam.uid=tx_dam_mm_ref.uid_local AND tx_dam_mm_ref.tablenames=\''.$table.'\' AND tx_dam_mm_ref.ident=\'tx_damlightbox_image\' ORDER BY tx_dam_mm_ref.sorting_foreign) AS tx_damlightbox_image, (SELECT tx_damlightbox_flex FROM tx_damlightbox_ds WHERE tx_damlightbox_ds.uid_foreign='.$table.'.uid AND tx_damlightbox_ds.tablenames=\''.$table.'\') AS tx_damlightbox_flex';
 
-		}		
+		}
 	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/hooks/class.tx_damlightbox_dblist.php'])    {
-    include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/hooks/class.tx_damlightbox_dblist.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/hooks/class.tx_damlightbox_dblist.php']) {
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/hooks/class.tx_damlightbox_dblist.php']);
 }
 ?>

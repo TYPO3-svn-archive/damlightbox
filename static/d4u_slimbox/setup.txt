@@ -17,7 +17,7 @@ lib.damlightbox.d4u_slimbox.imageLinkWrap.typolink {
 	ATagParams.cObject.10 = LOAD_REGISTER
 	ATagParams.cObject.10 {
 	
-		## calculate width / height & get the value for the lightbox caption ##		
+		## calculate width / height & get the value for the lightbox caption ##
 		hpixels = TEXT
 		hpixels {
 			cObject < lib.damlightbox.getDAMvalues
@@ -58,7 +58,7 @@ lib.damlightbox.d4u_slimbox.imageLinkWrap.typolink {
 			token.char = 34
 			cObjNum = 1
 			1.current = 1
-			1.wrap = &quot;|				
+			1.wrap = &quot;|
 		}
 		
 		# remove the first entity again

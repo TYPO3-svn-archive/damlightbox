@@ -10,11 +10,11 @@ includeLibs.tx_damlightbox_ttnews = EXT:damlightbox/pi1/class.tx_damlightbox_ttn
 plugin.tx_damlightbox_pi1.settings.fileUsage.getTables := addToList(tt_news)
 
 plugin.tt_news {
-	
+
 	## include the damlightbox image marker function ##
 	imageMarkerFunc = tx_damlightbox_ttnews->imageMarkerFunc
 	imageMarkerFunc {
-	
+
 		## call to damlightbox ##
 		executeDamlightbox =< plugin.tx_damlightbox_pi1
 
@@ -24,9 +24,9 @@ plugin.tt_news {
 			## list of images to process ##
 			imgList = TEXT
 			imgList {
-			
+
 				data = TSFE:register|tx_damlightbox|damImages
-				
+
 				## override if imgPreview is set in damlightbox ##
 				override {
 					cObject = TEXT
@@ -40,11 +40,11 @@ plugin.tt_news {
 					}
 				}
 			}
-		
+
 			## configuration for each image ##
 			image = IMAGE
 			image {
-			
+
 				file {
 					import.cObject < lib.damlightbox.getDAMvalues
 					import.cObject {
@@ -57,11 +57,11 @@ plugin.tt_news {
 				## alt texts from DAM ##
 				altText.cObject < lib.damlightbox.getDAMvalues
 				altText.cObject.cObject.value  = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|alt_text
-				
+
 				## allow override from record ##
 				altText.override {
 					if.isTrue.field = imagealttext
-					
+
 					field = imagealttext
 					split.token.char = 10
 					split.returnKey.data = register:currentImg
@@ -78,64 +78,64 @@ plugin.tt_news {
 					
 					field = imagetitletext	
 					split.token.char = 10
-					split.returnKey.data = register:currentImg	
+					split.returnKey.data = register:currentImg
 				}
 			}
-			
+
 			## additional wraps from tt_news
 			imageWrapIfAny < plugin.tt_news.displayList.imageWrapIfAny
 			noImage_stdWrap < plugin.tt_news.displayList.image.noImage_stdWrap
 		}
-		
+
 		## configuration of images for latest view ##
 		LATEST < plugin.tt_news.imageMarkerFunc.LIST
 		LATEST {
-		
+
 			image.file {
 				maxW < plugin.tt_news.displayLatest.image.file.maxW
 				maxH < plugin.tt_news.displayLatest.image.file.maxH
 			}
-		
+
 			## additional wraps from tt_news
 			imageWrapIfAny < plugin.tt_news.displayLatest.imageWrapIfAny
 			noImage_stdWrap < plugin.tt_news.displayLatest.image.noImage_stdWrap
 		}
-		
+
 		## configuration of images in single view ##
 		SINGLE < plugin.tt_news.imageMarkerFunc.LIST
 		SINGLE {
-		
+
 			image {
 
 				file {
 					maxW < plugin.tt_news.displaySingle.image.file.maxW
 					maxH < plugin.tt_news.displaySingle.image.file.maxH
 				}
-			
+
 				imageLinkWrap = 1
 				imageLinkWrap {
 					enable = 1
 					typolink {
-					
+
 						## caching ##
 						no_cache = 0
 						useCacheHash = 1
-						
-						parameter.data = TSFE:id	
-						
+
+						parameter.data = TSFE:id
+
 						parameter.append = TEXT
 						parameter.append {
 							if.isFalse.field = image_link
 							value = {$plugin.damlightbox.jsParams}
 							noTrimWrap = | ||
 						}
-							
+
 						additionalParams.cObject = TEXT
 						additionalParams.cObject {
 							htmlspecialchars = 1
 							dataWrap = |&type=313&content=tt_news_{field:uid}&img={register:currentImg}
 						}
-						
+
 						ATagParams.cObject = TEXT
 						ATagParams.cObject {
 							value = {$plugin.damlightbox.imageLinkAttributes}
@@ -143,16 +143,16 @@ plugin.tt_news {
 					}
 				}
 			}
-			
+
 			## captions ##
 			caption = COA
 			caption {
-				
+
 				## DAM metadata ##
 				10 < lib.damlightbox.getDAMvalues
 				10.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|{TSFE:register|tx_damlightbox|config|sDEF|imgCaption}
 				10.if.isFalse.field = imagecaption
-			
+
 				## override from record ##
 				20 = TEXT
 				20.if.isTrue.field = imagecaption
@@ -162,8 +162,7 @@ plugin.tt_news {
 					split.returnKey.data = register:currentImg
 				}
 			}
-			
-			
+
 			## additional wraps from tt_news
 			imageWrapIfAny < plugin.tt_news.displaySingle.imageWrapIfAny
 			noImage_stdWrap < plugin.tt_news.displaySingle.image.noImage_stdWrap
@@ -207,15 +206,15 @@ plugin.tt_news.displaySingle.content_stdWrap {
 		cObject {
 			content.data = field:uid
 			content.table = tt_news
-			
+
 			lbCaption < plugin.tt_news.imageMarkerFunc.SINGLE.image.imageLinkWrap.typolink.ATagParams.cObject.10.lbCaption
 
 			linkConfig {
 				no_cache = 0
 				useCacheHash = 1
 				ATagParams.dataWrap = rel="lightbox[sb{field:uid}]" rev="width={register:widthCalc}, height={register:heightCalc}, src={register:fullPath}" title="{register:lbCaption}"
-			}			
-			
+			}
+
 			hCalc.cObject = TEXT
 			hCalc.cObject.value = {$plugin.damlightbox.d4u_slimbox.hCalc}
 			vCalc.cObject = TEXT

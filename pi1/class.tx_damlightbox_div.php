@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010 Torsten Schrade <schradt@uni-mainz.de>
+*  (c) 2012 Torsten Schrade <schradt@uni-mainz.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -53,16 +53,16 @@ final class tx_damlightbox_div {
 	 * @return	boolean		true if table should include the field
 	 */
 	static function tableAllowedForDamlightbox($table) {
-		
-		// load $TCA
+
+			// load $TCA
 		t3lib_div::loadTCA($table);
 
-		// table is not configured at all
+			// table is not configured at all
 		if (!isset($GLOBALS['TCA'][$table])) return FALSE;
 
-		// test if damlightbox field is allowed for the table according to damlightbox extconf
+			// test if damlightbox field is allowed for the table according to damlightbox extconf
 		if (strpos($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['damlightbox']['configuredTables'], $table) === FALSE) return FALSE;
-		
+
 		return TRUE;
 	}
 
@@ -75,21 +75,21 @@ final class tx_damlightbox_div {
 	 */
 	static function getFlexFormForRecord($uid, $table) {
 
-		// QUERY on the flexform table to find the ds belonging the incoming uid
+			// QUERY on the flexform table to find the ds belonging the incoming uid
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('tx_damlightbox_flex', 'tx_damlightbox_ds', 'tablenames=\''.$table.'\' AND uid_foreign='.$uid.' AND deleted=0', null, null, null);
 		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
 
-			// get and set
+				// get and set
 			$row = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 			$ds = $row[0];
 
 		}
-		// free memory
+			// free memory
 		$GLOBALS['TYPO3_DB']->sql_free_result($res);
 
 		return $ds;
 	}
-	
+
 
 	/**
 	 * Adds the current tablename in front of the submitted fieldnames in order to do proper SQL queries
@@ -108,7 +108,7 @@ final class tx_damlightbox_div {
 	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/pi1/class.tx_damlightbox_div.php'])    {
-    include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/pi1/class.tx_damlightbox_div.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/pi1/class.tx_damlightbox_div.php']) {
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/pi1/class.tx_damlightbox_div.php']);
 }
 ?>

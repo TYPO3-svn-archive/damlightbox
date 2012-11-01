@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010 Torsten Schrade (schradt@uni-mainz.de)
+*  (c) 2012 Torsten Schrade (schradt@uni-mainz.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -63,22 +63,21 @@ class tx_damlightbox_tcemain {
 
 		if (tx_damlightbox_div::tableAllowedForDamlightbox($table)) {
 
-			// keep incoming damlightbox values for post processing and unset the pseudo field
-
+				// keep incoming damlightbox values for post processing and unset the pseudo field
 			if (array_key_exists('tx_damlightbox_flex', $incomingFieldArray)) {
 				$pObj->tx_damlightbox_flex = $incomingFieldArray['tx_damlightbox_flex'];
 				unset($incomingFieldArray['tx_damlightbox_flex']);
 			}
 
-			// tx_damlightbox_image exists in field array and has values
+				// tx_damlightbox_image exists in field array and has values
 			if (empty($incomingFieldArray['tx_damlightbox_image']) == FALSE) {
 				$pObj->tx_damlightbox_image = $incomingFieldArray['tx_damlightbox_image'];
 				unset($incomingFieldArray['tx_damlightbox_image']);
-			// tx_damlightbox_image exists but is empty (=removed relations)
+				// tx_damlightbox_image exists but is empty (=removed relations)
 			} elseif (array_key_exists('tx_damlightbox_image', $incomingFieldArray)) {
 				$pObj->tx_damlightbox_image = '-1';
 				unset($incomingFieldArray['tx_damlightbox_image']);
-			// tx_damlightbox_image doesn't exist in field array
+				// tx_damlightbox_image doesn't exist in field array
 			} else {
 				$pObj->tx_damlightbox_image = '-2';
 			}
@@ -101,23 +100,23 @@ class tx_damlightbox_tcemain {
 
 		if (tx_damlightbox_div::tableAllowedForDamlightbox($table)) {
 
-			// MM relations for image field: Note that the field always needs to be processed to make sure that any MM relations are removed in case they were removed in the parent record (=the $incomingFieldArray had an empty value for the field)
+				// MM relations for image field: Note that the field always needs to be processed to make sure that any MM relations are removed in case they were removed in the parent record (=the $incomingFieldArray had an empty value for the field)
 			if ($pObj->tx_damlightbox_image !== '-2') {
 
-				// get the config for the field
+					// get the config for the field
 				$tcaFieldConf = $GLOBALS['TCA'][$table]['columns']['tx_damlightbox_image']['config'];
 
-				// has the field values or should relations be removed
+					// has the field values or should relations be removed
 				($pObj->tx_damlightbox_image !== '-1') ? $valueArray = t3lib_div::trimExplode(',', $pObj->tx_damlightbox_image, 1) : $valueArray = array();
 
-				// execute according TCEMAIN function to build/update MM relations
+					// execute according TCEMAIN function to build/update MM relations
 				$pObj->checkValue_group_select_processDBdata($valueArray, $tcaFieldConf, $id, $status, 'group', $table, 'tx_damlightbox_image');
 			}
 
-			// MM relations for flexform field
+				// MM relations for flexform field
 			if ($pObj->tx_damlightbox_flex) {
 
-				// if the field is in array form, transform it to xml
+					// if the field is in array form, transform it to xml
 				if (is_array($pObj->tx_damlightbox_flex)) {
 					$flexformtools = t3lib_div::makeInstance('t3lib_flexformtools');
 					$tx_damlightbox_flex = $flexformtools->flexArray2Xml($pObj->tx_damlightbox_flex, 1);
@@ -125,26 +124,26 @@ class tx_damlightbox_tcemain {
 
 				if ($status == 'update') {
 
-					// find out if a relation already exists
+						// find out if a relation already exists
 					$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid_local', 'tx_damlightbox_ds', 'tablenames=\''.$table.'\' AND uid_foreign='.(int)$id.' AND deleted=0', null, null, null);
 
-					// if yes, update the relation
+						// if yes, update the relation
 					if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
 						$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_damlightbox_ds', 'tablenames=\''.$table.'\' AND uid_foreign='.(int)$id.'', array('tx_damlightbox_flex' => $tx_damlightbox_flex), null);
-					// create the relation
+						// create the relation
 					} else {
 						$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_damlightbox_ds', array('tablenames' => $table, 'uid_foreign' => (int)$id, 'tx_damlightbox_flex' => $tx_damlightbox_flex), null);
 					}
 
-					// free memory
+						// free memory
 					$GLOBALS['TYPO3_DB']->sql_free_result($res);
 
 				} elseif ($status == 'new') {
 
-					// get the new uid of the record
+						// get the new uid of the record
 					$id = $pObj->substNEWwithIDs[$id];
 
-					// insert relation
+						// insert relation
 					$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_damlightbox_ds', array('tablenames' => $table, 'uid_foreign' => (int)$id, 'tx_damlightbox_flex' => $tx_damlightbox_flex), null);
 				}
 			}
@@ -169,38 +168,38 @@ class tx_damlightbox_tcemain {
 
 			case 'copy':
 
-				// traverse the copyMappingArray, fetch values for the generic fields from the original records and then update the MM relations for the copied (=new) records
+					// traverse the copyMappingArray, fetch values for the generic fields from the original records and then update the MM relations for the copied (=new) records
 				foreach ($pObj->copyMappingArray as $copiedTable => $copiedRecords) {
 
-					// only if the generic fields are activated for the current table
+						// only if the generic fields are activated for the current table
 					if (tx_damlightbox_div::tableAllowedForDamlightbox($copiedTable)) {
 
-						// traverse the sets of original ids from the copied table & get the values for the generic fields of the original records
+							// traverse the sets of original ids from the copied table & get the values for the generic fields of the original records
 						foreach ($copiedRecords as $origId => $copyId) {
 
-							// MM relations for generic flexform field on copied records
+								// MM relations for generic flexform field on copied records
 							$row = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('tx_damlightbox_flex', 'tx_damlightbox_ds', 'tablenames=\''.$copiedTable.'\' AND uid_foreign='.(int)$origId.' AND deleted=0', null, null, null, null);
 							if (is_array($row)) {
-								// insert a new entry in the datastructure table
+									// insert a new entry in the datastructure table
 								$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_damlightbox_ds', array('tablenames' => $copiedTable, 'uid_foreign' => (int)$copyId, 'tx_damlightbox_flex' => $row['0']['tx_damlightbox_flex']), null);
 							}
 
-							// MM relations of generic image field on copied records
+								// MM relations of generic image field on copied records
 							$damDB = t3lib_div::makeInstance('tx_dam_db');
 							// first find out what files are referenced in the original record - tx_damlightbox_image is used as ident field, if another field (like from dam_ttcontent) is used, nothing happens
 							$damData = $damDB->getReferencedFiles($copiedTable, $origId, 'tx_damlightbox_image', $MM_table='tx_dam_mm_ref', '', array(), '', 'sorting_foreign', 1000);
 							if (is_array($damData)) {
 
-								// determine the referenced ids of the dam records
+									// determine the referenced ids of the dam records
 								$imgs = array_keys($damData['files']);
-								// now prepare a value array for using the group_select function from TCEMain
+									// now prepare a value array for using the group_select function from TCEMain
 								$valueArray = array();
 								foreach ($imgs as $key => $value) {
 									$valueArray[$key] = 'tx_dam_'.$value;
 								}
-								// load $TCA configuration for tx_damlightbox_image
+									// load $TCA configuration for tx_damlightbox_image
 								$tcaFieldConf = $GLOBALS['TCA'][$table]['columns']['tx_damlightbox_image']['config'];
-								// let the group_select function do the rest
+									// let the group_select function do the rest
 								$pObj->checkValue_group_select_processDBdata($valueArray, $tcaFieldConf, (int)$copyId, 'update', 'group', $copiedTable, 'tx_damlightbox_image');
 							}
 						}
@@ -225,7 +224,7 @@ class tx_damlightbox_tcemain {
 
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/hooks/class.tx_damlightbox_tcemain.php'])    {
-    include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/hooks/class.tx_damlightbox_tcemain.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/hooks/class.tx_damlightbox_tcemain.php']) {
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/hooks/class.tx_damlightbox_tcemain.php']);
 }
 ?>
