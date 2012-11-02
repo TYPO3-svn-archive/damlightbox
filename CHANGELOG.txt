@@ -1,4 +1,7 @@
-2012-01-11 Torsten Schrade <schradt@uni-mainz.de>
+2012-11-01 Torsten Schrade <schradt@uni-mainz.de>
+	* BUGFIX: Fixed a typo in setup.txt that led to a failure of a TS condition
+
+2012-11-01 Torsten Schrade <schradt@uni-mainz.de>
 	* FEATURE: Now uses d4u_slimbox for the lightbox functionality
 	* CHANGE: Support for pmkslimbox is dropped
 	* BUGFIX: Invalid argument supplied for foreach (#42508). Thanks Andy Grunwald for supplying a patch
