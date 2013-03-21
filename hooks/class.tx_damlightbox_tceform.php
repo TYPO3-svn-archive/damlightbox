@@ -41,8 +41,6 @@
  * @subpackage 	damlightbox
  */
 
-require_once(t3lib_extMgm::extPath('damlightbox').'pi1/class.tx_damlightbox_div.php');
-
 class tx_damlightbox_tceform {
 
 	/**

@@ -41,9 +41,6 @@
  * @subpackage 	damlightbox
  */
 
-require_once(t3lib_extMgm::extPath('damlightbox').'pi1/class.tx_damlightbox_div.php');
-require_once(PATH_t3lib.'interfaces/interface.t3lib_localrecordlistgettablehook.php');
-
 class tx_damlightbox_dblist implements t3lib_localRecordListGetTableHook {
 
 	/**

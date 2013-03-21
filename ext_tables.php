@@ -58,4 +58,9 @@ if (t3lib_extMgm::isLoaded('tt_address')) {
 if (t3lib_extMgm::isLoaded('d4u_slimbox')) {
 	t3lib_extMgm::addStaticFile($_EXTKEY,'static/d4u_slimbox','DAM Lightbox: d4u_slimbox');
 }
+
+# perfectlightbox
+if (t3lib_extMgm::isLoaded('perfectlightbox')) {
+	t3lib_extMgm::addStaticFile($_EXTKEY,'static/perfectlightbox','DAM Lightbox: perfectlightbox');
+}
 ?>

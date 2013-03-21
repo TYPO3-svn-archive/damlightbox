@@ -22,13 +22,13 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 /**
- * Contains damlightbox functions for d4u_slimbox usage
+ * Contains miscellaneous functions for use with lightboxes
  *
  */
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- *   47: class tx_damlightbox_d4u_slimbox extends tx_damlightbox_pi1
+ *   47: class tx_damlightbox_lightbox extends tx_damlightbox_pi1
  *   60:     public function addHiddenImgs($content, $conf)
  *  114:     public function overrideDimsFromFlexform($content, $conf)
  *
@@ -44,23 +44,19 @@
  * @subpackage 	damlightbox
  */
 
-class tx_damlightbox_d4u_slimbox extends tx_damlightbox_pi1 {
-
-	var $uid = 0;
-	var $table = '';
-	var $title = '';
+class tx_damlightbox_lightbox extends tx_damlightbox_pi1 {
 
 	/**
-	 * If the preview mode is set and d4u_slimbox is used the remaining imagelinks need to be inserted in a hidden div. Otherwise the lightbox will not be browsable and just open the preview image.
+	 * If the preview mode is set and a lightbox is used the remaining imagelinks need to be inserted in a hidden div. Otherwise the lightbox will not be browsable and just open the preview image.
 	 *
-	 * @param	[type]		$content: ...
-	 * @param	[type]		$conf: ...
+	 * @param	string		$content
+	 * @param	array		$conf
 	 * @return	string		Hidden div with the remaining imagelinks
 	 */
-	public function addHiddenImgs($content, $conf) {
+	public function firstImageIsPreview($content, $conf) {
 
 			// check if there is more than one image and if yes insert a hidden div
-		if (count($GLOBALS['TSFE']->register['tx_damlightbox']['metaData']) > 1) {
+		if (count($GLOBALS['TSFE']->register['tx_damlightbox']['metaData']) > 1 && $GLOBALS['TSFE']->register['tx_damlightbox']['config']['sDEF']['imgPreview'] == 1) {
 			foreach ($GLOBALS['TSFE']->register['tx_damlightbox']['metaData'] as $key => $value) {
 
 					// leave out the first image and any image that is hidden in DAM
@@ -69,18 +65,20 @@ class tx_damlightbox_d4u_slimbox extends tx_damlightbox_pi1 {
 					// set current image number
 				$GLOBALS['TSFE']->register['currentImg'] = $key;
 
-					// get uid & table & caption of the current record & image
-				$this->uid = $this->cObj->stdWrap($conf['content'], $conf['content.']);
-				$this->table = $conf['content.']['table'];
-
 					// lightbox caption
-				$GLOBALS['TSFE']->register['lbCaption'] = $this->cObj->stdWrap($conf['lbCaption'], $conf['lbCaption.']);
+				if (isset($conf['lbCaption']) || is_array($conf['lbCaption.'])) {
+					$GLOBALS['TSFE']->register['lbCaption'] = $this->cObj->stdWrap($conf['lbCaption'], $conf['lbCaption.']);
+				}
 
 					// specific width/height calculations
-				$hCalc = t3lib_div::trimExplode('|',$this->cObj->stdWrap(null,$conf['hCalc.']));
-				$vCalc = t3lib_div::trimExplode('|',$this->cObj->stdWrap(null,$conf['vCalc.']));
-				$GLOBALS['TSFE']->register['widthCalc'] = intval(t3lib_div::calcParenthesis($hCalc[0].$GLOBALS['TSFE']->register['tx_damlightbox']['metaData'][$key]['hpixels'].$hCalc[1]));
-				$GLOBALS['TSFE']->register['heightCalc'] = intval(t3lib_div::calcParenthesis($vCalc[0].$GLOBALS['TSFE']->register['tx_damlightbox']['metaData'][$key]['vpixels'].$vCalc[1]));
+				if ($conf['hCalc.']) {
+					$hCalc = t3lib_div::trimExplode('|',$this->cObj->stdWrap(null, $conf['hCalc.']));
+					$GLOBALS['TSFE']->register['heightCalc'] = intval(t3lib_div::calcParenthesis($vCalc[0].$GLOBALS['TSFE']->register['tx_damlightbox']['metaData'][$key]['vpixels'].$vCalc[1]));
+				}
+				if ($conf['vCalc.']) {
+					$vCalc = t3lib_div::trimExplode('|',$this->cObj->stdWrap(null, $conf['vCalc.']));
+					$GLOBALS['TSFE']->register['widthCalc'] = intval(t3lib_div::calcParenthesis($hCalc[0].$GLOBALS['TSFE']->register['tx_damlightbox']['metaData'][$key]['hpixels'].$hCalc[1]));
+				}
 
 					// full path register
 				$GLOBALS['TSFE']->register['fullPath'] = t3lib_div::getIndpEnv('TYPO3_SITE_URL').$GLOBALS['TSFE']->register['tx_damlightbox']['metaData'][$key]['fullPath'];
@@ -89,15 +87,10 @@ class tx_damlightbox_d4u_slimbox extends tx_damlightbox_pi1 {
 				if ($GLOBALS['TSFE']->register['tx_damlightbox']['config']['sLIGHTBOX']['setSpecificDimensions']) $this->overrideDimsFromFlexform($key,null);
 
 					// configurations for the typolink
-				$linkConfig=array();
-				$linkConfig['parameter'] = $GLOBALS['TSFE']->id;
-				$linkConfig['no_cache'] = $conf['linkConfig.']['no_cache'];
-				$linkConfig['useCacheHash'] = $conf['linkConfig.']['useCacheHash'];
-				$linkConfig['additionalParams'] = '&type=313&content='.$this->table.'_'.$this->uid.'&img='.$key.'';
-				$linkConfig['ATagParams'] = $this->cObj->stdWrap($conf['linkConfig.']['ATagParams'], $conf['linkConfig.']['ATagParams.']);
-				$linkConfig['ATagBeforeWrap'] = 1;
+				if (is_array($conf['linkConfig.'])) {
+					$hiddenLinks .= $this->cObj->typoLink($content, $conf['linkConfig.']);
+				}
 
-				$hiddenLinks .= $this->cObj->typoLink(null,$linkConfig);
 			}
 			$content = '<div style="display: none;">'.$hiddenLinks.'</div>';
 		}
@@ -110,7 +103,7 @@ class tx_damlightbox_d4u_slimbox extends tx_damlightbox_pi1 {
 	 * Checks if there are custom dimension set for the lightbox of the current image in the flexform of the content element and if yes overrides the calculated
 	 * values from TS. The expected notation in the flexorm is "imagenumber:width,height" starting with number 1 for the first image
 	 *
-	 * @param	int			The current image number
+	 * @param	integer		The current image number
 	 * @param	array		TypoScript configuration array
 	 * @return	string		Hidden div with the remaining imagelinks
 	 */
@@ -121,10 +114,10 @@ class tx_damlightbox_d4u_slimbox extends tx_damlightbox_pi1 {
 		$customDims = t3lib_div::trimExplode(';', $GLOBALS['TSFE']->register['tx_damlightbox']['config']['sLIGHTBOX']['setSpecificDimensions'], 1);
 
 		if ($customDims) {
-			foreach($customDims as $value) {
+			foreach ($customDims as $value) {
 					// check if the current image dimensions in the GLOBAL register need to be overridden
 				if (substr($value, 0, 1)-1 == $content) {
-					$dims = t3lib_div::trimExplode(',',substr($value,strpos($value,':')+1));
+					$dims = t3lib_div::trimExplode(',', substr($value,strpos($value,':')+1));
 					if ($dims) {
 						$GLOBALS['TSFE']->register['widthCalc'] = htmlspecialchars($dims[0]);
 						$GLOBALS['TSFE']->register['heightCalc'] = htmlspecialchars($dims[1]);
@@ -137,7 +130,7 @@ class tx_damlightbox_d4u_slimbox extends tx_damlightbox_pi1 {
 
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/pi1/class.tx_damlightbox_d4u_slimbox.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/pi1/class.tx_damlightbox_d4u_slimbox.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/pi1/class.tx_damlightbox_lightbox.php']) {
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/damlightbox/pi1/class.tx_damlightbox_lightbox.php']);
 }
 ?>

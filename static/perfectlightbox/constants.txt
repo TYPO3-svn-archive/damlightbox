@@ -1,0 +1,7 @@
+#################################################################################
+# Constants for the plugin.damlightbox_pi1.perfectlightbox						#
+# @author Torsten Schrade <schradt@uni-mainz.de>								#
+#################################################################################
+
+## TURN ON PERFECTLIGHTBOX ##
+plugin.damlightbox.lightboxExtension = perfectlightbox

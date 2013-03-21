@@ -1,3 +1,8 @@
+2013-02-25 Torsten Schrade <schradt@uni-mainz.de>
+	* FEATURE: Basic support for perfectlightbox
+	* CLEANUP: Switch to autoloader registry and removed requires
+	* INFO: Modified dependency settings in ext_emconf.php
+
 2012-11-01 Torsten Schrade <schradt@uni-mainz.de>
 	* BUGFIX: Fixed a typo in setup.txt that led to a failure of a TS condition
 

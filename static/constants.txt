@@ -12,7 +12,6 @@ plugin.damlightbox.damFields = *
 #cat=plugin.damlightbox/enable/20; type=options[0,1]; label= Debug data: Show debug information
 plugin.damlightbox.debugData = 0
 
-
 ## DIMENSIONS ##
 
 #cat=plugin.damlightbox/dims/10; type=int+; label= Maximum width: Maximum width of the images in the lightbox and at the same time the basis value for the calculation of the lightbox dimensions

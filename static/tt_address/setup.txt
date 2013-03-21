@@ -98,28 +98,24 @@ plugin.tx_ttaddress_pi1.templates.default.dam_image.cObject {
 		ATagParams >
 		ATagParams < lib.damlightbox.d4u_slimbox.imageLinkWrap.typolink.ATagParams
 	}
-	stdWrap.postCObject = TEXT
+	stdWrap.postCObject = USER
 	stdWrap.postCObject {
-		if.isTrue.data = TSFE:register|tx_damlightbox|config|sDEF|imgPreview
-		cObject = USER
-		cObject.userFunc = tx_damlightbox_d4u_slimbox->addHiddenImgs
-		cObject {
-			content.data = field:uid
-			content.table = tt_address
+		userFunc = tx_damlightbox_lightbox->firstImageIsPreview
 
-			lbCaption < plugin.tx_ttaddress_pi1.templates.default.dam_image.cObject.20.imageLinkWrap.typolink.ATagParams.cObject.10.lbCaption
+		lbCaption < plugin.tx_ttaddress_pi1.templates.default.dam_image.cObject.20.imageLinkWrap.typolink.ATagParams.cObject.10.lbCaption
 
-			linkConfig {
-				no_cache = 0
-				useCacheHash = 1
-				ATagParams.dataWrap = rel="lightbox[sb{field:uid}]" rev="width={register:widthCalc}, height={register:heightCalc}, src={register:fullPath}" title="{register:lbCaption}"
-			}
-			
-			hCalc.cObject = TEXT
-			hCalc.cObject.value = {$plugin.damlightbox.d4u_slimbox.hCalc}
-			vCalc.cObject = TEXT
-			vCalc.cObject.value = {$plugin.damlightbox.d4u_slimbox.vCalc}
+		linkConfig {
+			no_cache = 0
+			useCacheHash = 1
+			parameter.data = TSFE:id
+			additionalParams.dataWrap = |&type=313&content=tt_address_{field:uid}&img={register:currentImg}
+			ATagParams.dataWrap = rel="lightbox[sb{field:uid}]" rev="width={register:widthCalc}, height={register:heightCalc}, src={register:fullPath}" title="{register:lbCaption}"
 		}
+
+		hCalc.cObject = TEXT
+		hCalc.cObject.value = {$plugin.damlightbox.d4u_slimbox.hCalc}
+		vCalc.cObject = TEXT
+		vCalc.cObject.value = {$plugin.damlightbox.d4u_slimbox.vCalc}
 	}
 }
 
@@ -130,8 +126,69 @@ damlightbox {
 		marks.CE_TITLE >
 
 		marks.DAM_TITLE.outerWrap >
-	
+
 	}
+}
+
+[global]
+
+#####################################################################
+# TypoScrip configuration for the plugin.damlightbox_pi1			#
+# @author Torsten Schrade <schradt@uni-mainz.de>					#
+# PART IV: config for tt_address & perfectlightbox					#
+#####################################################################
+
+[globalVar = LIT:perfectlightbox = {$plugin.damlightbox.lightboxExtension}]
+
+plugin.tx_ttaddress_pi1.templates.default.dam_image.cObject {
+
+	20.imageLinkWrap {
+
+		directImageLink >
+		JSwindow >
+		width >
+		height >
+		effects >
+		bodyTag >
+		wrap >
+		linkParams >
+
+		typolink {
+			additionalParams >
+			parameter >
+			parameter.cObject = IMG_RESOURCE
+			parameter.cObject {
+				file {
+					import.cObject < lib.damlightbox.getDAMvalues
+					import.cObject.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|fullPath
+					maxW = {$plugin.perfectlightbox.lightBoxMaxW}
+					maxH = {$plugin.perfectlightbox.lightBoxMaxH}
+				}
+			}
+			ATagParams.cObject = COA
+			ATagParams.cObject {
+				10 = TEXT
+				10 {
+					noTrimWrap = |rel="lightbox[sb{field:uid}]"| |
+					insertData = 1
+				}
+
+				20 < lib.damlightbox.getDAMvalues
+				20 {
+					cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|{TSFE:register|tx_damlightbox|config|sLIGHTBOX|lbCaption}
+					wrap = title="{|}"
+				}
+			}
+		}
+	}
+
+	stdWrap.postCObject = USER
+	stdWrap.postCObject {
+		userFunc = tx_damlightbox_lightbox->firstImageIsPreview
+
+		linkConfig < plugin.tx_ttaddress_pi1.templates.default.dam_image.cObject.20.imageLinkWrap.typolink
+	}
+
 }
 
 [global]

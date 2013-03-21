@@ -4,11 +4,6 @@
 # PART I: Basic TypoScript libraries and settings					#
 #####################################################################
 
-## include the plugin class ##
-
-includeLibs.tx_damlightbox_pi1 = EXT:damlightbox/pi1/class.tx_damlightbox_pi1.php
-includeLibs.tx_dam_tsfe = EXT:dam/lib/class.tx_dam_tsfe.php
-
 ## basic setup ##
 
 plugin.tx_damlightbox_pi1 = USER

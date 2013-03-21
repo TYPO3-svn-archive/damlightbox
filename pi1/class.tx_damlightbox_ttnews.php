@@ -43,8 +43,6 @@
  * @subpackage 	damlightbox
  */
 
-require_once (t3lib_extMgm::extPath('tt_news') . 'pi/class.tx_ttnews.php');
-
 class tx_damlightbox_ttnews extends tx_ttnews {
 
 	/**

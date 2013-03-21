@@ -1,0 +1,5 @@
+#####################################################################
+# TypoScrip configuration for the plugin.damlightbox 				#
+# @author Torsten Schrade <schradt@uni-mainz.de>					#
+# PART III: config for image CEs with perfectlightbox				#
+#####################################################################

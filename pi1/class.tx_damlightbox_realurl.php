@@ -40,8 +40,6 @@
  *
  */
 
-require_once(t3lib_extMgm::extPath('realurl', 'class.tx_realurl_advanced.php'));
-
 class tx_damlightbox_realurl {
 
 	/**

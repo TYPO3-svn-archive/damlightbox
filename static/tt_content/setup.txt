@@ -67,7 +67,6 @@ tt_content.image.20 {
 		useCacheHash = 1
 
 		## if image_link field is filled ##
-		parameter >
 		parameter.cObject = TEXT
 		parameter.cObject {
 			field = image_link
@@ -232,30 +231,25 @@ tt_content.image.20 {
 		}
 	}
 	## if slimbox is used together with the preview function all imgs despite the first one need to be inserted into a hidden div ##
-	stdWrap.postCObject = TEXT
+	stdWrap.postCObject = USER
 	stdWrap.postCObject {
-		if.isTrue.data = TSFE:register|tx_damlightbox|config|sDEF|imgPreview
-		cObject = USER
-		cObject.userFunc = tx_damlightbox_d4u_slimbox->addHiddenImgs
-		cObject {
+		userFunc = tx_damlightbox_lightbox->firstImageIsPreview
 
-			content.data = field:uid
-			content.table = tt_content
+		lbCaption < tt_content.image.20.1.imageLinkWrap.typolink.ATagParams.cObject.10.lbCaption
+		lbCaption.cObject.10.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|{TSFE:register|tx_damlightbox|config|sLIGHTBOX|lbCaption}
 
-			lbCaption < tt_content.image.20.1.imageLinkWrap.typolink.ATagParams.cObject.10.lbCaption
-			lbCaption.cObject.10.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|{TSFE:register|tx_damlightbox|config|sLIGHTBOX|lbCaption}
-
-			linkConfig {
-				no_cache = 0
-				useCacheHash = 1
-				ATagParams.dataWrap = rel="lightbox[sb{field:uid}]" rev="width={register:widthCalc}, height={register:heightCalc}, src={register:fullPath}" title="{register:lbCaption}"
-			}
-
-			hCalc.cObject = TEXT
-			hCalc.cObject.value = {$plugin.damlightbox.d4u_slimbox.hCalc}
-			vCalc.cObject = TEXT
-			vCalc.cObject.value = {$plugin.damlightbox.d4u_slimbox.vCalc}
+		linkConfig {
+			no_cache = 0
+			useCacheHash = 1
+			parameter.data = TSFE:id
+			additionalParams.dataWrap = |&type=313&content=tt_content_{field:uid}&img={register:currentImg}
+			ATagParams.dataWrap = rel="lightbox[sb{field:uid}]" rev="width={register:widthCalc}, height={register:heightCalc}, src={register:fullPath}" title="{register:lbCaption}"
 		}
+
+		hCalc.cObject = TEXT
+		hCalc.cObject.value = {$plugin.damlightbox.d4u_slimbox.hCalc}
+		vCalc.cObject = TEXT
+		vCalc.cObject.value = {$plugin.damlightbox.d4u_slimbox.vCalc}
 	}
 }
 
@@ -265,6 +259,66 @@ damlightbox {
 		marks.CE_TITLE >
 		marks.DAM_TITLE.outerWrap >
 	}
+}
+
+[global]
+
+#####################################################################
+# TypoScrip configuration for the plugin.damlightbox_pi1			#
+# @author Torsten Schrade <schradt@uni-mainz.de>					#
+# PART IV: config for tt_content & perfectlightbox					#
+#####################################################################
+
+[globalVar = LIT:perfectlightbox = {$plugin.damlightbox.lightboxExtension}]
+
+tt_content.image.20.1 {
+
+	titleInLink = 0
+
+	titleText.cObject.10.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:IMAGE_NUM_CURRENT}|{TSFE:register|tx_damlightbox|config|sLIGHTBOX|lbCaption}
+
+	imageLinkWrap {
+
+		directImageLink >
+		JSwindow >
+		width >
+		height >
+		effects >
+		bodyTag >
+		wrap >
+		linkParams >
+		typolink {
+			additionalParams >
+			ATagParams >
+			ATagParams.cObject < tt_content.image.20.1.titleText.cObject
+			ATagParams.wrap = title="|"
+			parameter.append >
+			parameter.override.cObject = IMG_RESOURCE
+			parameter.override.cObject {
+				file {
+					import.cObject < lib.damlightbox.getDAMvalues
+					import.cObject.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:IMAGE_NUM_CURRENT}|fullPath
+					maxW = {$plugin.perfectlightbox.lightBoxMaxW}
+					maxH = {$plugin.perfectlightbox.lightBoxMaxH}
+				}
+			}
+		}
+	}
+
+	stdWrap.postCObject = USER
+	stdWrap.postCObject {
+		userFunc = tx_damlightbox_lightbox->firstImageIsPreview
+
+		lbCaption < tt_content.image.20.1.titleText
+		lbCaption.cObject.10.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|{TSFE:register|tx_damlightbox|config|sLIGHTBOX|lbCaption}
+
+		linkConfig < tt_content.image.20.1.imageLinkWrap.typolink
+		linkConfig.ATagParams >
+		linkConfig.ATagParams.dataWrap = title="{register:lbCaption}"
+		linkConfig.parameter.override.cObject.file.import.cObject.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|fullPath
+
+	}
+
 }
 
 [global]

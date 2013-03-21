@@ -45,9 +45,6 @@
  *
  */
 
-require_once(t3lib_extMgm::extPath('damlightbox').'pi1/class.tx_damlightbox_div.php');
-require_once(PATH_tslib.'class.tslib_pibase.php');
-
 class tx_damlightbox_pi1 extends tslib_pibase {
 
 	var $prefixID = 'tx_damlightbox_pi1';

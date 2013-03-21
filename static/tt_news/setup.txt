@@ -4,9 +4,6 @@
 # PART I: Configuration for tt_news									#
 #####################################################################
 
-## include the damlightbox class for tt_news image rendering ##
-includeLibs.tx_damlightbox_ttnews = EXT:damlightbox/pi1/class.tx_damlightbox_ttnews.php
-
 plugin.tx_damlightbox_pi1.settings.fileUsage.getTables := addToList(tt_news)
 
 plugin.tt_news {
@@ -198,28 +195,24 @@ plugin.tt_news.imageMarkerFunc.SINGLE.image.imageLinkWrap.typolink {
 }
 
 plugin.tt_news.displaySingle.content_stdWrap {
-	postCObject = TEXT
+	postCObject = USER
 	postCObject {
-		if.isTrue.data = TSFE:register|tx_damlightbox|config|sDEF|imgPreview
-		cObject = USER
-		cObject.userFunc = tx_damlightbox_d4u_slimbox->addHiddenImgs
-		cObject {
-			content.data = field:uid
-			content.table = tt_news
+		userFunc = tx_damlightbox_lightbox->firstImageIsPreview
 
-			lbCaption < plugin.tt_news.imageMarkerFunc.SINGLE.image.imageLinkWrap.typolink.ATagParams.cObject.10.lbCaption
+		lbCaption < plugin.tt_news.imageMarkerFunc.SINGLE.image.imageLinkWrap.typolink.ATagParams.cObject.10.lbCaption
 
-			linkConfig {
-				no_cache = 0
-				useCacheHash = 1
-				ATagParams.dataWrap = rel="lightbox[sb{field:uid}]" rev="width={register:widthCalc}, height={register:heightCalc}, src={register:fullPath}" title="{register:lbCaption}"
-			}
-
-			hCalc.cObject = TEXT
-			hCalc.cObject.value = {$plugin.damlightbox.d4u_slimbox.hCalc}
-			vCalc.cObject = TEXT
-			vCalc.cObject.value = {$plugin.damlightbox.d4u_slimbox.vCalc}
+		linkConfig {
+			no_cache = 0
+			useCacheHash = 1
+			parameter.data = TSFE:id
+			additionalParams.dataWrap = |&type=313&content=tt_news_{field:uid}&img={register:currentImg}
+			ATagParams.dataWrap = rel="lightbox[sb{field:uid}]" rev="width={register:widthCalc}, height={register:heightCalc}, src={register:fullPath}" title="{register:lbCaption}"
 		}
+
+		hCalc.cObject = TEXT
+		hCalc.cObject.value = {$plugin.damlightbox.d4u_slimbox.hCalc}
+		vCalc.cObject = TEXT
+		vCalc.cObject.value = {$plugin.damlightbox.d4u_slimbox.vCalc}
 	}
 }
 
@@ -231,6 +224,67 @@ damlightbox {
 
 		marks.DAM_TITLE.outerWrap >
 	}
+}
+
+[global]
+
+#####################################################################
+# TypoScrip configuration for the plugin.damlightbox_pi1			#
+# @author Torsten Schrade <schradt@uni-mainz.de>					#
+# PART IV: config for tt_news & perfectlightbox						#
+#####################################################################
+
+[globalVar = LIT:perfectlightbox = {$plugin.damlightbox.lightboxExtension}]
+
+plugin.tt_news.imageMarkerFunc.SINGLE.image.imageLinkWrap {
+
+	directImageLink >
+	JSwindow >
+	width >
+	height >
+	effects >
+	bodyTag >
+	wrap >
+	linkParams >
+
+	typolink {
+		additionalParams >
+		parameter >
+		parameter.cObject = IMG_RESOURCE
+		parameter.cObject {
+			file {
+				import.cObject < lib.damlightbox.getDAMvalues
+				import.cObject.cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|fullPath
+				maxW = {$plugin.perfectlightbox.lightBoxMaxW}
+				maxH = {$plugin.perfectlightbox.lightBoxMaxH}
+			}
+		}
+		ATagParams.cObject = COA
+		ATagParams.cObject {
+			10 = TEXT
+			10 {
+				noTrimWrap = |rel="lightbox[sb{field:uid}]"| |
+				insertData = 1
+			}
+
+			20 < lib.damlightbox.getDAMvalues
+			20 {
+				cObject.value = TSFE:register|tx_damlightbox|metaData|{register:currentImg}|{TSFE:register|tx_damlightbox|config|sLIGHTBOX|lbCaption}
+				wrap = title="{|}"
+			}
+		}
+	}
+}
+
+plugin.tt_news.displaySingle.content_stdWrap {
+
+	postCObject = USER
+	postCObject {
+		userFunc = tx_damlightbox_lightbox->firstImageIsPreview
+
+		linkConfig < plugin.tt_news.imageMarkerFunc.SINGLE.image.imageLinkWrap.typolink
+	}
+
 }
 
 [global]
